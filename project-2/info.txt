@@ -1,4 +1,4 @@
 Santa Clara University
-COEN 338 - Ad. Operating Systems
+COEN 383 - Ad. Operating Systems
 Winter 2021
 Group 5
