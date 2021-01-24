@@ -1,13 +1,13 @@
-CC = gcc
+CC = g++
 
 edit : main.o linked.o
-	gcc -o test main.o linked.o
+	g++ -o test main.o linked.o
 
-main.o: main.c	linked.h
-	cc -c main.c
+main.o: main.cpp linked.hpp
+	cc -c main.cpp
 
-linked.o: linked.c linked.h
-	cc -c linked.c
+linked.o: linked.cpp linked.hpp
+	cc -c linked.cpp
 
 clean:
 	rm test main.o linked.o
