@@ -4,18 +4,19 @@
 #define CHAR_LEN 11
 #include <string>
 class Node;
+struct stat{
+	int waitTime;
+	int responseTime;
+	int turnaroundTime;
+};
 
 //class for your basic Job;
 class Job{	
 	public:
 	//public variables (yay?)
 	std::string name;
-	int arrivalTime, serviceTime, priority;
-	struct stat{
-		int waitTime;
-		int responseTime;
-		int turnaroundTime;
-	} stats;
+	int arrivalTime, serviceTime, priority, completion;
+	struct stat stats;
 	
 	//constructors
 	Job();
@@ -24,8 +25,12 @@ class Job{
 	//getter stuff
 	std::string getName(){return name;}
 	int getArr(){return arrivalTime;}
+	const int getArr() const{return arrivalTime;}
 	int getServ(){return serviceTime;}
+	const int getServ() const{return serviceTime;}
 	int getPri(){return priority;}
+	const int getPri() const{return priority;}
+	int getComp() {return completion;}
 	int getWait(){return stats.waitTime;}
 	int getRes(){return stats.responseTime;}
 	int getTurn(){return stats.turnaroundTime;}
@@ -61,6 +66,8 @@ class List{
 	//checks and stuff
 	bool notIdle() const;
 	//just a getter
+	Node * getHead() {return head;}
+	const Node * getHead() const {return head;}
 	const int length() const {return len;}
 	
 };
