@@ -12,7 +12,7 @@ Job::Job()
 
 //Makes the Job Class with parameters
 //Param: a->arrival, b->service, nam-> name of service
-Job::Job(int a, int b, int s, std::string nam = "None")
+Job::Job(int a, double b, int s, std::string nam = "None")
 {
 	arrivalTime = a;
 	serviceTime = b;

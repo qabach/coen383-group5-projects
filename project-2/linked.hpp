@@ -10,14 +10,14 @@ class Job{
 	public:
 	std::string name;
 	int arrivalTime;
-	int serviceTime;
+	double serviceTime;
 	int priority;
 	
 	Job();
-	Job(int a, int b, int s, std::string name);
+	Job(int a, double b, int s, std::string name);
 	std::string getName(){return name;}
 	int getArr(){return arrivalTime;}
-	int getServ(){return serviceTime;}
+	double getServ(){return serviceTime;}
 	int getPri(){return priority;}
 };
 

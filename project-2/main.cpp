@@ -1,3 +1,20 @@
+/*
+ 
+ Santa Clara University
+ COEN 383 - Ad. Operating Systems
+ Winter 2021
+ Group 5
+    Anh Truong
+    Manjiri Parab
+    Pauldin Bebla
+    Quan Bach
+    Travis Le
+    Yukun Zhang
+ 
+ Project 2
+ 
+ */
+
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
@@ -13,19 +30,30 @@ int generateJob(List &a, int startpoint, int count)
 {
 	int i;
 	Job jobs;
-	int arr, serv, pri;
+	int arr, pri;
+    double serv;
 	//generate the random values for a job.
 	for(i = startpoint;  i <= startpoint + count - 1; ++i)
 	{
 		string n = "P" + to_string(i);
-		arr = rand() %100;
-		serv = (rand() % 11) + 1;
-		pri = (rand() % 4) + 1;
+		arr = rand() %100;              // arrival time in range 0-99
+        double tmp = rand() % 100 + 1;  // random a number from 1-100
+        serv = tmp/10.0;                // normalize to get in range of 0.1-10 (i.e 1-100)
+		pri = rand() % 4 + 1;           // priority of job in range 1-4
 		jobs=Job(arr, serv, pri,n);
 		a.insertData(jobs);
 	}
 	return i;
 }
+
+// statistics to print out
+// each scheduler should calculate its own statistics and return this struct
+struct statistics
+{
+    double average_turn_around_time;
+    double average_waiting_time;
+    double average_response_time;
+};
 
 
 int main()
@@ -54,3 +82,4 @@ int main()
 
 	
 }
+
