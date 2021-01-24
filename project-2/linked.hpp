@@ -35,6 +35,12 @@ class Job{
 	int getRes(){return stats.responseTime;}
 	int getTurn(){return stats.turnaroundTime;}
 	
+	//setter Stuff
+	void setComp(int c) {completion =c;}
+	void setWait(int w){stats.waitTime =w;}
+	void setRes(int r){stats.responseTime =s;}
+	void setTurn(int t){stats.turnaroundTime =t;}
+	
 };
 
 //class for the Basic list;
