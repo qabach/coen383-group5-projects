@@ -8,6 +8,9 @@ Job::Job()
 	serviceTime = 0;
 	priority = 0;
 	name = "None";	
+	stats.waitTime = 0;
+	stats.responseTime = 0;
+	stats.turnaroundTime = 0;
 }
 
 //Makes the Job Class with parameters
@@ -18,6 +21,9 @@ Job::Job(int a, int b, int s, std::string nam = "None")
 	serviceTime = b;
 	priority = s;
 	name = nam;
+	stats.waitTime = 0;
+	stats.responseTime = 0;
+	stats.turnaroundTime = 0;
 	
 }
 
@@ -25,6 +31,7 @@ Job::Job(int a, int b, int s, std::string nam = "None")
 List::List()
 {
 	head = NULL;
+	tail = NULL;
 	len = 0;
 }
 
@@ -47,6 +54,10 @@ void List::insertData(Job data)
 	if(temp == NULL || temp->data.arrivalTime > data.arrivalTime)
 	{
 		this->head = new Node(data,temp);
+		if(temp == NULL)
+		{
+			this->tail= this->head;
+		}
 		++(this->len);
 		return;
 	}
@@ -59,11 +70,33 @@ void List::insertData(Job data)
 		temp->next->data.arrivalTime > data.arrivalTime)
 		{
 			temp2 = new Node(data, temp->next);
+			//checks if this is the last element
+			if(temp->next == NULL)
+			{
+				tail = temp2;
+			}
 			temp->next = temp2;
 			++(this->len);
 			return;
 		}
 	}
+}
+
+//insert at the tail of the list, no sorting
+void List::pushDataNS(Job ok)
+{
+	//check to see if there is anything in the list
+	if(head ==NULL)
+	{
+		this->head = new Node(ok,NULL);
+		this->tail = this->head;
+	}
+	else{
+		this->tail->next = new Node(ok,NULL);
+		this->tail = this->tail->next;
+	}
+	++(this->len);
+	return;
 }
 
 //deletes whatever is the node after the node specfifed
@@ -76,6 +109,10 @@ void List::deleteNode(Node *prev)
 		return;
 	}
 	prev->next= temp->next;
+	if(temp->next == NULL)
+	{
+		this->tail = prev;
+	}
 	delete temp;
 	--(this->len);
 
@@ -95,6 +132,18 @@ void List::deleteHeadNode()
 
 }
 
+//clear everything in the List
+void List::clr()
+{
+	Node *temp;
+	int size = this->len;
+	//make the next one a head and free whatever was in head
+	for(int i =0; i< size; ++i)
+	{
+		deleteHeadNode();
+	}
+}
+
 //just print out a list of items
 void List::printList() const
 {
@@ -108,16 +157,18 @@ void List::printList() const
 
 }
 
-//clear everything in the List
-void List::clr()
+void List::printListOnlyName() const
 {
-	Node *temp;
-	int size = this->len;
-	//make the next one a head and free whatever was in head
-	for(int i =0; i< size; ++i)
+	
+	const Node * temp;
+	//print everything until it ends
+	for(temp = this->head; temp !=NULL; temp = temp->getNext())
 	{
-		deleteHeadNode();
-	}
+		std::cout<< temp->getJob().getName();
+		
+	
+
+}
 }
 
 //checks if there is enough jobs in t
@@ -175,4 +226,5 @@ void Node::printData() const
 	<< "\nPriority: " << data.priority 
 	<<std::endl;
 }
+
 
