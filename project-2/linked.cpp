@@ -8,6 +8,9 @@ Job::Job()
 	serviceTime = 0;
 	priority = 0;
 	name = "None";	
+	stats.waitTime = 0;
+	stats.responseTime = 0;
+	stats.turnaroundTime = 0;
 }
 
 //Makes the Job Class with parameters
@@ -18,6 +21,9 @@ Job::Job(int a, int b, int s, std::string nam = "None")
 	serviceTime = b;
 	priority = s;
 	name = nam;
+	stats.waitTime = 0;
+	stats.responseTime = 0;
+	stats.turnaroundTime = 0;
 	
 }
 

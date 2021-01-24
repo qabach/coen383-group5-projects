@@ -10,9 +10,12 @@ class Job{
 	public:
 	//public variables (yay?)
 	std::string name;
-	int arrivalTime;
-	int serviceTime;
-	int priority;
+	int arrivalTime, serviceTime, priority;
+	struct stat{
+		int waitTime;
+		int responseTime;
+		int turnaroundTime;
+	} stats;
 	
 	//constructors
 	Job();
@@ -23,6 +26,10 @@ class Job{
 	int getArr(){return arrivalTime;}
 	int getServ(){return serviceTime;}
 	int getPri(){return priority;}
+	int getWait(){return stats.waitTime;}
+	int getRes(){return stats.responseTime;}
+	int getTurn(){return stats.turnaroundTime;}
+	
 };
 
 //class for the Basic list;
