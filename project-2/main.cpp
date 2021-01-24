@@ -49,7 +49,7 @@ int main()
 	//print out list
 	yay.printList();
 	yay.clr();
-	yay.printList();
+	cout << "end of program" <<endl;
 	return 0;
 
 	
