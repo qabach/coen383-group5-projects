@@ -2,6 +2,7 @@
 #include <cstdlib>
 #include <ctime>
 #include "linked.hpp"
+#include "hpfnp.hpp"
 
 using namespace std;
 
@@ -46,8 +47,8 @@ int main()
 		count2 *= 2;
 	}
 	cout << yay.length() << endl;
-	//print out list
-	yay.printList();
+	//run algo
+	hpfnp(yay);
 	yay.clr();
 	cout << "end of program" <<endl;
 	return 0;

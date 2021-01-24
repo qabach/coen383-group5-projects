@@ -7,6 +7,7 @@ Job::Job()
 	arrivalTime = 0;
 	serviceTime = 0;
 	priority = 0;
+	completion =0;
 	name = "None";	
 	stats.waitTime = 0;
 	stats.responseTime = 0;
@@ -20,6 +21,7 @@ Job::Job(int a, int b, int s, std::string nam = "None")
 	arrivalTime = a;
 	serviceTime = b;
 	priority = s;
+	completion =0;
 	name = nam;
 	stats.waitTime = 0;
 	stats.responseTime = 0;
@@ -164,11 +166,10 @@ void List::printListOnlyName() const
 	//print everything until it ends
 	for(temp = this->head; temp !=NULL; temp = temp->getNext())
 	{
-		std::cout<< temp->getJob().getName();
+		std::cout<< temp->getJob().getName() << " ";
 		
-	
-
-}
+	}
+	std::cout<< std::endl;
 }
 
 //checks if there is enough jobs in t
