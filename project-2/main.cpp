@@ -35,7 +35,7 @@ int main()
 	List yay;
 	int seed = 1;
 	int count, count2;
-	srand(1);
+	srand(time(NULL));
 	yay = List();
 	//generate 10 jobs
 	count = generateJob(yay,1,10);
@@ -46,11 +46,11 @@ int main()
 		count = generateJob(yay,count,count2);
 		count2 *= 2;
 	}
-	cout << yay.length() << endl;
+	cout <<"Starting # of Jobs: " << yay.length() << endl;
 	//run algo
 	hpfnp(yay);
 	yay.clr();
-	cout << "end of program" <<endl;
+	cout << "End of program" <<endl;
 	return 0;
 
 	
