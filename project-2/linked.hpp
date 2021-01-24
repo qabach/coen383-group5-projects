@@ -38,7 +38,7 @@ class Job{
 	//setter Stuff
 	void setComp(int c) {completion =c;}
 	void setWait(int w){stats.waitTime =w;}
-	void setRes(int r){stats.responseTime =s;}
+	void setRes(int s){stats.responseTime =s;}
 	void setTurn(int t){stats.turnaroundTime =t;}
 	
 };
