@@ -1,9 +1,14 @@
-//
-//  roundRobin.hpp
-//  coen-383-projects
-//
-//  Created by Quan Bach  on 1/24/21.
-//
+/*
+ Santa Clara University
+ COEN 383 - Ad. Operating Systems
+ Winter 2021
+ Project-2
+ Author: Quan Bach
+ 
+ Round Robin Header File 
+ This file is the implementation of round robin scheduler
+ 
+ */
 
 #ifndef roundRobin_hpp
 #define roundRobin_hpp
