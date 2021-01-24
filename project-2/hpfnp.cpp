@@ -7,11 +7,15 @@ void hpfnp(const List &a)
 	List p1, p2, p3, p4, finished;
 	int t;
 	const Node * ref;
+	//get the first element in the queue
 	ref = a.getHead();
 	t = ref->data.getArr();
+	//fill all the prioirty queus first
 	ref = fillQueues(ref,p1,p2,p3,p4,t);
+	//when time is not greater than 100 quatumn
 	while(t < 100)
 	{
+		//check all the prioirty queues first if they are empty. If all are empty. Increment time by 1.
 		if(p1.length() != 0)
 		{
 			performJob(p1,finished,t);
@@ -28,6 +32,10 @@ void hpfnp(const List &a)
 		{
 			performJob(p4,finished,t);
 		}
+		else
+		{
+			++t;
+		}
 		ref = fillQueues(ref,p1,p2,p3,p4,t);
 		
 	}
@@ -35,7 +43,7 @@ void hpfnp(const List &a)
 	p2.clr();
 	p3.clr();
 	p4.clr();
-	finished.printListOnlyName();
+	computeStats(finished);
 	finished.clr();
 }
 //run a paritcular job given the queue and completion queue.
@@ -80,4 +88,13 @@ const Node * fillQueues(const Node* ref,List &a1,List &a2,List &a3,List &a4, int
 		ref = ref->getNext();
 	}
 	return ref;
+}
+
+void computeStats(const List &a)
+{
+	std::cout << "Jobs: " <<std::endl;
+	a.printList();
+	std::cout << "Time Chart: " <<std::endl;
+	a.printListOnlyName();
+
 }
