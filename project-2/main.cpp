@@ -66,12 +66,12 @@ int main()
 	yay = List();
 	//generate 10 jobs
 	count = generateJob(yay,1,10);
-	count2 = 2;
+	count2 = 5;
 	//generatate more jobs if needed
 	while(yay.notIdle())
 	{
 		count = generateJob(yay,count,count2);
-		count2 *= 2;
+		count2 += 5;
 	}
 	cout <<"Starting # of Jobs: " << yay.length() << endl;
 	//run algo
