@@ -17,6 +17,7 @@
 #include <iostream>
 #include <algorithm> // for find 
 #include "linked.hpp"
+#include "stats.hpp"
 
 // statistics to print out
 // each scheduler should calculate its own statistics and return this struct
@@ -28,6 +29,6 @@ struct statistics
     double throughput; 
 };
 
-struct statistics* round_robin_scheduler(List *input_list);
+void round_robin_scheduler(List *input_list);
 
 #endif /* roundRobin_hpp */
