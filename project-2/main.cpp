@@ -110,8 +110,7 @@ void round_robin_demo()
             count2 *= 2;
         }        
         // Round-Robin Scheduler
-        struct statistics * rr_stats = nullptr;
-        rr_stats = round_robin_scheduler(&yay);
+        round_robin_scheduler(&yay);
         
         yay.clr();
     }

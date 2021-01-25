@@ -21,7 +21,7 @@ Round Robin Scheduler Implementation
  
 */
 
-struct statistics* round_robin_scheduler(List *input_list)
+void round_robin_scheduler(List *input_list)
 {
     // send system message if the job list is empty
     if (input_list == nullptr)
@@ -72,6 +72,7 @@ struct statistics* round_robin_scheduler(List *input_list)
         // if the queue is empty, then CPU will idle
         if (process_queue.size() == 0)
         {
+            time_chart.push_back("<idle>"); // log in idle when no job
             continue;
         }
         // CPU idle if the job has not arrived
@@ -138,7 +139,7 @@ struct statistics* round_robin_scheduler(List *input_list)
         }
         else
         {
-            std::cout << " " << std::endl;
+            std::cout << "<idle>" << std::endl; //print out idle if no job
         }
     }
     
@@ -161,12 +162,9 @@ struct statistics* round_robin_scheduler(List *input_list)
     // TAT = Wait_time + Service_Time
     int total_TAT = total_completion + total_wait_time_of_finised_jobs;
     
-    // compute the average statistics
-    stat_return->average_response_time = response_time/respond_count;
-    stat_return->throughput = finished_queue.size() / double(quantas_limit);// number of jobs done divides by total time
-    stat_return->average_waiting_time = total_wait_time / quantas_limit;
-    stat_return->average_turn_around_time = total_TAT / double(finished_queue.size());
-    return stat_return;
+    // print out statistics 
+    printAlgoStats(response_time, total_TAT, total_wait_time_of_finised_jobs, int(finished_queue.size()));
+    
 }
 
 
