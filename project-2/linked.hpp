@@ -33,14 +33,17 @@ class Job{
 	const int getPri() const{return priority;}
 	int getComp() {return completion;}
 	int getWait(){return stats.waitTime;}
-	int getRes(){return stats.responseTime;}
+	const int getWait() const{return stats.waitTime;}
+	int getRes() {return stats.responseTime;}
+	const int getRes() const{return stats.responseTime;}
 	int getTurn(){return stats.turnaroundTime;}
-
+	const int getTurn() const{return stats.turnaroundTime;}
 	
+  
 	//setter Stuff
 	void setComp(int c) {completion =c;}
 	void setWait(int w){stats.waitTime =w;}
-	void setRes(int r){stats.responseTime =r;}
+	void setRes(int s){stats.responseTime =s;}
 	void setTurn(int t){stats.turnaroundTime =t;}
     
 	
