@@ -21,6 +21,7 @@ class Job{
 	//constructors
 	Job();
 	Job(int a, int b, int s, std::string name);
+    
 		
 	//getter stuff
 	std::string getName(){return name;}
@@ -38,11 +39,13 @@ class Job{
 	int getTurn(){return stats.turnaroundTime;}
 	const int getTurn() const{return stats.turnaroundTime;}
 	
+  
 	//setter Stuff
 	void setComp(int c) {completion =c;}
 	void setWait(int w){stats.waitTime =w;}
 	void setRes(int s){stats.responseTime =s;}
 	void setTurn(int t){stats.turnaroundTime =t;}
+    
 	
 };
 
@@ -101,6 +104,13 @@ class Node{
 	Job getJob() const{return data;}
 	const Node * getNext() const {return next;}
 	Node * getNext() {return next;}
+    
+    void setJobStats(int w, int r, int t)
+    {
+        data.setWait(w);
+        data.setRes(r);
+        data.setTurn(t);
+    }
 	
 	//firend functions to allow stuff
 	friend void List::insertData(Job ok);
