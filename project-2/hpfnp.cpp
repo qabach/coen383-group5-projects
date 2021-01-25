@@ -75,7 +75,7 @@ void performJob(List &a, List &c, int &t)
 const Node * fillQueues(const Node* ref,List &a1,List &a2,List &a3,List &a4, int t)
 {
 	//go until you reach the end or time happens to be up
-	while(ref != NULL && ref->data.getArr() <= t )
+	while(ref != nullptr && ref->data.getArr() <= t )
 	{
 		switch(ref->data.getPri())
 		{
@@ -158,7 +158,7 @@ void computeStats(const List &a)
 		count[i] = 0;
 	}
 	//count how many items are in the queue per prioirty queue and in total.
-	for(temp =a.getHead(); temp != NULL; temp = temp->getNext())
+	for(temp =a.getHead(); temp != nullptr; temp = temp->getNext())
 	{
 		switch(temp->data.getPri())
 		{
