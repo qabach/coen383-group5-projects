@@ -88,7 +88,7 @@ void List::insertData(Job data)
 void List::pushDataNS(Job ok)
 {
 	//check to see if there is anything in the list
-	if(head ==NULL)
+	if(head == NULL)
 	{
 		this->head = new Node(ok,NULL);
 		this->tail = this->head;
@@ -115,6 +115,7 @@ void List::deleteNode(Node *prev)
 	{
 		this->tail = prev;
 	}
+    temp = NULL;            //********
 	delete temp;
 	--(this->len);
 
@@ -129,6 +130,7 @@ void List::deleteHeadNode()
 	}
 	temp = this->head;
 	this->head= temp->next;
+    temp = NULL;
 	delete temp;
 	--(this->len);
 
@@ -171,6 +173,7 @@ void List::printListOnlyName() const
 	}
 	std::cout<< std::endl;
 }
+
 
 //checks if there is enough jobs in t
 bool List::notIdle() const
@@ -227,5 +230,7 @@ void Node::printData() const
 	<< "\nPriority: " << data.priority 
 	<<std::endl;
 }
+
+
 
 
