@@ -1,7 +1,8 @@
 CC = g++
 
-edit : main.o linked.o hpfnp.o roundRobin.o
-	g++ -o test main.o linked.o hpfnp.o roundRobin.o
+edit : main.o linked.o hpfnp.o roundRobin.o FCFS.o stats.o
+	g++ -o test main.o linked.o hpfnp.o roundRobin.o FCFS.o \
+	stats.o
 
 main.o: main.cpp linked.hpp
 	cc -c main.cpp
@@ -15,5 +16,13 @@ hpfnp.o: hpfnp.cpp hpfnp.hpp
 roundRobin.o: roundRobin.cpp roundRobin.hpp
 	cc -c roundRobin.cpp
 
+FCFS.o: FCFS.cpp FCFS.hpp
+	cc -c FCFS.cpp 
+	
+stats.o: stats.cpp stats.hpp
+	cc -c stats.cpp 
+	
 clean:
-	rm test main.o linked.o hpfnp.o roundRobin.o
+	rm test main.o linked.o hpfnp.o roundRobin.o \
+	FCFS.o stats.o
+	
