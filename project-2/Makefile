@@ -1,7 +1,7 @@
 CC = g++
 
 edit : main.o linked.o hpfnp.o roundRobin.o FCFS.o stats.o
-	g++ -o test main.o linked.o hpfnp.o roundRobin.o FCFS.o \
+	g++ -std=c++11 -o test main.o linked.o hpfnp.o roundRobin.o FCFS.o \
 	stats.o
 
 main.o: main.cpp linked.hpp
