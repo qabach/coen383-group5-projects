@@ -5,7 +5,6 @@
  Winter 2021
  Group 5
     Anh Truong
-    Manjiri Parab
     Pauldin Bebla
     Quan Bach
     Travis Le
@@ -19,6 +18,8 @@
 #include <cstdlib>
 #include <ctime>
 #include "linked.hpp"
+#include "FCFS.hpp"
+#include "stats.hpp"
 #include "hpfnp.hpp"
 #include "roundRobin.hpp"
 
@@ -31,10 +32,10 @@ const int WORKLOAD = 5;
 void round_robin_demo();
 
 
-
 //Generate a Random Job
 //Paramas: a->the List working with, startpoint -> where you want to start,
 //count -> how many elements
+
 
 int generateJob(List &a, int startpoint, int count)
 {
@@ -75,13 +76,16 @@ int main()
 	cout <<"Starting # of Jobs: " << yay.length() << endl;
 	//run algo
 	hpfnp(yay);
+  FCFS(&yay);     // First Come First Serve
 	yay.clr();
 	
-    // Round Robin Demo
-    round_robin_demo();
+  // Round Robin Demo
+  round_robin_demo();
     
-    cout << "end of program" <<endl;
-    return 0;
+
+    
+   cout << "end of program" <<endl;
+   return 0;
 
     
 }
@@ -112,3 +116,8 @@ void round_robin_demo()
         yay.clr();
     }
 }
+
+
+
+
+
