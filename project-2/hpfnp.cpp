@@ -45,6 +45,7 @@ void hpfnp(const List &a)
 	p2.clr();
 	p3.clr();
 	p4.clr();
+	//print out the stats
 	computeStats(finished);
 	//std::cout << "yay" <<std::endl;
 	finished.clr();
@@ -73,6 +74,7 @@ void performJob(List &a, List &c, int &t)
 //returns the node that is greater than time.
 const Node * fillQueues(const Node* ref,List &a1,List &a2,List &a3,List &a4, int t)
 {
+	//go until you reach the end or time happens to be up
 	while(ref != NULL && ref->data.getArr() <= t )
 	{
 		switch(ref->data.getPri())
@@ -101,6 +103,7 @@ const Node * fillQueues(const Node* ref,List &a1,List &a2,List &a3,List &a4, int
 void insertStats(const Job &data, double &at, double &aw,
 	double &ar, int&c)
 {
+	//just add the average wait time, average response time, and average turnaround time
 	aw += data.getWait();
 	ar += data.getRes();
 	at += data.getTurn();
@@ -110,6 +113,7 @@ void insertStats(const Job &data, double &at, double &aw,
 //prints out an indiviudal stat
 void subprintStat(std::string s, double &a, int &b)
 {
+	//if its not 0 print this. otherwise give N/A
 	if(b)
 	{
 		std::cout << s << a/b << std::endl;
@@ -124,10 +128,12 @@ void subprintStat(std::string s, double &a, int &b)
 //prints out the given stats
 void printStats(double a[], int c[], int size =5)
 {
+	//if the size is not 5 just reutrn
 	if(size != 5)
 	{
 		return;
 	}
+	//for each q. print out some sort of stat
 	for(int i =0; i<size-1 ; ++i)
 	{
 		subprintStat("Q"+std::to_string(i+1) +": ",a[i],c[i]);
@@ -143,6 +149,7 @@ void computeStats(const List &a)
 	double qawt[5];
 	double qart[5];
 	int count[5];
+	//initialize everything to 0
 	for(int i = 0; i < 5; ++i)
 	{
 		qatt[i] = 0;
@@ -150,6 +157,7 @@ void computeStats(const List &a)
 		qart[i] = 0;
 		count[i] = 0;
 	}
+	//count how many items are in the queue per prioirty queue and in total.
 	for(temp =a.getHead(); temp != NULL; temp = temp->getNext())
 	{
 		switch(temp->data.getPri())
@@ -172,9 +180,12 @@ void computeStats(const List &a)
 		}
 		insertStats(temp->data,qatt[4],qawt[4],qart[4],count[4]);
 	}
+	//print out all the finished jobs
 	std::cout << "Jobs: " <<std::endl;
 	a.printList();
+	//print out the time chart 
 	std::cout << "Time Chart: " <<std::endl;
+	//printing out stats
 	a.printListOnlyName();
 	std::cout << "Avg Turn:" << std::endl;
 	printStats(qatt,count);
