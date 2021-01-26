@@ -2,9 +2,10 @@
 #include <deque>
 #include <iostream>
 #include <algorithm>
+#include "stats.hpp"
 
 using namespace std;
 
 int remainingTime(Job);
 bool compareFunc(Job, Job);
-void srt(List);
+overStat srt(List);
