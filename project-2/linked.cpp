@@ -101,6 +101,35 @@ void List::pushDataNS(Job ok)
 	return;
 }
 
+void List::insertSjf(Job job)
+{
+	if(head == NULL)
+	{
+		this->head = new Node(job, NULL);
+		++(this->len);
+		return; 
+	}
+	Node * pre;
+	Node * cur;
+	cur = this->head;
+	while(cur != NULL && cur->data.getServ() < job.getServ())
+	{
+		pre = cur;
+		cur = cur->getNext();
+	}
+	Node * newNode = new Node(job, cur);
+	if(cur == this->head)
+	{
+		this->head = newNode;
+	}
+	else
+	{
+		pre->next = newNode;
+	}
+	++(this->len);
+	return; 
+}
+
 //deletes whatever is the node after the node specfifed
 //Param: Need Like previous node
 void List::deleteNode(Node *prev)
@@ -168,7 +197,7 @@ void List::printListOnlyName() const
 	//print everything until it ends
 	for(temp = this->head; temp !=nullptr; temp = temp->getNext())
 	{
-		std::cout<< temp->getJob().getName() << " ";
+		std::cout << temp->getJob().getName() << " ";
 		
 	}
 	std::cout<< std::endl;
