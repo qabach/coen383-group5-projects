@@ -23,6 +23,7 @@
 #include "hpfnp.hpp"
 #include "sjf.hpp"
 #include "roundRobin.hpp"
+#include "HPFpreemptive.hpp"
 
 using namespace std;
 
@@ -61,9 +62,9 @@ int main()
 {
 	cout << "Note: this is C++" <<endl;
 	List yay;
-	int seed = 1;
+	int seed = time_t(NULL);
 	int count, count2;
-	srand(time(NULL));
+	srand(seed);
 	yay = List();
 	//generate 10 jobs
 	count = generateJob(yay,1,10);
@@ -79,19 +80,23 @@ int main()
 	hpfnp(yay);
 	sjf(yay);
   FCFS(&yay);     // First Come First Serve
+  round_robin_scheduler(&yay);    // Round Robin
+  HPFpre_emptive(&yay);           // Highest Priority First - preemptive
 	yay.clr();
+
 	
   // Round Robin Demo
-  round_robin_demo();
+  //round_robin_demo();
     
-
-    
-   cout << "end of program" <<endl;
-   return 0;
-
-    
+  cout << "end of program" <<endl;
+  return 0;
 }
 
+/*
+ round_robin_demo() defnition:
+ - generates job lists based on the number of WORKLOAD
+ - call Round Robin scheduler to work on the generated job lists
+ */
 void round_robin_demo()
 {
     for (int i = 0; i < WORKLOAD; i++)
