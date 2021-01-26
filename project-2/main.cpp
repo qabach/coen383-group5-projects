@@ -21,6 +21,7 @@
 #include "FCFS.hpp"
 #include "stats.hpp"
 #include "hpfnp.hpp"
+#include "sjf.hpp"
 #include "roundRobin.hpp"
 
 using namespace std;
@@ -76,6 +77,7 @@ int main()
 	cout <<"Starting # of Jobs: " << yay.length() << endl;
 	//run algo
 	hpfnp(yay);
+	sjf(yay);
   FCFS(&yay);     // First Come First Serve
 	yay.clr();
 	
