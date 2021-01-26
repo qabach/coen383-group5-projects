@@ -101,6 +101,44 @@ void List::pushDataNS(Job ok)
 	return;
 }
 
+void List::insertSjf(Job job)
+{
+	//std::cout << job.getName() << " " << job.getArr() << " " << job.getServ() <<  std::endl;
+	if(head == NULL)
+	{
+		this->head = new Node(job, NULL);
+		++(this->len);
+		//this->printListOnlyName();
+		//std::cout << "head == NULL" << std::endl;
+		return; 
+	}
+	Node * pre;
+	Node * cur;
+	cur = this->head;
+	//std::cout << "to cur = this->head;" << std::endl;
+	while(cur != NULL && cur->data.getServ() < job.getServ())
+	{
+		pre = cur;
+		cur = cur->getNext();
+	}
+	//std::cout << "to while end" << std::endl;
+	Node * newNode = new Node(job, cur);
+	//std::cout << "to new Node" << std::endl;
+	if(cur == this->head)
+	{
+		this->head = newNode;
+	}
+	else
+	{
+		pre->next = newNode;
+	}
+	//std::cout << "to pre->next" << std::endl;
+	++(this->len);
+	//this->printListOnlyName();
+	//std::cout << "head != NULL" << std::endl;
+	return; 
+}
+
 //deletes whatever is the node after the node specfifed
 //Param: Need Like previous node
 void List::deleteNode(Node *prev)
@@ -166,7 +204,7 @@ void List::printListOnlyName() const
 	//print everything until it ends
 	for(temp = this->head; temp !=NULL; temp = temp->getNext())
 	{
-		std::cout<< temp->getJob().getName() << " ";
+		std::cout << temp->getJob().getName() << " ";
 		
 	}
 	std::cout<< std::endl;

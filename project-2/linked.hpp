@@ -59,6 +59,7 @@ class List{
 	//insertion methods
 	void pushDataNS(Job ok);
 	void insertData(Job ok);
+	void insertSjf(Job job);
 	
 	//deletion methods
 	void deleteNode(Node *prev);
@@ -102,6 +103,7 @@ class Node{
 	//firend functions to allow stuff
 	friend void List::insertData(Job ok);
 	friend void List::pushDataNS(Job ok);
+	friend void List::insertSjf(Job job);
 	friend void List::deleteNode(Node *prev);
 	friend void List::deleteHeadNode();
 	

@@ -3,6 +3,7 @@
 #include <ctime>
 #include "linked.hpp"
 #include "hpfnp.hpp"
+#include "sjf.hpp"
 
 using namespace std;
 
@@ -49,6 +50,7 @@ int main()
 	cout << yay.length() << endl;
 	//run algo
 	hpfnp(yay);
+	sjf(yay);
 	yay.clr();
 	cout << "end of program" <<endl;
 	return 0;
