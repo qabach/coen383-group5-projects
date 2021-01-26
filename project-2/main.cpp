@@ -62,14 +62,15 @@ int main()
     
     // keep track of the running total stats for each algorithm
     overStat statEndingValue;
-    
+    overStat statEndingValueHPFNP[5];
+    vector<struct overStat> stats1;
+    srand(time(NULL));
     for (int i = 0; i < WORKLOAD; i++)
     {
         cout << "***************************** RUN "<< i+1 << " *********************************" << endl << endl;
         List yay;
         int seed = 1;
         int count, count2;
-        srand(time(NULL));
         yay = List();
         //generate 10 jobs
       
@@ -93,17 +94,38 @@ int main()
         //round_robin_scheduler(&yay);    
   	    // sjf(yay);                       // Shortest Job First 
         // srt(yay);                       // Shortest Remaining Time First 
-        // hpfnp(yay);                     // Highest Priority First - non_preemptive
+        hpfnp(yay,stats1);                     // Highest Priority First - non_preemptive
         // HPFpre_emptive(&yay);           // Highest Priority First - preemptive
         
         statEndingValue.AveResponseTime += statRunningValue.AveResponseTime;
         statEndingValue.AveWaitTime += statRunningValue.AveWaitTime;
         statEndingValue.AveTurnaroundTime += statRunningValue.AveTurnaroundTime;
         statEndingValue.AveThroughput += statRunningValue.AveThroughput;
-        
+        for(int j = 0; j < 5 ;++j)
+        {
+        	statEndingValueHPFNP[i].AveResponseTime += stats1[i].AveResponseTime;
+        statEndingValueHPFNP[i].AveWaitTime += stats1[i].AveWaitTime;
+        statEndingValueHPFNP[i].AveTurnaroundTime += stats1[i].AveTurnaroundTime;
+        statEndingValueHPFNP[i].AveThroughput += stats1[i].AveThroughput;
+        }
         yay.clr();
     }
+    cout<<"*************** Avg HPFNP *************** "<<endl;
+    for(int j = 0; j < 5 ;++j)
+    {	
+    		if(j <4)
+    		{
+    		cout<<"*************** Q" << to_string(j+1)
+    			<< "*************** "<<endl;
+    		}
+    		else
+    		{
+    			cout<<"*************** Total HPFNP *************** "<<endl;
+    		}
+		    printOverStat(statEndingValueHPFNP[j]);
+    }
     printOverStat(statEndingValue);
+    
 	
     // Round Robin Demo
     //round_robin_demo();
