@@ -1,5 +1,4 @@
 #include "srt.hpp"
-#include "stats.hpp"
 using namespace std;
 
 //calculate remaining time for each job
@@ -23,7 +22,7 @@ bool compareFunc(Job a, Job b)
     }
 }
 
-void srt(List a)
+overStat srt(List a)
 {
     cout << "****************SRT*********************" << endl;
     deque<Job> input_queue;
@@ -42,20 +41,19 @@ void srt(List a)
         input_queue.push_back(tmp->data);
     }
     // print out the jobs list
-    std::cout << " *** SRT Sheduler Process List *** " << std::endl;
+    cout << " *** SRT Sheduler Process List *** " << endl;
     for (int i = 0; i < input_queue.size(); i++)
     {
-        std::cout << "Name: " << input_queue[i].getName() << std::endl;
-        std::cout << "Arrival: " << input_queue[i].getArr() << std::endl;
-        std::cout << "Service: " << input_queue[i].getServ() << std::endl;
-        std::cout << "Priority: " << input_queue[i].getPri() << std::endl;
-        std::cout << std::endl;
+        cout << "Name: " << input_queue[i].getName() << endl;
+        cout << "Arrival: " << input_queue[i].getArr() << endl;
+        cout << "Service: " << input_queue[i].getServ() << endl;
+        cout << "Priority: " << input_queue[i].getPri() << endl;
+        cout << endl;
     }
-    std::cout << " *** END OF SRT Sheduler Process List *** " << std::endl;
+    cout << " *** END OF SRT Sheduler Process List *** " << endl;
     int quantum;
     for (quantum = 0; quantum < quantumAmount; quantum++)
     {
-        cout << "Quantum: " << quantum << endl;
         bool currQueueChanged = false;
         //add new jobs from input queue if they've arrived
         while (!input_queue.empty() && input_queue.front().getArr() <= quantum)
@@ -131,4 +129,7 @@ void srt(List a)
     //print stats for the run
     printTimeChart(finishedQueue);
     printAlgoStats(totalResponseTime, totalTurnaroundTime, totalWaitTime, numProcessedJobs);
+
+    overStat retVal = retStat(totalResponseTime, totalTurnaroundTime, totalWaitTime, numProcessedJobs);
+    return retVal;
 }
