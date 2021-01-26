@@ -32,8 +32,8 @@ Job::Job(int a, int b, int s, std::string nam = "None")
 //Makes the List Class
 List::List()
 {
-	head = NULL;
-	tail = NULL;
+	head = nullptr;
+	tail = nullptr;
 	len = 0;
 }
 
@@ -53,10 +53,10 @@ void List::insertData(Job data)
 	//if the new value arrivial time is less than the head, put it
 	//at head and move head down
 	temp = this->head;
-	if(temp == NULL || temp->data.arrivalTime > data.arrivalTime)
+	if(temp == nullptr || temp->data.arrivalTime > data.arrivalTime)
 	{
 		this->head = new Node(data,temp);
-		if(temp == NULL)
+		if(temp == nullptr)
 		{
 			this->tail= this->head;
 		}
@@ -66,14 +66,14 @@ void List::insertData(Job data)
 	//if there is nothing in the last spot or
 	//if the new value arrivial time is less than the one that is next, put it
 	//at next 
-	for(temp = this->head; temp !=NULL; temp = temp->next)
+	for(temp = this->head; temp !=nullptr; temp = temp->next)
 	{
-		if(temp->next == NULL || 
+		if(temp->next == nullptr || 
 		temp->next->data.arrivalTime > data.arrivalTime)
 		{
 			temp2 = new Node(data, temp->next);
 			//checks if this is the last element
-			if(temp->next == NULL)
+			if(temp->next == nullptr)
 			{
 				tail = temp2;
 			}
@@ -88,13 +88,13 @@ void List::insertData(Job data)
 void List::pushDataNS(Job ok)
 {
 	//check to see if there is anything in the list
-	if(head ==NULL)
+	if(head == nullptr)
 	{
-		this->head = new Node(ok,NULL);
+		this->head = new Node(ok,nullptr);
 		this->tail = this->head;
 	}
 	else{
-		this->tail->next = new Node(ok,NULL);
+		this->tail->next = new Node(ok,nullptr);
 		this->tail = this->tail->next;
 	}
 	++(this->len);
@@ -136,14 +136,15 @@ void List::deleteNode(Node *prev)
 {
 	Node *temp;
 	temp = prev->next;
-	if(temp == NULL){
+	if(temp == nullptr){
 		return;
 	}
 	prev->next= temp->next;
-	if(temp->next == NULL)
+	if(temp->next == nullptr)
 	{
 		this->tail = prev;
 	}
+    temp = nullptr;            //********
 	delete temp;
 	--(this->len);
 
@@ -152,12 +153,13 @@ void List::deleteNode(Node *prev)
 void List::deleteHeadNode()
 {
 	Node * temp;
-	if(this->head == NULL || this->len ==0)
+	if(this->head == nullptr || this->len ==0)
 	{
 		return;
 	}
 	temp = this->head;
 	this->head= temp->next;
+    temp = nullptr;
 	delete temp;
 	--(this->len);
 
@@ -180,7 +182,7 @@ void List::printList() const
 {
 	const Node * temp;
 	//print everything until it ends
-	for(temp = this->head; temp !=NULL; temp = temp->getNext())
+	for(temp = this->head; temp !=nullptr; temp = temp->getNext())
 	{
 		temp->printData();
 		std::cout<< std::endl;
@@ -193,7 +195,7 @@ void List::printListOnlyName() const
 	
 	const Node * temp;
 	//print everything until it ends
-	for(temp = this->head; temp !=NULL; temp = temp->getNext())
+	for(temp = this->head; temp !=nullptr; temp = temp->getNext())
 	{
 		std::cout << temp->getJob().getName() << " ";
 		
@@ -201,18 +203,19 @@ void List::printListOnlyName() const
 	std::cout<< std::endl;
 }
 
+
 //checks if there is enough jobs in t
 bool List::notIdle() const
 {
 	int time = 0;
 	const Node * temp;
 	//check if head is empty or that lenght of linked list is 0
-	if(head == NULL || len == 0)
+	if(head == nullptr || len == 0)
 	{
 		return true;
 	}
 	//go through all the linked list
-	for(temp = head; temp !=NULL; temp = temp->getNext())
+	for(temp = head; temp !=nullptr; temp = temp->getNext())
 	{
 		//if time is greater than 100, return true;
 		if( time >= 100)
@@ -256,5 +259,7 @@ void Node::printData() const
 	<< "\nPriority: " << data.priority 
 	<<std::endl;
 }
+
+
 
 
