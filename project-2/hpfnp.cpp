@@ -1,17 +1,26 @@
 #include "hpfnp.hpp"
+#include "stats.hpp"
 
 
 //does highest prioirty first, (FCFS for each prioirty)
-void hpfnp(const List &a)
+//store stats in stats
+//not that thins stored in vector should be q1,q2,q3,q4,total in that order.
+void hpfnp(const List &a, std::vector<struct overStat> &stats)
 {
 	List p1, p2, p3, p4, finished;
 	int t;
 	const Node * ref;
+	stats.clear();
 	//get the first element in the queue
 	ref = a.getHead();
 	t = ref->data.getArr();
 	//fill all the prioirty queus first
 	ref = fillQueues(ref,p1,p2,p3,p4,t);
+		//print out all the finished jobs
+	std::cout << "******************** HPFNP ********************" 
+		<< std::endl;
+	std::cout << "******************** Jobs ********************" 			<< std::endl;
+	a.printList();
 	//when time is not greater than 100 quatumn
 	while(t < 100)
 	{
@@ -46,7 +55,7 @@ void hpfnp(const List &a)
 	p3.clr();
 	p4.clr();
 	//print out the stats
-	computeStats(finished);
+	computeStats(finished, stats);
 	//std::cout << "yay" <<std::endl;
 	finished.clr();
 }
@@ -59,8 +68,7 @@ void performJob(List &a, List &c, int &t)
 	//calulates all the time for a node
 	jtemp.stats.turnaroundTime = (t + jtemp.getServ()) - jtemp.getArr();
 	jtemp.stats.responseTime = t - jtemp.getArr();
-	jtemp.stats.waitTime = jtemp.stats.responseTime
-		+jtemp.stats.turnaroundTime;
+	jtemp.stats.waitTime = jtemp.stats.turnaroundTime - jtemp.getServ();
 	//push onto the finished queue and delete from current queue to indicate doneness. also increment the time up to service time.
 	c.pushDataNS(jtemp);
 	t += jtemp.getServ();
@@ -100,61 +108,50 @@ const Node * fillQueues(const Node* ref,List &a1,List &a2,List &a3,List &a4, int
 }
 
 //used for calculating stats. inserts data into the each prioirty queue stat.
-void insertStats(const Job &data, double &at, double &aw,
-	double &ar, int&c)
+void insertStats(const Job &data, std::vector<struct overStat> &stats, int &count, int pos)
 {
 	//just add the average wait time, average response time, and average turnaround time
-	aw += data.getWait();
-	ar += data.getRes();
-	at += data.getTurn();
-	++c;
-}
-
-//prints out an indiviudal stat
-void subprintStat(std::string s, double &a, int &b)
-{
-	//if its not 0 print this. otherwise give N/A
-	if(b)
-	{
-		std::cout << s << a/b << std::endl;
-	}
-	else
-	{
-		std::cout << s << "N/A" << std::endl;
-	}
-		
+	stats[pos].AveTurnaroundTime += data.getTurn();
+	stats[pos].AveWaitTime += data.getWait();
+	stats[pos].AveResponseTime += data.getRes();
+	++count;
 }
 
 //prints out the given stats
-void printStats(double a[], int c[], int size =5)
+void printStats(std::vector<struct overStat> &stats, int size =5)
 {
 	//if the size is not 5 just reutrn
 	if(size != 5)
 	{
 		return;
 	}
+	cout << "*************** Algorithm Statistic ****************" << endl;
 	//for each q. print out some sort of stat
 	for(int i =0; i<size-1 ; ++i)
 	{
-		subprintStat("Q"+std::to_string(i+1) +": ",a[i],c[i]);
+		std::cout<<"Q"+std::to_string(i+1) +": " <<std::endl;
+		std::cout << "Avg Turn: " << stats[i].AveTurnaroundTime << std::endl;
+		std::cout << "Avg Wait: " << stats[i].AveWaitTime  << std::endl;
+		std::cout << "Avg Resp: " << stats[i].AveResponseTime  << std::endl;
+		std::cout << "Throughput:" << stats[i].AveThroughput << std::endl;
 	}
-	std::cout << "Total: " << a[4]/c[4] << std::endl;
+	std::cout << "Total: " << std::endl;
+	std::cout << "Avg Turn: " << stats[4].AveTurnaroundTime << std::endl;
+		std::cout << "Avg Wait: " << stats[4].AveWaitTime  << std::endl;
+		std::cout << "Avg Resp: " << stats[4].AveResponseTime  << std::endl;
+		std::cout << "Throughput:" << stats[4].AveThroughput << std::endl;
 	
 }
 
-void computeStats(const List &a)
+void computeStats(const List &a, std::vector<struct overStat> &stats)
 {
 	const Node * temp;
-	double qatt[5];
-	double qawt[5];
-	double qart[5];
 	int count[5];
 	//initialize everything to 0
 	for(int i = 0; i < 5; ++i)
 	{
-		qatt[i] = 0;
-		qawt[i] = 0;
-		qart[i] = 0;
+		struct overStat a= {0,0,0,0}; 
+		stats.push_back(a);
 		count[i] = 0;
 	}
 	//count how many items are in the queue per prioirty queue and in total.
@@ -163,41 +160,47 @@ void computeStats(const List &a)
 		switch(temp->data.getPri())
 		{
 			case 1:
-				insertStats(temp->data,qatt[0],qawt[0],qart[0],count[0]);
+				insertStats(temp->data,stats,
+					count[0],0);
 				break;
 			case 2:
-				insertStats(temp->data,qatt[1],qawt[1],qart[1],count[1]);
+				insertStats(temp->data,stats,
+					count[1],1);
 				break;
 			case 3:
-				insertStats(temp->data,qatt[2],qawt[2],qart[2],count[2]);
+				insertStats(temp->data,stats,
+					count[2],2);
 				break;
 			case 4:
-				insertStats(temp->data,qatt[3],qawt[3],qart[3],count[3]);
+				insertStats(temp->data,stats,
+					count[3],3);
 				break;
 			default:
 				std::cout << "error" <<std::endl;
 				return;
 		}
-		insertStats(temp->data,qatt[4],qawt[4],qart[4],count[4]);
+		insertStats(temp->data,stats,
+			count[4],4);
 	}
 	//print out all the finished jobs
-	std::cout << "Jobs: " <<std::endl;
-	a.printList();
+	//std::cout << "Jobs: " <<std::endl;
+	//a.printList();
 	//print out the time chart 
 	std::cout << "Time Chart: " <<std::endl;
 	//printing out stats
-	a.printListOnlyName();
-	std::cout << "Avg Turn:" << std::endl;
-	printStats(qatt,count);
-	std::cout << "Avg Wait:" << std::endl;
-	printStats(qawt,count);
-	std::cout << "Avg Resp:" << std::endl;
-	printStats(qart,count);
-	std::cout << "Throughput:" << std::endl;
-	std::cout << "Q1: " << count[0]/100.0 << std::endl;
-	std::cout << "Q2: " << count[1]/100.0 << std::endl;
-	std::cout << "Q3: " << count[2]/100.0 << std::endl;
-	std::cout << "Q4: " << count[3]/100.0 << std::endl;
-	std::cout << "Total: " << count[4]/100.0 << std::endl;
+	printTimeChart(a);
+	//make the necessary calulations
+	for(int i = 0; i < 5; ++i)
+	{
+		if(count[i] !=0)
+		{
+			stats[i].AveTurnaroundTime = (double)stats[i].AveTurnaroundTime / count[i];
+			stats[i].AveResponseTime = (double)stats[i].AveResponseTime / count[i];
+			stats[i].AveWaitTime = (double)stats[i].AveWaitTime / count[i];
+			stats[i].AveThroughput = (double)count[i]/100;
+		}
+	}
+	//print the stats
+	printStats(stats);
 
 }
