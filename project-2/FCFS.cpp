@@ -7,39 +7,39 @@
 
 #include <iostream>
 #include "FCFS.hpp"
-#include "stats.hpp"
 
-
-void FCFS(List * processQueue)
+overStat FCFS(List * processQueue)
 {
-    cout << "******************** FCFS ********************" << endl;
+    cout << endl << "******************** FCFS ********************" << endl;
     
+    cout << "Job Queue: " << endl;
+    //processQueue->printListOnlyName();
+    processQueue->printList();
     
+    Node * currentNode = nullptr;
+    currentNode = processQueue->getHead();  // currentNode point to the front of the queue (job to be processed)
     
-    Node * currentNode = NULL;
-    currentNode = processQueue->getHead();
-    
-    int numProcessedJobs = 0;
+    int numProcessedJobs = 0;           // total number of jobs get processed at least once
 
     double totalResponseTime = 0;
     double totalWaitTime = 0;
     double totalTurnarounTime = 0;
     
-    List finishedQueue;
+    List finishedQueue;                 // queue of finished jobs for FCFS
     finishedQueue = List();
    
     
-    int timeslice = 0;  // to keep track of the timeslice
+    int timeslice = 0;                  // to keep track of the timeslice
     
-    //while(currentNode->getJob().getArr() <= 99 and processQueue != nullptr)
+    // while job queue is not empty and current time does not exceed 99
     while(currentNode != nullptr && timeslice < 100)
     {
+        // **TRACING** Print the job at the head node to be processed at each timeslice
+        // cout << endl << "Current time: " << timeslice << endl << endl;
+        // currentNode->printData();
         
-        cout << endl << "Current time: " << timeslice << endl;
-        currentNode->printData();
-        cout << endl;
-        
-        if (timeslice < currentNode->getJob().getArr())        // job cannot arrive before the passing of time
+        // job cannot arrive before the passing of time
+        if (timeslice < currentNode->getJob().getArr())
         {
             timeslice++;
         }
@@ -47,45 +47,39 @@ void FCFS(List * processQueue)
         else
         {
             int responseTime = timeslice - currentNode->getJob().getArr();
-            //currentNode->getJob().setRes(responseTime);
-            //cout << "responseTime: " << responseTime << endl;
             totalResponseTime += responseTime;
-            
             
             timeslice += currentNode->getJob().getServ();
             
             int turnaroundTime = timeslice - currentNode->getJob().getArr();
-            //currentNode->getJob().setTurn(turnaroundTime);
-            //cout << "turnaround: " << turnaroundTime << endl;
             totalTurnarounTime += turnaroundTime;
             
-            
             int waitTime = turnaroundTime - currentNode->getJob().getServ();
-            //currentNode->getJob().setWait(waitTime);
-            //cout << "waittime: " << waitTime << endl;
             totalWaitTime += waitTime;
             
-            
+            // set the waitTime, responseTime, and turnaroundTime to the Job in the current Node
             currentNode->setJobStats(waitTime, responseTime, turnaroundTime);
             
-            numProcessedJobs++;
-            //cout << "num Jobs Processed: " << numProcessedJobs << endl;
+            numProcessedJobs++;         // total number of job has been processed
             
-            printStats(currentNode);
+            // **TRACING** print out waitTime, responseTime, and turnaroundTime of the Job in the current Node
+            // printStats(currentNode);
             
-         
-            finishedQueue.pushDataNS(currentNode->getJob());
-            processQueue->deleteHeadNode();
-            cout << "Processed Queue: " << endl;
-            finishedQueue.printListOnlyName();
-            currentNode = processQueue->getHead();
+            finishedQueue.pushDataNS(currentNode->getJob());        // insert the processed job to the finishedQueue
+            processQueue->deleteHeadNode();                         // move the processed job out of the queue's head
             
+            // **TRACING** print out processedQueue for each timeslide
+            // cout << "Processed Queue: " << endl;
+            // finishedQueue.printListOnlyName();
+            
+            currentNode = processQueue->getHead();                  // move the next job to front of the queue
         }
-       
     }
+    printAlgoStats(totalResponseTime, totalTurnarounTime, totalWaitTime, numProcessedJobs);     // print stats for this run
+    printTimeChart(finishedQueue);          // print the time chart
     
-    printTimeChart(finishedQueue);
     
-    printAlgoStats(totalResponseTime, totalTurnarounTime, totalWaitTime, numProcessedJobs);
-    
+    overStat retVal = retStat(totalResponseTime, totalTurnarounTime, totalWaitTime, numProcessedJobs);
+    return retVal;
 }
+
