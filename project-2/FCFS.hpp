@@ -7,12 +7,13 @@
 
 #include <stdio.h>
 #include "linked.hpp"
+#include "stats.hpp"
 using namespace std;
 
 #ifndef FCFS_hpp
 #define FCFS_hpp
 
-void FCFS(List * processQueue);
+overStat FCFS(List * processQueue);
 
 
 #endif /* FCFS_hpp */
