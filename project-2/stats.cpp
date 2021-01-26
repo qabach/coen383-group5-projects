@@ -26,7 +26,7 @@ void printStats(Node * currentNode)
 //******************************************************************************
 void printAlgoStats(int totalResponseTime, int totalTurnarounTime, int totalWaitTime, int numProcessedJobs)
 {
-    cout << "*************** Algorithm Statistic ****************" << endl;
+    cout << endl << "*************** Algorithm Statistic ****************" << endl;
     cout << "Average ResponseTime: " << float(totalResponseTime)/numProcessedJobs << endl;
     cout << "Average TurnaroundTime: " << float(totalTurnarounTime)/numProcessedJobs << endl;
     cout << "Average WaitTime: " << float(totalWaitTime)/numProcessedJobs << endl;
@@ -57,3 +57,43 @@ void printTimeChart(List finishedQueue)
     cout << endl << endl;
 }
 
+
+
+//******************************************************************************
+//          returnOverallStats
+//******************************************************************************
+overStat retStat(int totalResponseTime, int totalTurnarounTime, int totalWaitTime, int numProcessedJobs)
+{
+    overStat retValue;
+ 
+    float aveOverRes = float(totalResponseTime)/numProcessedJobs;
+    float aveOverTurn =float(totalTurnarounTime)/numProcessedJobs;
+    float aveOverWait = float(totalWaitTime)/numProcessedJobs;
+    float aveOverThrough = float(numProcessedJobs)/100;
+    
+    retValue.AveResponseTime = aveOverRes;
+    retValue.AveTurnaroundTime = aveOverTurn;
+    retValue.AveWaitTime = aveOverWait;
+    retValue.AveThroughput = aveOverThrough;
+    
+    return retValue;
+}
+
+
+//******************************************************************************
+//          printOverallAlgoStats
+//******************************************************************************
+void printOverStat(struct overStat stat)
+{
+    float totalAveResponseTime = stat.AveResponseTime;
+    float totalAveTurnaroundTime = stat.AveTurnaroundTime;
+    float totalAveWaitTime = stat.AveWaitTime;
+    float totalAveThroughput = stat.AveThroughput;
+    
+    cout << endl << "*************** Overall Average Algorithm Statistic ****************" << endl;
+    cout << "Overall Average ResponseTime: " << totalAveResponseTime/5 << endl;
+    cout << "Overall Average TurnaroundTime: " << totalAveTurnaroundTime/5 << endl;
+    cout << "Overall Average WaitTime: " << totalAveWaitTime/5 << endl;
+    cout << "Overall Throughput: " << totalAveThroughput/5 << endl;
+    cout << endl ;
+}

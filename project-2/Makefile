@@ -1,9 +1,9 @@
 CC = g++
 
 edit : main.o linked.o hpfnp.o roundRobin.o FCFS.o stats.o \
-		sjf.o
+		sjf.o srt.o 
 	g++ -std=c++11 -o test main.o linked.o hpfnp.o roundRobin.o FCFS.o \
-	stats.o sjf.o
+	stats.o sjf.o srt.o 
 
 main.o: main.cpp linked.hpp
 	cc -c main.cpp
@@ -19,6 +19,9 @@ roundRobin.o: roundRobin.cpp roundRobin.hpp
 
 FCFS.o: FCFS.cpp FCFS.hpp
 	cc -c FCFS.cpp 
+
+srt.o: srt.cpp srt.hpp
+	cc -c srt.cpp
 	
 stats.o: stats.cpp stats.hpp
 	cc -c stats.cpp 
@@ -28,5 +31,6 @@ sjf.o: sjf.cpp sjf.hpp
 	
 clean:
 	rm test main.o linked.o hpfnp.o roundRobin.o \
-	FCFS.o stats.o sjf.o
+	FCFS.o stats.o sjf.o srt.o
+
 	

@@ -19,16 +19,6 @@
 #include "linked.hpp"
 #include "stats.hpp"
 
-// statistics to print out
-// each scheduler should calculate its own statistics and return this struct
-struct statistics
-{
-    double average_turn_around_time;
-    double average_waiting_time;
-    double average_response_time;
-    double throughput; 
-};
-
 void round_robin_scheduler(List *input_list);
 
 #endif /* roundRobin_hpp */
