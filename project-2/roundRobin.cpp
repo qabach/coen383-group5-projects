@@ -38,12 +38,9 @@ void round_robin_scheduler(List *input_list)
     
     
     // statistics variables
-    struct statistics *stat_return = nullptr;   // return statistics for one run
-    stat_return = new(statistics);
-    double turn_around_time = 0.0;
-    double waiting_time     = 0.0;
-    double response_time    = 0.0;
-    int    respond_count    = 0;
+    double waiting_time         = 0.0;
+    double response_time        = 0.0;
+    int    jobs_processed_count = 0;
     
         
     // copy generated jobs from input list to queue
@@ -67,7 +64,7 @@ void round_robin_scheduler(List *input_list)
     std::cout << " *** END OF RR Sheduler Process List *** " << std::endl;
     
     // main loop to run 100 quantas 1-100
-    for (int quantum = 1; quantum <= quantas_limit; quantum++)
+    for (int quantum = 0; quantum < quantas_limit; quantum++)
     {
         // if the queue is empty, then CPU will idle
         if (process_queue.size() == 0)
@@ -78,6 +75,7 @@ void round_robin_scheduler(List *input_list)
         // CPU idle if the job has not arrived
         if (process_queue[0].getArr() > quantum)
         {
+            time_chart.push_back("<idle>"); // log in idle when no job
             continue;
         }
         
@@ -88,7 +86,6 @@ void round_robin_scheduler(List *input_list)
         {
             response_time += quantum - process_queue[0].getArr();
             waiting_time += response_time;         // increment waiting time of servicing job in case it has been waiting
-            respond_count++;
         }
         
         // increment wait time of all the jobs in queue
@@ -105,6 +102,7 @@ void round_robin_scheduler(List *input_list)
         
         //add to the time chart
         time_chart.push_back(process_queue[0].getName());
+        jobs_processed_count++; // increment the count of jobs processed
         
         if (time_left == 0) // if time left is 0, then remove the job from the schedule queue and add job to the finished queue
         {
@@ -113,14 +111,7 @@ void round_robin_scheduler(List *input_list)
         }
         else // if time left is not 0, then move it to the back of the queue with updated service time
         {
-            Job updated_job = Job(process_queue[0].getArr(),
-                                  process_queue[0].getServ(),
-                                  process_queue[0].getPri(),
-                                  process_queue[0].getName());
-            
-            updated_job.completion ++;
-            
-            process_queue.push_back(updated_job); // append job at the end of queue
+            process_queue.push_back(process_queue[0]); // append job at the end of queue
             process_queue.pop_front();            // remove job in front
         }
     }
@@ -131,7 +122,7 @@ void round_robin_scheduler(List *input_list)
     {
         for (int j = 0; j < i;j++)
         {
-            std::cout << " "; // one space represents one quantum time
+            std::cout << "."; // one dot represents one quantum time
         }
         if (i < time_chart.size())
         {
@@ -163,7 +154,7 @@ void round_robin_scheduler(List *input_list)
     int total_TAT = total_completion + total_wait_time_of_finised_jobs;
     
     // print out statistics 
-    printAlgoStats(response_time, total_TAT, total_wait_time_of_finised_jobs, int(finished_queue.size()));
+    printAlgoStats(response_time, total_TAT, total_wait_time_of_finised_jobs, jobs_processed_count);
     
 }
 
