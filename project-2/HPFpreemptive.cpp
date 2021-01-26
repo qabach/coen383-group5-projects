@@ -59,7 +59,7 @@ overStat HPFpre_emptive (List * input_list)
     std::cout << "Jobs list's size: " << process_queue.size() << std::endl;
     
     // print out the jobs list
-    std::cout << " *** HPF-preemptive Sheduler Process List *** " << std::endl;
+    std::cout << " *** HPF-preemptive Scheduler Process List *** " << std::endl;
     for (int i = 0; i < process_queue.size(); i++)
     {
         std::cout << "Name: "    << process_queue[i].getName()  << std::endl;
@@ -68,7 +68,7 @@ overStat HPFpre_emptive (List * input_list)
         std::cout << "Priority: "<< process_queue[i].getPri()   << std::endl;
         std::cout << std::endl;
     }
-    std::cout << " *** END OF HPF-preemptive Sheduler Process List *** " << std::endl;
+    std::cout << " *** END OF HPF-preemptive Scheduler Process List *** " << std::endl;
         
     // for each quantum time pass:
     //  - check the processed queue for jobs arrival
