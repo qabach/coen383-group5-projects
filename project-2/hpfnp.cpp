@@ -1,4 +1,5 @@
 #include "hpfnp.hpp"
+#include "stats.hpp"
 
 
 //does highest prioirty first, (FCFS for each prioirty)
@@ -12,6 +13,11 @@ void hpfnp(const List &a)
 	t = ref->data.getArr();
 	//fill all the prioirty queus first
 	ref = fillQueues(ref,p1,p2,p3,p4,t);
+		//print out all the finished jobs
+	std::cout << "******************** HPFNP ********************" 
+		<< std::endl;
+	std::cout << "******************** Jobs ********************" 			<< std::endl;
+	a.printList();
 	//when time is not greater than 100 quatumn
 	while(t < 100)
 	{
@@ -59,8 +65,7 @@ void performJob(List &a, List &c, int &t)
 	//calulates all the time for a node
 	jtemp.stats.turnaroundTime = (t + jtemp.getServ()) - jtemp.getArr();
 	jtemp.stats.responseTime = t - jtemp.getArr();
-	jtemp.stats.waitTime = jtemp.stats.responseTime
-		+jtemp.stats.turnaroundTime;
+	jtemp.stats.waitTime = jtemp.stats.turnaroundTime - jtemp.getServ();
 	//push onto the finished queue and delete from current queue to indicate doneness. also increment the time up to service time.
 	c.pushDataNS(jtemp);
 	t += jtemp.getServ();
@@ -138,7 +143,7 @@ void printStats(double a[], int c[], int size =5)
 	{
 		subprintStat("Q"+std::to_string(i+1) +": ",a[i],c[i]);
 	}
-	std::cout << "Total: " << a[4]/c[4] << std::endl;
+	std::cout << "Total: " << a[4]/c[4] << std::endl << std::endl;
 	
 }
 
@@ -181,12 +186,13 @@ void computeStats(const List &a)
 		insertStats(temp->data,qatt[4],qawt[4],qart[4],count[4]);
 	}
 	//print out all the finished jobs
-	std::cout << "Jobs: " <<std::endl;
-	a.printList();
+	//std::cout << "Jobs: " <<std::endl;
+	//a.printList();
 	//print out the time chart 
 	std::cout << "Time Chart: " <<std::endl;
 	//printing out stats
-	a.printListOnlyName();
+	printTimeChart(a);
+	cout << "*************** Algorithm Statistic ****************" << endl;
 	std::cout << "Avg Turn:" << std::endl;
 	printStats(qatt,count);
 	std::cout << "Avg Wait:" << std::endl;
