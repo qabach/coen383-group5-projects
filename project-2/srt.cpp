@@ -1,12 +1,13 @@
 #include "srt.hpp"
-#include "stats.hpp"
 using namespace std;
 
+//calculate remaining time for each job
 int remainingTime(Job a)
 {
     return a.getServ() - a.getComp();
 }
 
+//for sorting the queue based on remaining time, arrival time is tiebreaker
 bool compareFunc(Job a, Job b)
 {
     int aTimeLeft = remainingTime(a);
@@ -21,7 +22,7 @@ bool compareFunc(Job a, Job b)
     }
 }
 
-void srt(List a)
+overStat srt(List a)
 {
     cout << "****************SRT*********************" << endl;
     deque<Job> input_queue;
@@ -40,20 +41,21 @@ void srt(List a)
         input_queue.push_back(tmp->data);
     }
     // print out the jobs list
-    std::cout << " *** SRT Sheduler Process List *** " << std::endl;
+    cout << " *** SRT Sheduler Process List *** " << endl;
     for (int i = 0; i < input_queue.size(); i++)
     {
-        std::cout << "Name: " << input_queue[i].getName() << std::endl;
-        std::cout << "Arrival: " << input_queue[i].getArr() << std::endl;
-        std::cout << "Service: " << input_queue[i].getServ() << std::endl;
-        std::cout << std::endl;
+        cout << "Name: " << input_queue[i].getName() << endl;
+        cout << "Arrival: " << input_queue[i].getArr() << endl;
+        cout << "Service: " << input_queue[i].getServ() << endl;
+        cout << "Priority: " << input_queue[i].getPri() << endl;
+        cout << endl;
     }
-    std::cout << " *** END OF SRT Sheduler Process List *** " << std::endl;
+    cout << " *** END OF SRT Sheduler Process List *** " << endl;
     int quantum;
     for (quantum = 0; quantum < quantumAmount; quantum++)
     {
-        cout << "Quantum: " << quantum << endl;
         bool currQueueChanged = false;
+        //add new jobs from input queue if they've arrived
         while (!input_queue.empty() && input_queue.front().getArr() <= quantum)
         {
             current_queue.push_back(input_queue.front());
@@ -65,6 +67,7 @@ void srt(List a)
         {
             continue;
         }
+        //resort queue if new processes arrived
         if (currQueueChanged)
         {
             sort(current_queue.begin(), current_queue.end(), compareFunc);
@@ -75,14 +78,17 @@ void srt(List a)
             }
             cout << endl;
         }
+        //if job gets CPU for first time, set responseTime
         if (current_queue[0].getComp() == 0)
         {
             double res = double(quantum - current_queue[0].getArr());
             current_queue[0].setRes(res);
             totalResponseTime += res;
         }
+        //Execute current job
         current_queue[0].setComp(current_queue[0].getComp() + 1);
         cout << "Served Process: " << current_queue[0].getName() << " Time Left: " << remainingTime(current_queue[0]) << endl;
+        //If current job finished, remove from queue and update stats
         if (remainingTime(current_queue[0]) == 0)
         {
             double turn = double(quantum - current_queue[0].getArr());
@@ -96,6 +102,7 @@ void srt(List a)
             current_queue.pop_front();
         }
     }
+    //finish the remaining processes if they've already started
     while (!current_queue.empty())
     {
         if (current_queue[0].getComp() == 0)
@@ -119,7 +126,10 @@ void srt(List a)
             quantum++;
         }
     }
-
+    //print stats for the run
     printTimeChart(finishedQueue);
     printAlgoStats(totalResponseTime, totalTurnaroundTime, totalWaitTime, numProcessedJobs);
+
+    overStat retVal = retStat(totalResponseTime, totalTurnaroundTime, totalWaitTime, numProcessedJobs);
+    return retVal;
 }
