@@ -21,6 +21,7 @@
 #include "FCFS.hpp"
 #include "stats.hpp"
 #include "hpfnp.hpp"
+#include "sjf.hpp"
 #include "roundRobin.hpp"
 #include "HPFpreemptive.hpp"
 
@@ -76,19 +77,19 @@ int main()
 	}
 	cout <<"Starting # of Jobs: " << yay.length() << endl;
 	//run algo
-	hpfnp(yay);                     // Highest Priority First - non_preemptive
-    FCFS(&yay);                     // First Come First Serve
-    round_robin_scheduler(&yay);    // Round Robin
-    HPFpre_emptive(&yay);           // Highest Priority First - preemptive
-    yay.clr();
-	
-    // Round Robin Demo
-    //round_robin_demo();
-    
-    cout << "end of program" <<endl;
-    return 0;
+	hpfnp(yay);
+	sjf(yay);
+  FCFS(&yay);     // First Come First Serve
+  round_robin_scheduler(&yay);    // Round Robin
+  HPFpre_emptive(&yay);           // Highest Priority First - preemptive
+	yay.clr();
 
+	
+  // Round Robin Demo
+  //round_robin_demo();
     
+  cout << "end of program" <<endl;
+  return 0;
 }
 
 /*
