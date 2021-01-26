@@ -2,11 +2,13 @@
 #include "stats.hpp"
 using namespace std;
 
+//calculate remaining time for each job
 int remainingTime(Job a)
 {
     return a.getServ() - a.getComp();
 }
 
+//for sorting the queue based on remaining time, arrival time is tiebreaker
 bool compareFunc(Job a, Job b)
 {
     int aTimeLeft = remainingTime(a);
@@ -46,6 +48,7 @@ void srt(List a)
         std::cout << "Name: " << input_queue[i].getName() << std::endl;
         std::cout << "Arrival: " << input_queue[i].getArr() << std::endl;
         std::cout << "Service: " << input_queue[i].getServ() << std::endl;
+        std::cout << "Priority: " << input_queue[i].getPri() << std::endl;
         std::cout << std::endl;
     }
     std::cout << " *** END OF SRT Sheduler Process List *** " << std::endl;
@@ -54,6 +57,7 @@ void srt(List a)
     {
         cout << "Quantum: " << quantum << endl;
         bool currQueueChanged = false;
+        //add new jobs from input queue if they've arrived
         while (!input_queue.empty() && input_queue.front().getArr() <= quantum)
         {
             current_queue.push_back(input_queue.front());
@@ -65,6 +69,7 @@ void srt(List a)
         {
             continue;
         }
+        //resort queue if new processes arrived
         if (currQueueChanged)
         {
             sort(current_queue.begin(), current_queue.end(), compareFunc);
@@ -75,14 +80,17 @@ void srt(List a)
             }
             cout << endl;
         }
+        //if job gets CPU for first time, set responseTime
         if (current_queue[0].getComp() == 0)
         {
             double res = double(quantum - current_queue[0].getArr());
             current_queue[0].setRes(res);
             totalResponseTime += res;
         }
+        //Execute current job
         current_queue[0].setComp(current_queue[0].getComp() + 1);
         cout << "Served Process: " << current_queue[0].getName() << " Time Left: " << remainingTime(current_queue[0]) << endl;
+        //If current job finished, remove from queue and update stats
         if (remainingTime(current_queue[0]) == 0)
         {
             double turn = double(quantum - current_queue[0].getArr());
@@ -96,6 +104,7 @@ void srt(List a)
             current_queue.pop_front();
         }
     }
+    //finish the remaining processes if they've already started
     while (!current_queue.empty())
     {
         if (current_queue[0].getComp() == 0)
@@ -119,7 +128,7 @@ void srt(List a)
             quantum++;
         }
     }
-
+    //print stats for the run
     printTimeChart(finishedQueue);
     printAlgoStats(totalResponseTime, totalTurnaroundTime, totalWaitTime, numProcessedJobs);
 }
