@@ -31,9 +31,6 @@ using namespace std;
 // Const number of workload
 const int WORKLOAD = 5;
 
-// RR demo func declaration
-//void round_robin_demo();
-
 //Generate a Random Job
 //Paramas: a->the List working with, startpoint -> where you want to start,
 //count -> how many elements
@@ -62,18 +59,21 @@ int main()
     
     // keep track of the running total stats for each algorithm
     overStat statEndingValue;
+    overStat rr_endingStats;
+    overStat hpfe_endingStats;
+    
+    time_t seed = time(NULL);
+    srand(int(seed));
     
     for (int i = 0; i < WORKLOAD; i++)
     {
         cout << "***************************** RUN "<< i+1 << " *********************************" << endl << endl;
         List yay;
-        int seed = 1;
         int count, count2;
-        srand(time(NULL));
         yay = List();
         //generate 10 jobs
       
-        count = generateJob(yay,1,10);
+        count = generateJob(yay,1,100);
         count2 = 2;
       
         //generatate more jobs if needed
@@ -87,26 +87,42 @@ int main()
         
         // keep track of the running total stats for each algorithm
         overStat statRunningValue;
+        overStat rr_stats;
+        overStat hpfe_stats;
         
         //run 6 algorithm
-        statRunningValue = FCFS(&yay);     // First Come First Serve
-        //round_robin_scheduler(&yay);    
-  	    // sjf(yay);                       // Shortest Job First 
-        // srt(yay);                       // Shortest Remaining Time First 
-        // hpfnp(yay);                     // Highest Priority First - non_preemptive
-        // HPFpre_emptive(&yay);           // Highest Priority First - preemptive
+        //statRunningValue = FCFS(&yay);            // First Come First Serve
+        rr_stats = round_robin_scheduler(&yay);     // Round Robin
+  	    sjf(yay);                                   // Shortest Job First
+        srt(yay);                                   // Shortest Remaining Time First
+        hpfnp(yay);                                 // Highest Priority First - non_preemptive
+        hpfe_stats = HPFpre_emptive(&yay);                       // Highest Priority First - preemptive
         
         statEndingValue.AveResponseTime += statRunningValue.AveResponseTime;
         statEndingValue.AveWaitTime += statRunningValue.AveWaitTime;
         statEndingValue.AveTurnaroundTime += statRunningValue.AveTurnaroundTime;
         statEndingValue.AveThroughput += statRunningValue.AveThroughput;
         
+        // Round Robin overall avg stats after WORKLOAD run
+        rr_endingStats.AveResponseTime      += rr_stats.AveResponseTime;
+        rr_endingStats.AveWaitTime          += rr_stats.AveWaitTime;
+        rr_endingStats.AveTurnaroundTime    += rr_stats.AveTurnaroundTime;
+        rr_endingStats.AveThroughput        += rr_stats.AveThroughput;
+        
+        // HPF preemptive overall avg stats after WORKLOAD run
+        hpfe_endingStats.AveResponseTime    += hpfe_stats.AveResponseTime;
+        hpfe_endingStats.AveWaitTime        += hpfe_stats.AveWaitTime;
+        hpfe_endingStats.AveTurnaroundTime  += hpfe_stats.AveTurnaroundTime;
+        hpfe_endingStats.AveThroughput      += hpfe_stats.AveThroughput;
+        
         yay.clr();
     }
     printOverStat(statEndingValue);
-	
-    // Round Robin Demo
-    //round_robin_demo();
+    
+    cout << "*************** ROUND ROBIN OVERALL STATS **************************";
+    printOverStat(rr_endingStats);
+    cout << "*************** HPF Preemptive OVERALL STATS ***********************";
+    printOverStat(hpfe_endingStats);
     
     cout << "end of program" <<endl;
     return 0;

@@ -23,7 +23,7 @@ High Priority First - preemptive Scheduler Implementation
 #include "HPFpreemptive.hpp"
 
 
-void HPFpre_emptive (List * input_list)
+overStat HPFpre_emptive (List * input_list)
 {
     // send system message if the job list is empty
     if (input_list == nullptr)
@@ -121,8 +121,7 @@ void HPFpre_emptive (List * input_list)
                 // if the process name is already recorded in time chart, its response time is already computed
                 if (std::find(time_chart.begin(),time_chart.end(),hpf_queue.queue_list[i][0].getName()) == time_chart.end())
                 {
-                    stat_list[i].response_time += quantum - hpf_queue.queue_list[i][0].getArr();
-                    stat_list[i].total_wait_time += stat_list[i].response_time;         // increment waiting time of servicing job in case it has been waiting
+                    stat_list[i].response_time += quantum - hpf_queue.queue_list[i][0].getArr(); // compute the respone time 
                 }
                 
                 // log job to time chart
@@ -147,15 +146,14 @@ void HPFpre_emptive (List * input_list)
                     hpf_queue.queue_list[i].pop_front(); // pop the front
                 }
                 jobServiced = true;
-                
-                // increment wait time in all jobs for all queues
-                for (int r = 0; r < hpf_queue.levels_count; r++)
-                {
-                    for (int s = 0; s < hpf_queue.queue_list[r].size(); s++)
-                    {
-                        hpf_queue.queue_list[r][s].stats.waitTime ++; 
-                    }
-                }
+            }
+        }
+        // increment wait time in all jobs for all queues
+        for (int r = 0; r < hpf_queue.levels_count; r++)
+        {
+            for (int s = 0; s < hpf_queue.queue_list[r].size(); s++)
+            {
+                hpf_queue.queue_list[r][s].stats.waitTime ++;
             }
         }
     }
@@ -188,12 +186,29 @@ void HPFpre_emptive (List * input_list)
         stat_list[finished_queue[j].getPri()-1].total_TurnAroundTime = stat_list[finished_queue[j].getPri()].total_wait_time + finished_queue[j].completion;
     }
     
+    // variables to compute overall stats
+    double totalResponseTime   = 0.0;
+    double totalTurnarounTime  = 0.0;
+    double totalWaitTime       = 0.0;
+    int numProcessedJobs    = 0;
+    
+    
     // print out statistics for each queue
     for(int i = 0; i < hpf_queue.levels_count; i++)
     {
-        std::cout << "*************** STATISTICS FOR QUEUE " << i+1 << " *************" << std::endl;
+        std::cout << "*************** STATISTICS FOR QUEUE " << i+1 << " *************";
         printAlgoStats(stat_list[i].response_time, stat_list[i].total_TurnAroundTime, stat_list[i].total_wait_time, stat_list[i].processed_jobs);
+        totalResponseTime   += stat_list[i].response_time;
+        totalTurnarounTime  += stat_list[i].total_TurnAroundTime;
+        totalWaitTime       += stat_list[i].total_wait_time;
+        numProcessedJobs    += stat_list[i].processed_jobs;
     }
     
+    // free memory
+    tmp = nullptr;
+    delete tmp;
     
+    // Compute avg overall stats of all the queues
+    overStat retVal = retStat(totalResponseTime, totalTurnarounTime, totalWaitTime, numProcessedJobs);
+    return retVal;
 }
