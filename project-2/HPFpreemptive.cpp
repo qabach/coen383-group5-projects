@@ -183,7 +183,7 @@ overStat HPFpre_emptive (List * input_list)
         
         // compute Turn Around Time
         // TAT = Wait_time + Service_Time
-        stat_list[finished_queue[j].getPri()-1].total_TurnAroundTime = stat_list[finished_queue[j].getPri()].total_wait_time + finished_queue[j].completion;
+        stat_list[finished_queue[j].getPri()-1].total_TurnAroundTime = stat_list[finished_queue[j].getPri()-1].total_wait_time + finished_queue[j].completion;
     }
     
     // variables to compute overall stats
@@ -204,6 +204,9 @@ overStat HPFpre_emptive (List * input_list)
         numProcessedJobs    += stat_list[i].processed_jobs;
     }
     
+    std::cout << "*************** OVERALL STATISTICS FOR  ALL QUEUE *************";
+    printAlgoStats(totalResponseTime, totalTurnarounTime, totalWaitTime, numProcessedJobs);
+
     // free memory
     tmp = nullptr;
     delete tmp;
