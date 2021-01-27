@@ -34,6 +34,7 @@ void printAlgoStats(int totalResponseTime, int totalTurnarounTime, int totalWait
     cout << endl ;
 }
 
+
 //******************************************************************************
 //          printTimeChart
 //******************************************************************************
@@ -79,6 +80,26 @@ overStat retStat(int totalResponseTime, int totalTurnarounTime, int totalWaitTim
     return retValue;
 }
 
+//******************************************************************************
+//          returnOverallStats
+//******************************************************************************
+overStat retStat(int totalResponseTime, int totalTurnarounTime, int totalWaitTime, int numProcessedJobs, int completedJob)
+{
+    overStat retValue;
+ 
+    float aveOverRes = float(totalResponseTime)/numProcessedJobs;
+    float aveOverTurn =float(totalTurnarounTime)/numProcessedJobs;
+    float aveOverWait = float(totalWaitTime)/numProcessedJobs;
+    float aveOverThrough = float(completedJob)/100;
+    
+    retValue.AveResponseTime = aveOverRes;
+    retValue.AveTurnaroundTime = aveOverTurn;
+    retValue.AveWaitTime = aveOverWait;
+    retValue.AveThroughput = aveOverThrough;
+    
+    return retValue;
+}
+
 
 //******************************************************************************
 //          printOverallAlgoStats
@@ -95,5 +116,19 @@ void printOverStat(struct overStat stat)
     cout << "Overall Average TurnaroundTime: " << totalAveTurnaroundTime/5 << endl;
     cout << "Overall Average WaitTime: " << totalAveWaitTime/5 << endl;
     cout << "Overall Throughput: " << totalAveThroughput/5 << endl;
+    cout << endl ;
+}
+
+
+//******************************************************************************
+//          printAlgoStats
+//******************************************************************************
+void printAlgoStats(int totalResponseTime, int totalTurnarounTime, int totalWaitTime, int numProcessedJobs, int completedJobs)
+{
+    cout << endl << "*************** Algorithm Statistic ****************" << endl;
+    cout << "Average ResponseTime: " << float(totalResponseTime)/numProcessedJobs << endl;
+    cout << "Average TurnaroundTime: " << float(totalTurnarounTime)/numProcessedJobs << endl;
+    cout << "Average WaitTime: " << float(totalWaitTime)/numProcessedJobs << endl;
+    cout << "Throughput: " << float(completedJobs)/100 << endl;
     cout << endl ;
 }

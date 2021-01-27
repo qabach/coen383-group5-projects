@@ -204,10 +204,11 @@ overStat HPFpre_emptive (List * input_list)
         numProcessedJobs    += stat_list[i].processed_jobs;
     }
     
+    //get the avg TAT
     std::cout << "*************** OVERALL STATISTICS FOR  ALL QUEUE *************";
-    printAlgoStats(totalResponseTime, totalTurnarounTime, totalWaitTime, numProcessedJobs);
+    printAlgoStats(totalResponseTime, totalTurnarounTime, totalWaitTime, numProcessedJobs, finished_queue.size());
     
     // Compute avg overall stats of all the queues
-    overStat retVal = retStat(totalResponseTime, totalTurnarounTime, totalWaitTime, numProcessedJobs);
+    overStat retVal = retStat(totalResponseTime, totalTurnarounTime, totalWaitTime, numProcessedJobs, finished_queue.size());
     return retVal;
 }
