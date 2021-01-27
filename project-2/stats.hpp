@@ -14,9 +14,17 @@ using namespace std;
 #ifndef stats_hpp
 #define stats_hpp
 
+struct overStat{
+    float AveWaitTime = 0;
+    float AveResponseTime = 0;
+    float AveTurnaroundTime = 0;
+    float AveThroughput = 0;
+};
+
 void printStats(Node * currentNode);
 void printAlgoStats(int totalResponseTime, int totalTurnarounTime, int totalWaitTime, int numProcessedJobs);
 void printTimeChart(List finishedQueue);
-
+overStat retStat(int totalResponseTime, int totalTurnarounTime, int totalWaitTime, int numProcessedJobs);
+void printOverStat(struct overStat stat);
 
 #endif /* stats_hpp */
