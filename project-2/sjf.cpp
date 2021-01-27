@@ -1,14 +1,23 @@
+#include <iostream>
 #include "sjf.hpp"
 
-void sjf(const List &list)
+overStat sjf(const List &list)
 {
+	std::cout << std::endl << "******************** start SJF ********************" << std::endl;
+	
 	List sjfList, finishedList;
 	int t = 0;
-	Node * curNode;
+	Node * curNode = NULL;
 	const Node * pointer = list.getHead();
 	const Node * next;
+
+	int numProcessedJobs = 0;
+    double totalResponseTime = 0;
+    double totalWaitTime = 0;
+    double totalTurnaroundTime = 0;
+
 	while(t < 100)
-	{
+	{	
 		//1. move arrived Nodes from (list) to (sjfList)
 
 		while(pointer != NULL && pointer->data.getArr() <= t)
@@ -34,6 +43,12 @@ void sjf(const List &list)
 				curNode->data.stats.responseTime = t - curNode->data.getArr();
 				curNode->data.stats.waitTime = curNode->data.getTurn() - curNode->data.getServ();
 
+				//calculate total stats
+				totalTurnaroundTime += curNode->data.stats.turnaroundTime;
+				totalResponseTime += curNode->data.stats.responseTime;
+				totalWaitTime += curNode->data.stats.waitTime;
+				numProcessedJobs++;
+
 				//add current job from (sjfList) to (finishedList)
 				finishedList.pushDataNS(curNode->data);
 				sjfList.deleteHeadNode();
@@ -48,10 +63,18 @@ void sjf(const List &list)
 			}
 		}
 
-		t++;
+		if(curNode == NULL) t++;
+		else t += curNode->data.serviceTime;
 	}
 	sjfList.clr();
-	std::cout << "This is SJF:" << std::endl;
-	finishedList.printListOnlyName();
+
+	printAlgoStats(totalResponseTime, totalTurnaroundTime, totalWaitTime, numProcessedJobs);
+    printTimeChart(finishedList);
+    overStat overallStats = retStat(totalResponseTime, totalTurnaroundTime, totalWaitTime, numProcessedJobs);
+    
 	finishedList.clr();
+
+	std::cout << std::endl << "******************** end SJF ********************" << std::endl;
+
+	return overallStats;
 }
