@@ -91,6 +91,9 @@ int main()
         }
         cout <<"Starting # of Jobs: " << yay.length() << endl;
         
+        yay.clr();
+    }
+}
         // keep track of the running total stats for each algorithm
 
         overStat statRunningValueFCFS;
@@ -106,7 +109,7 @@ int main()
         srt_stats   = srt(yay);                           // Shortest Remaining Time First
         hpfnp(yay,stats1);                                // Highest Priority First - non_preemptive
         hpfe_stats  = HPFpre_emptive(&yay);               // Highest Priority First - preemptive
-  
+        
         // FCFS Overall Average Statistics after WORKLOAD runs
         statEndingValueFCFS.AveResponseTime += statRunningValueFCFS.AveResponseTime;
         statEndingValueFCFS.AveWaitTime += statRunningValueFCFS.AveWaitTime;
@@ -134,7 +137,6 @@ int main()
         // HPF non-preemptive overall avg stats after WORKLOAD runs
         for(int j = 0; j < 5 ;++j)
         {
-
           statEndingValueHPFNP[i].AveResponseTime += stats1[i].AveResponseTime;
           statEndingValueHPFNP[i].AveWaitTime += stats1[i].AveWaitTime;
           statEndingValueHPFNP[i].AveTurnaroundTime += stats1[i].AveTurnaroundTime;
