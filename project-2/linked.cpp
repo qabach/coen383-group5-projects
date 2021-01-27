@@ -204,7 +204,8 @@ void List::printListOnlyName() const
 }
 
 
-//checks if there is enough jobs in t
+//checks if there is enough jobs in it.
+//Note: its suppose to be isIdle but changing it might mess up some stuff
 bool List::notIdle() const
 {
 	int time = 0;
@@ -217,12 +218,12 @@ bool List::notIdle() const
 	//go through all the linked list
 	for(temp = head; temp !=nullptr; temp = temp->getNext())
 	{
-		//if time is greater than 100, return true;
+		//if time is greater than 100, return false;
 		if( time >= 100)
 		{
 			return false;
 		}
-		//check if program idle for 2 quatumn, return false if true
+		//check if program idle for 2 quatumn, return true if true
 		if(time + 2 < temp->data.arrivalTime)
 		{
 			return true;
