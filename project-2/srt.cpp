@@ -28,7 +28,7 @@ overStat srt(List a)
     deque<Job> input_queue;
     deque<Job> current_queue;
 
-    List finishedQueue = List();
+    deque<string> finishedQueue;
     int quantumAmount = 100;
     int numProcessedJobs = 0;
     double totalResponseTime = 0;
@@ -65,6 +65,7 @@ overStat srt(List a)
         // CPU idle if the job has not arrived
         if (current_queue.empty())
         {
+            finishedQueue.push_back("idle");
             continue;
         }
         //resort queue if new processes arrived
@@ -87,6 +88,7 @@ overStat srt(List a)
         }
         //Execute current job
         current_queue[0].setComp(current_queue[0].getComp() + 1);
+        finishedQueue.push_back(current_queue[0].getName());
         cout << "Served Process: " << current_queue[0].getName() << " Time Left: " << remainingTime(current_queue[0]) << endl;
         //If current job finished, remove from queue and update stats
         if (remainingTime(current_queue[0]) == 0)
@@ -98,7 +100,6 @@ overStat srt(List a)
             totalTurnaroundTime += turn;
             totalWaitTime += wait;
             numProcessedJobs += 1;
-            finishedQueue.insertData(current_queue[0]);
             current_queue.pop_front();
         }
     }
@@ -112,6 +113,7 @@ overStat srt(List a)
         }
         current_queue[0].setComp(current_queue[0].getComp() + 1);
         cout << "Served Process: " << current_queue[0].getName() << " Time Left: " << remainingTime(current_queue[0]) << endl;
+        finishedQueue.push_back(current_queue[0].getName());
         if (remainingTime(current_queue[0]) == 0)
         {
             double turn = quantum - current_queue[0].getArr();
@@ -121,13 +123,22 @@ overStat srt(List a)
             totalTurnaroundTime += turn;
             totalWaitTime += wait;
             numProcessedJobs += 1;
-            finishedQueue.insertData(current_queue[0]);
             current_queue.pop_front();
             quantum++;
         }
     }
     //print stats for the run
-    printTimeChart(finishedQueue);
+    //print out time chart
+    cout << "Time Chart from 0 to 99 quanta:" << endl;
+    for (int i = 0; i < quantumAmount; i++)
+    {
+        for (int j = 0; j < i; j++)
+        {
+            cout << "."; // one dot represents one quantum time
+        }
+        cout << finishedQueue[0] << endl;
+        finishedQueue.pop_front();
+    }
     printAlgoStats(totalResponseTime, totalTurnaroundTime, totalWaitTime, numProcessedJobs);
 
     overStat retVal = retStat(totalResponseTime, totalTurnaroundTime, totalWaitTime, numProcessedJobs);
