@@ -41,7 +41,7 @@ overStat srt(List a)
         input_queue.push_back(tmp->data);
     }
     // print out the jobs list
-    cout << " *** SRT Sheduler Process List *** " << endl;
+    cout << " *** SRT Scheduler Process List *** " << endl;
     for (int i = 0; i < input_queue.size(); i++)
     {
         cout << "Name: " << input_queue[i].getName() << endl;
@@ -50,7 +50,7 @@ overStat srt(List a)
         cout << "Priority: " << input_queue[i].getPri() << endl;
         cout << endl;
     }
-    cout << " *** END OF SRT Sheduler Process List *** " << endl;
+    cout << " *** END OF SRT Scheduler Process List *** " << endl;
     int quantum;
     for (quantum = 0; quantum < quantumAmount; quantum++)
     {
@@ -72,12 +72,6 @@ overStat srt(List a)
         if (currQueueChanged)
         {
             sort(current_queue.begin(), current_queue.end(), compareFunc);
-            cout << "Queue changed." << endl;
-            for (int i = 0; i < current_queue.size(); i++)
-            {
-                cout << current_queue[i].getName() << " ";
-            }
-            cout << endl;
         }
         //if job gets CPU for first time, set responseTime
         if (current_queue[0].getComp() == 0)
@@ -89,7 +83,6 @@ overStat srt(List a)
         //Execute current job
         current_queue[0].setComp(current_queue[0].getComp() + 1);
         finishedQueue.push_back(current_queue[0].getName());
-        cout << "Served Process: " << current_queue[0].getName() << " Time Left: " << remainingTime(current_queue[0]) << endl;
         //If current job finished, remove from queue and update stats
         if (remainingTime(current_queue[0]) == 0)
         {
@@ -112,7 +105,6 @@ overStat srt(List a)
             continue;
         }
         current_queue[0].setComp(current_queue[0].getComp() + 1);
-        cout << "Served Process: " << current_queue[0].getName() << " Time Left: " << remainingTime(current_queue[0]) << endl;
         finishedQueue.push_back(current_queue[0].getName());
         if (remainingTime(current_queue[0]) == 0)
         {
