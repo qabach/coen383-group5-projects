@@ -64,9 +64,9 @@ int main()
     overStat hpfe_endingStats;
     overStat statEndingValueHPFNP[5];
     overStat srt_endingStats;
-
     vector<struct overStat> stats1;
-  
+    overStat sjfEndingStats;
+
     srand(time(NULL));
   
   for (int i = 0; i < WORKLOAD; i++)
@@ -97,14 +97,16 @@ int main()
         overStat rr_stats;
         overStat hpfe_stats;
         overStat srt_stats;
-        
+        overStat sjfStats;
+
         //run 6 algorithm
         statRunningValueFCFS = FCFS(&yay);            // First Come First Serve
         rr_stats = round_robin_scheduler(&yay);       // Round Robin
-  	    sjf(yay);                                     // Shortest Job First
         srt(yay);                                     // Shortest Remaining Time First
         hpfnp(yay,stats1);                            // Highest Priority First - non_preemptive
         hpfe_stats = HPFpre_emptive(&yay);            // Highest Priority First - preemptive
+        sjfStats = sjf(yay);                          // Shortest Job First
+  
   
          // FCFS Overall Average Statistics after WORKLOAD runs
         statEndingValueFCFS.AveResponseTime += statRunningValueFCFS.AveResponseTime;
@@ -133,11 +135,17 @@ int main()
         // HPF non-preemptive overall avg stats after WORKLOAD runs
         for(int j = 0; j < 5 ;++j)
         {
-            statEndingValueHPFNP[i].AveResponseTime += stats1[i].AveResponseTime;
+          statEndingValueHPFNP[i].AveResponseTime += stats1[i].AveResponseTime;
           statEndingValueHPFNP[i].AveWaitTime += stats1[i].AveWaitTime;
           statEndingValueHPFNP[i].AveTurnaroundTime += stats1[i].AveTurnaroundTime;
           statEndingValueHPFNP[i].AveThroughput += stats1[i].AveThroughput;
         }
+
+        // SJF overall avg stats after WORKLOAD runs
+        sjfEndingStats.AveResponseTime += sjfStats.AveResponseTime;
+        sjfEndingStats.AveWaitTime += sjfStats.AveWaitTime;
+        sjfEndingStats.AveTurnaroundTime += sjfStats.AveTurnaroundTime;
+        sjfEndingStats.AveThroughput += sjfStats.AveThroughput;
 
         yay.clr();
     }
@@ -165,10 +173,12 @@ int main()
 		    printOverStat(statEndingValueHPFNP[j]);
     }
     
-   
     cout << endl << "********************** HPF-PREEMPTIVE OVERALL STATS ***********************" << endl;
     printOverStat(hpfe_endingStats);
   
+    cout << endl << "********************************* SJF OVERALL STATS *************************" << endl;
+    printOverStat(sjfEndingStats);
+
     cout << "End of Program" <<endl;
     return 0;
 }
