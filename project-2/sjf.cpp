@@ -32,7 +32,7 @@ void sjf(const List &list)
 				//calculate job stats
 				curNode->data.stats.turnaroundTime = t + curNode->data.getServ() - curNode->data.getArr();
 				curNode->data.stats.responseTime = t - curNode->data.getArr();
-				curNode->data.stats.waitTime = curNode->data.getTurn() + curNode->data.getServ();
+				curNode->data.stats.waitTime = curNode->data.getTurn() - curNode->data.getServ();
 
 				//add current job from (sjfList) to (finishedList)
 				finishedList.pushDataNS(curNode->data);
