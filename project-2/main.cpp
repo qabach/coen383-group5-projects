@@ -107,7 +107,6 @@ int main()
         hpfe_stats = HPFpre_emptive(&yay);            // Highest Priority First - preemptive
         sjfStats = sjf(yay);                          // Shortest Job First
   
-  
          // FCFS Overall Average Statistics after WORKLOAD runs
         statEndingValueFCFS.AveResponseTime += statRunningValueFCFS.AveResponseTime;
         statEndingValueFCFS.AveWaitTime += statRunningValueFCFS.AveWaitTime;
