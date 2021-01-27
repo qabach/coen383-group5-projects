@@ -55,7 +55,7 @@ int generateJob(List &a, int startpoint, int count)
 
 int main()
 {
-	cout << "Note: this is C++" <<endl;
+	cout << "COEN383 - Group 5 - Project 2" <<endl;
     
     // keep track of the running total stats for each algorithm
 
@@ -150,16 +150,16 @@ int main()
         yay.clr();
     }
 
-    cout << endl << "************************* FCFS OVERALL STATS **************************" << endl;
+    cout << endl << "************************* FCFS OVERALL STATS **************************";
     printOverStat(statEndingValueFCFS);
   
-    cout << endl << "************************* ROUND ROBIN OVERALL STATS **************************" << endl;
+    cout << endl << "************************* ROUND ROBIN OVERALL STATS **************************";
     printOverStat(rr_endingStats);
     
-    cout << endl << "********************************* SRT OVERALL STATS *************************" << endl;
+    cout << endl << "********************************* SRT OVERALL STATS *************************";
     printOverStat(srt_endingStats);
   
-    cout << endl << "************************* HPF-NP OVERALL STATS ************************* "<<endl;
+    cout << endl << "************************* HPF-NP OVERALL STATS ************************* ";
     for(int j = 0; j < 5 ;++j)
     {	
     		if(j <4)
@@ -173,10 +173,10 @@ int main()
 		    printOverStat(statEndingValueHPFNP[j]);
     }
     
-    cout << endl << "********************** HPF-PREEMPTIVE OVERALL STATS ***********************" << endl;
+    cout << endl << "********************** HPF-PREEMPTIVE OVERALL STATS ***********************";
     printOverStat(hpfe_endingStats);
   
-    cout << endl << "********************************* SJF OVERALL STATS *************************" << endl;
+    cout << endl << "********************************* SJF OVERALL STATS *************************";
     printOverStat(sjfEndingStats);
 
     cout << "End of Program" <<endl;

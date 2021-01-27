@@ -7,7 +7,7 @@ overStat sjf(const List &list)
 	
 	List sjfList, finishedList;
 	int t = 0;
-	Node * curNode = NULL;
+	Node * curNode = nullptr;
 	const Node * pointer = list.getHead();
 	const Node * next;
 

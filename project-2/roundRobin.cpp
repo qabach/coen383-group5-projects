@@ -52,10 +52,6 @@ overStat round_robin_scheduler(List *input_list)
         copy_queue.push_back(tmp->data);
     }
     
-    // free memory;
-    tmp = nullptr;
-    delete tmp;
-    
     std::cout << "Jobs queue's size: " << copy_queue.size() << std::endl;
     
     // print out the jobs list
