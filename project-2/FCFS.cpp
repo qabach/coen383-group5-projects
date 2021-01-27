@@ -8,16 +8,32 @@
 #include <iostream>
 #include "FCFS.hpp"
 
-overStat FCFS(List * processQueue)
+overStat FCFS(List * oriProcessQueue)
 {
     cout << endl << "******************** FCFS ********************" << endl;
     
+    // create an empty queue
+    List processQueue;
+    processQueue = List();
+    
+    // Node pointer to the head of the original process queue
+    Node * nodePtr = oriProcessQueue->getHead();
+    
+    // Copy oriProcessQueue (jobs) into new queue
+    while(nodePtr != nullptr)
+    {
+        processQueue.insertData(nodePtr->data);
+        nodePtr = nodePtr->getNext();
+    }
+    
+    // print out the created job list
     cout << "Job Queue: " << endl;
     //processQueue->printListOnlyName();
-    processQueue->printList();
+    oriProcessQueue->printList();
     
+    // pointer to current Job
     Node * currentNode = nullptr;
-    currentNode = processQueue->getHead();  // currentNode point to the front of the queue (job to be processed)
+    currentNode = processQueue.getHead();  // currentNode point to the front of the queue (job to be processed)
     
     int numProcessedJobs = 0;           // total number of jobs get processed at least once
 
@@ -25,6 +41,7 @@ overStat FCFS(List * processQueue)
     double totalWaitTime = 0;
     double totalTurnarounTime = 0;
     
+    // queue to hold the number of job got processed so far
     List finishedQueue;                 // queue of finished jobs for FCFS
     finishedQueue = List();
    
@@ -66,19 +83,21 @@ overStat FCFS(List * processQueue)
             // printStats(currentNode);
             
             finishedQueue.pushDataNS(currentNode->getJob());        // insert the processed job to the finishedQueue
-            processQueue->deleteHeadNode();                         // move the processed job out of the queue's head
+            processQueue.deleteHeadNode();                         // move the processed job out of the queue's head
             
             // **TRACING** print out processedQueue for each timeslide
             // cout << "Processed Queue: " << endl;
             // finishedQueue.printListOnlyName();
             
-            currentNode = processQueue->getHead();                  // move the next job to front of the queue
+            currentNode = processQueue.getHead();                  // move the next job to front of the queue
         }
     }
+    // print out the stats for each run
     printAlgoStats(totalResponseTime, totalTurnarounTime, totalWaitTime, numProcessedJobs);     // print stats for this run
+    // print out the timechart for each run
     printTimeChart(finishedQueue);          // print the time chart
     
-    
+    // return the stats to main to keep the total overall average
     overStat retVal = retStat(totalResponseTime, totalTurnarounTime, totalWaitTime, numProcessedJobs);
     return retVal;
 }
