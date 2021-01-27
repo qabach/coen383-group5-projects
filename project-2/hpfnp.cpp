@@ -150,7 +150,8 @@ void computeStats(const List &a, std::vector<struct overStat> &stats)
 	//initialize everything to 0
 	for(int i = 0; i < 5; ++i)
 	{
-		struct overStat a= {0,0,0,0}; 
+		//struct overStat a= {0,0,0,0}; 
+		overStat a;
 		stats.push_back(a);
 		count[i] = 0;
 	}

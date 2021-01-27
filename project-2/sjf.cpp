@@ -7,7 +7,7 @@ overStat sjf(const List &list)
 	
 	List sjfList, finishedList;
 	int t = 0;
-	Node * curNode;
+	Node * curNode = NULL;
 	const Node * pointer = list.getHead();
 	const Node * next;
 
@@ -17,7 +17,7 @@ overStat sjf(const List &list)
     double totalTurnaroundTime = 0;
 
 	while(t < 100)
-	{
+	{	
 		//1. move arrived Nodes from (list) to (sjfList)
 
 		while(pointer != NULL && pointer->data.getArr() <= t)
@@ -59,10 +59,10 @@ overStat sjf(const List &list)
 			}
 		}
 
-		t++;
+		if(curNode == NULL) t++;
+		else t += curNode->data.serviceTime;
 	}
 	sjfList.clr();
-	//finishedList.printListOnlyName();
 
 	printAlgoStats(totalResponseTime, totalTurnaroundTime, totalWaitTime, numProcessedJobs);
     printTimeChart(finishedList);
