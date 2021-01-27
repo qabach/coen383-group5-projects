@@ -61,7 +61,9 @@ int main()
 	cout << "Note: this is C++" <<endl;
     
     // keep track of the running total stats for each algorithm
-    overStat statEndingValue;
+    overStat statEndingValueFCFS;
+    
+    srand(time_t(NULL));
     
     for (int i = 0; i < WORKLOAD; i++)
     {
@@ -69,7 +71,7 @@ int main()
         List yay;
         int seed = 1;
         int count, count2;
-        srand(time(NULL));
+        
         yay = List();
         //generate 10 jobs
       
@@ -86,25 +88,32 @@ int main()
         cout <<"Starting # of Jobs: " << yay.length() << endl;
         
         // keep track of the running total stats for each algorithm
-        overStat statRunningValue;
+        overStat statRunningValueFCFS;
         
         //run 6 algorithm
-        statRunningValue = FCFS(&yay);     // First Come First Serve
-        //round_robin_scheduler(&yay);    
-  	    // sjf(yay);                       // Shortest Job First 
-        // srt(yay);                       // Shortest Remaining Time First 
+        //statRunningValueFCFS = FCFS(&yay);     // First Come First Serve
+        //round_robin_scheduler(&yay);
+        //sjf(yay);                       // Shortest Job First
+        //srt(yay);                       // Shortest Remaining Time First
         // hpfnp(yay);                     // Highest Priority First - non_preemptive
         // HPFpre_emptive(&yay);           // Highest Priority First - preemptive
+        statRunningValueFCFS = FCFS(&yay);     // First Come First Serve
         
-        statEndingValue.AveResponseTime += statRunningValue.AveResponseTime;
-        statEndingValue.AveWaitTime += statRunningValue.AveWaitTime;
-        statEndingValue.AveTurnaroundTime += statRunningValue.AveTurnaroundTime;
-        statEndingValue.AveThroughput += statRunningValue.AveThroughput;
+        // FCFS Overall Average Statistics after 5 runs
+        statEndingValueFCFS.AveResponseTime += statRunningValueFCFS.AveResponseTime;
+        statEndingValueFCFS.AveWaitTime += statRunningValueFCFS.AveWaitTime;
+        statEndingValueFCFS.AveTurnaroundTime += statRunningValueFCFS.AveTurnaroundTime;
+        statEndingValueFCFS.AveThroughput += statRunningValueFCFS.AveThroughput;
         
         yay.clr();
     }
-    printOverStat(statEndingValue);
+    printOverStat(statEndingValueFCFS);
+   
 	
+    
+    
+    
+    
     // Round Robin Demo
     //round_robin_demo();
     
