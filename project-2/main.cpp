@@ -91,9 +91,6 @@ int main()
         }
         cout <<"Starting # of Jobs: " << yay.length() << endl;
         
-        yay.clr();
-    }
-}
         // keep track of the running total stats for each algorithm
 
         overStat statRunningValueFCFS;
