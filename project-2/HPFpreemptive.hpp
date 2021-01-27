@@ -50,6 +50,6 @@ struct HPF_system_queue
     
 };
 
-void HPFpre_emptive (List * input_list);
+overStat HPFpre_emptive (List * input_list);
 
 #endif /* HPFpreemptive_hpp */

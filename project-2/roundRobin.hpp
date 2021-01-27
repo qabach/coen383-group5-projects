@@ -19,6 +19,6 @@
 #include "linked.hpp"
 #include "stats.hpp"
 
-void round_robin_scheduler(List *input_list);
+overStat round_robin_scheduler(List *input_list);
 
 #endif /* roundRobin_hpp */
