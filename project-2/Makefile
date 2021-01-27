@@ -31,7 +31,11 @@ HPFpreemptive.o: HPFpreemptive.cpp HPFpreemptive.o
 sjf.o: sjf.cpp sjf.hpp
 	cc -c sjf.cpp 
 	
+sjf.o: sjf.cpp sjf.hpp
+	cc -c sjf.cpp
+	
 clean:
 	rm test main.o linked.o hpfnp.o roundRobin.o \
 	FCFS.o stats.o srt.o HPFpreemptive.o sjf.o
+
 	
