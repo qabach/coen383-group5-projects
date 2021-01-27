@@ -88,7 +88,6 @@ overStat HPFpre_emptive (List * input_list)
             if (process_queue[idx].getArr() == quantum)
             {
                 hpf_queue.queue_list[process_queue[idx].getPri()-1].push_back(process_queue[idx]);
-                process_queue.pop_front();
             }
         }
         
@@ -207,10 +206,6 @@ overStat HPFpre_emptive (List * input_list)
     
     std::cout << "*************** OVERALL STATISTICS FOR  ALL QUEUE *************";
     printAlgoStats(totalResponseTime, totalTurnarounTime, totalWaitTime, numProcessedJobs);
-
-    // free memory
-    tmp = nullptr;
-    delete tmp;
     
     // Compute avg overall stats of all the queues
     overStat retVal = retStat(totalResponseTime, totalTurnarounTime, totalWaitTime, numProcessedJobs);
