@@ -1,6 +1,7 @@
 CC = g++
 
-edit : main.o linked.o hpfnp.o roundRobin.o FCFS.o srt.o stats.o HPFpreemptive.o sjf.o
+edit : main.o linked.o hpfnp.o roundRobin.o FCFS.o srt.o stats.o \
+	 HPFpreemptive.o sjf.o
 	g++ -std=c++11 -o test main.o linked.o hpfnp.o roundRobin.o FCFS.o \
 	srt.o stats.o HPFpreemptive.o sjf.o
 
@@ -25,14 +26,12 @@ srt.o: srt.cpp srt.hpp
 stats.o: stats.cpp stats.hpp
 	cc -c stats.cpp
 
-HPFpreemptive.o: HPFpreemptive.cpp HPFpreemptive.o
+HPFpreemptive.o: HPFpreemptive.cpp HPFpreemptive.hpp
 	cc -c HPFpreemptive.cpp
 
 sjf.o: sjf.cpp sjf.hpp
 	cc -c sjf.cpp 
 	
-sjf.o: sjf.cpp sjf.hpp
-	cc -c sjf.cpp
 	
 clean:
 	rm test main.o linked.o hpfnp.o roundRobin.o \
