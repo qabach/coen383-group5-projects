@@ -72,7 +72,7 @@ int main()
         yay = List();
         //generate 10 jobs
       
-        count = generateJob(yay,1,100);
+        count = generateJob(yay,1,10);
         count2 = 2;
       
         //generatate more jobs if needed
@@ -117,7 +117,7 @@ int main()
 
         for(int j = 0; j < 5 ;++j)
         {
-        	statEndingValueHPFNP[i].AveResponseTime += stats1[i].AveResponseTime;
+            statEndingValueHPFNP[i].AveResponseTime += stats1[i].AveResponseTime;
           statEndingValueHPFNP[i].AveWaitTime += stats1[i].AveWaitTime;
           statEndingValueHPFNP[i].AveTurnaroundTime += stats1[i].AveTurnaroundTime;
           statEndingValueHPFNP[i].AveThroughput += stats1[i].AveThroughput;

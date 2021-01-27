@@ -102,6 +102,8 @@ overStat round_robin_scheduler(List *input_list)
         {
             response_time += quantum - process_queue[0].getArr();
             waiting_time += response_time;         // increment waiting time of servicing job in case it has been waiting
+            jobs_processed_count++; // increment the count of jobs processed
+
         }
         
         // increment wait time of all the jobs in queue
@@ -118,7 +120,6 @@ overStat round_robin_scheduler(List *input_list)
         
         //add to the time chart
         time_chart.push_back(process_queue[0].getName());
-        jobs_processed_count++; // increment the count of jobs processed
         
         if (time_left == 0) // if time left is 0, then remove the job from the schedule queue and add job to the finished queue
         {
