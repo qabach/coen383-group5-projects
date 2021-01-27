@@ -23,8 +23,10 @@ struct overStat{
 
 void printStats(Node * currentNode);
 void printAlgoStats(int totalResponseTime, int totalTurnarounTime, int totalWaitTime, int numProcessedJobs);
+void printAlgoStats(int totalResponseTime, int totalTurnarounTime, int totalWaitTime, int numProcessedJobs, int completedJobs);
 void printTimeChart(List finishedQueue);
 overStat retStat(int totalResponseTime, int totalTurnarounTime, int totalWaitTime, int numProcessedJobs);
+overStat retStat(int totalResponseTime, int totalTurnarounTime, int totalWaitTime, int numProcessedJobs, int completedJob);
 void printOverStat(struct overStat stat);
 
 #endif /* stats_hpp */
