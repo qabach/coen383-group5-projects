@@ -100,13 +100,13 @@ int main()
         
         //run 6 algorithm
         statRunningValueFCFS = FCFS(&yay);            // First Come First Serve
-        rr_stats = round_robin_scheduler(&yay);       // Round Robin
+        rr_stats    = round_robin_scheduler(&yay);       // Round Robin
   	    sjf(yay);                                     // Shortest Job First
-        srt(yay);                                     // Shortest Remaining Time First
+        srt_stats   = srt(yay);                                     // Shortest Remaining Time First
         hpfnp(yay,stats1);                            // Highest Priority First - non_preemptive
-        hpfe_stats = HPFpre_emptive(&yay);            // Highest Priority First - preemptive
+        hpfe_stats  = HPFpre_emptive(&yay);            // Highest Priority First - preemptive
   
-         // FCFS Overall Average Statistics after WORKLOAD runs
+        // FCFS Overall Average Statistics after WORKLOAD runs
         statEndingValueFCFS.AveResponseTime += statRunningValueFCFS.AveResponseTime;
         statEndingValueFCFS.AveWaitTime += statRunningValueFCFS.AveWaitTime;
         statEndingValueFCFS.AveTurnaroundTime += statRunningValueFCFS.AveTurnaroundTime;
@@ -134,9 +134,9 @@ int main()
         for(int j = 0; j < 5 ;++j)
         {
             statEndingValueHPFNP[i].AveResponseTime += stats1[i].AveResponseTime;
-          statEndingValueHPFNP[i].AveWaitTime += stats1[i].AveWaitTime;
-          statEndingValueHPFNP[i].AveTurnaroundTime += stats1[i].AveTurnaroundTime;
-          statEndingValueHPFNP[i].AveThroughput += stats1[i].AveThroughput;
+            statEndingValueHPFNP[i].AveWaitTime += stats1[i].AveWaitTime;
+            statEndingValueHPFNP[i].AveTurnaroundTime += stats1[i].AveTurnaroundTime;
+            statEndingValueHPFNP[i].AveThroughput += stats1[i].AveThroughput;
         }
 
         yay.clr();
