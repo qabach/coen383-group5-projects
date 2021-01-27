@@ -52,6 +52,10 @@ overStat sjf(const List &list)
 				//add current job from (sjfList) to (finishedList)
 				finishedList.pushDataNS(curNode->data);
 				sjfList.deleteHeadNode();
+
+				//print data
+				curNode->printData();
+				std::cout << std::endl;
 			}
 			else
 			{
