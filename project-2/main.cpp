@@ -59,7 +59,6 @@ int main()
     
     // keep track of the running total stats for each algorithm
     overStat statEndingValueFCFS;   
-    overStat statEndingValue;
     overStat rr_endingStats;
     overStat hpfe_endingStats;
     overStat statEndingValueHPFNP[5];
@@ -135,7 +134,7 @@ int main()
     cout << endl << "************************* FCFS OVERALL STATS **************************" << endl;
     printOverStat(statEndingValueFCFS);
   
-    cout << endl << "************************* ROUND ROBIN OVERALL STATS **************************" << endl";
+    cout << endl << "************************* ROUND ROBIN OVERALL STATS **************************" << endl;
     printOverStat(rr_endingStats);
   
     cout << endl << "************************* HPF-NP OVERALL STATS ************************* "<<endl;
@@ -153,7 +152,7 @@ int main()
     }
     
    
-    cout << endl << "********************** HPF-PPEEMPTIVE OVERALL STATS ***********************" << endl;
+    cout << endl << "********************** HPF-PREEMPTIVE OVERALL STATS ***********************" << endl;
     printOverStat(hpfe_endingStats);
     
     cout << "End of Program" <<endl;
