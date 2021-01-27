@@ -58,21 +58,26 @@ int main()
 	cout << "Note: this is C++" <<endl;
     
     // keep track of the running total stats for each algorithm
+    overStat statEndingValueFCFS;   
     overStat statEndingValue;
     overStat rr_endingStats;
     overStat hpfe_endingStats;
     overStat statEndingValueHPFNP[5];
     vector<struct overStat> stats1;
+  
     srand(time(NULL));
+  
     for (int i = 0; i < WORKLOAD; i++)
     {
         cout << "***************************** RUN "<< i+1 << " *********************************" << endl << endl;
+      
         List yay;
         int count, count2;
+
         yay = List();
-        //generate 10 jobs
       
         count = generateJob(yay,1,10);
+
         count2 = 2;
       
         //generatate more jobs if needed
@@ -85,36 +90,37 @@ int main()
         cout <<"Starting # of Jobs: " << yay.length() << endl;
         
         // keep track of the running total stats for each algorithm
-        overStat statRunningValue;
+        overStat statRunningValueFCFS;
         overStat rr_stats;
         overStat hpfe_stats;
         
         //run 6 algorithm
-        //statRunningValue = FCFS(&yay);            // First Come First Serve
-        rr_stats = round_robin_scheduler(&yay);     // Round Robin
-  	    sjf(yay);                                   // Shortest Job First
-        srt(yay);                                   // Shortest Remaining Time First
-        hpfnp(yay,stats1);                     // Highest Priority First - non_preemptive
-        hpfe_stats = HPFpre_emptive(&yay);                       // Highest Priority First - preemptive
-
-        statEndingValue.AveResponseTime += statRunningValue.AveResponseTime;
-        statEndingValue.AveWaitTime += statRunningValue.AveWaitTime;
-        statEndingValue.AveTurnaroundTime += statRunningValue.AveTurnaroundTime;
-        statEndingValue.AveThroughput += statRunningValue.AveThroughput;
+        statRunningValueFCFS = FCFS(&yay);            // First Come First Serve
+        rr_stats = round_robin_scheduler(&yay);       // Round Robin
+  	    sjf(yay);                                     // Shortest Job First
+        srt(yay);                                     // Shortest Remaining Time First
+        hpfnp(yay,stats1);                            // Highest Priority First - non_preemptive
+        hpfe_stats = HPFpre_emptive(&yay);            // Highest Priority First - preemptive
+  
+         // FCFS Overall Average Statistics after WORKLOAD runs
+        statEndingValueFCFS.AveResponseTime += statRunningValueFCFS.AveResponseTime;
+        statEndingValueFCFS.AveWaitTime += statRunningValueFCFS.AveWaitTime;
+        statEndingValueFCFS.AveTurnaroundTime += statRunningValueFCFS.AveTurnaroundTime;
+        statEndingValueFCFS.AveThroughput += statRunningValueFCFS.AveThroughput;
         
-        // Round Robin overall avg stats after WORKLOAD run
+        // Round Robin overall avg stats after WORKLOAD runs
         rr_endingStats.AveResponseTime      += rr_stats.AveResponseTime;
         rr_endingStats.AveWaitTime          += rr_stats.AveWaitTime;
         rr_endingStats.AveTurnaroundTime    += rr_stats.AveTurnaroundTime;
         rr_endingStats.AveThroughput        += rr_stats.AveThroughput;
         
-        // HPF preemptive overall avg stats after WORKLOAD run
+        // HPF preemptive overall avg stats after WORKLOAD runs
         hpfe_endingStats.AveResponseTime    += hpfe_stats.AveResponseTime;
         hpfe_endingStats.AveWaitTime        += hpfe_stats.AveWaitTime;
         hpfe_endingStats.AveTurnaroundTime  += hpfe_stats.AveTurnaroundTime;
         hpfe_endingStats.AveThroughput      += hpfe_stats.AveThroughput;
         
-
+        // HPF non-preemptive overall avg stats after WORKLOAD runs
         for(int j = 0; j < 5 ;++j)
         {
             statEndingValueHPFNP[i].AveResponseTime += stats1[i].AveResponseTime;
@@ -125,13 +131,19 @@ int main()
 
         yay.clr();
     }
-    cout<<"*************** Avg HPFNP *************** "<<endl;
+
+    cout << endl << "************************* FCFS OVERALL STATS **************************" << endl;
+    printOverStat(statEndingValueFCFS);
+  
+    cout << endl << "************************* ROUND ROBIN OVERALL STATS **************************" << endl";
+    printOverStat(rr_endingStats);
+  
+    cout << endl << "************************* HPF-NP OVERALL STATS ************************* "<<endl;
     for(int j = 0; j < 5 ;++j)
     {	
     		if(j <4)
     		{
-    		cout<<"*************** Q" << to_string(j+1)
-    			<< "*************** "<<endl;
+    		  cout<<"*************** Q" << to_string(j+1) << "*************** "<<endl;
     		}
     		else
     		{
@@ -139,15 +151,12 @@ int main()
     		}
 		    printOverStat(statEndingValueHPFNP[j]);
     }
-    printOverStat(statEndingValue);
     
-    cout << "*************** ROUND ROBIN OVERALL STATS **************************";
-    printOverStat(rr_endingStats);
-    cout << "*************** HPF Preemptive OVERALL STATS ***********************";
+   
+    cout << endl << "********************** HPF-PPEEMPTIVE OVERALL STATS ***********************" << endl;
     printOverStat(hpfe_endingStats);
-
     
-    cout << "end of program" <<endl;
+    cout << "End of Program" <<endl;
     return 0;
 }
 
