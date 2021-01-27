@@ -58,15 +58,18 @@ int main()
 	cout << "Note: this is C++" <<endl;
     
     // keep track of the running total stats for each algorithm
+
     overStat statEndingValueFCFS;   
     overStat rr_endingStats;
     overStat hpfe_endingStats;
     overStat statEndingValueHPFNP[5];
+    overStat srt_endingStats;
+
     vector<struct overStat> stats1;
   
     srand(time(NULL));
   
-    for (int i = 0; i < WORKLOAD; i++)
+  for (int i = 0; i < WORKLOAD; i++)
     {
         cout << "***************************** RUN "<< i+1 << " *********************************" << endl << endl;
       
@@ -89,9 +92,11 @@ int main()
         cout <<"Starting # of Jobs: " << yay.length() << endl;
         
         // keep track of the running total stats for each algorithm
+
         overStat statRunningValueFCFS;
         overStat rr_stats;
         overStat hpfe_stats;
+        overStat srt_stats;
         
         //run 6 algorithm
         statRunningValueFCFS = FCFS(&yay);            // First Come First Serve
@@ -112,6 +117,12 @@ int main()
         rr_endingStats.AveWaitTime          += rr_stats.AveWaitTime;
         rr_endingStats.AveTurnaroundTime    += rr_stats.AveTurnaroundTime;
         rr_endingStats.AveThroughput        += rr_stats.AveThroughput;
+    
+        // SRT overall avg stats after WORKLOAD runs
+        srt_endingStats.AveResponseTime += srt_stats.AveResponseTime;
+        srt_endingStats.AveWaitTime += srt_stats.AveWaitTime;
+        srt_endingStats.AveTurnaroundTime += srt_stats.AveTurnaroundTime;
+        srt_endingStats.AveThroughput += srt_stats.AveThroughput;
         
         // HPF preemptive overall avg stats after WORKLOAD runs
         hpfe_endingStats.AveResponseTime    += hpfe_stats.AveResponseTime;
@@ -136,6 +147,9 @@ int main()
   
     cout << endl << "************************* ROUND ROBIN OVERALL STATS **************************" << endl;
     printOverStat(rr_endingStats);
+    
+    cout << endl << "********************************* SRT OVERALL STATS *************************" << endl;
+    printOverStat(srt_endingStats);
   
     cout << endl << "************************* HPF-NP OVERALL STATS ************************* "<<endl;
     for(int j = 0; j < 5 ;++j)
@@ -154,7 +168,7 @@ int main()
    
     cout << endl << "********************** HPF-PREEMPTIVE OVERALL STATS ***********************" << endl;
     printOverStat(hpfe_endingStats);
-    
+  
     cout << "End of Program" <<endl;
     return 0;
 }
