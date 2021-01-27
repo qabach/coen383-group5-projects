@@ -114,11 +114,6 @@ void round_robin_demo()
         // Round-Robin Scheduler
         round_robin_scheduler(&yay);
         
-<<<<<<< Updated upstream
-        yay.clr();
-    }
-}
-=======
         // keep track of the running total stats for each algorithm
 
         overStat statRunningValueFCFS;
@@ -162,7 +157,6 @@ void round_robin_demo()
         // HPF non-preemptive overall avg stats after WORKLOAD runs
         for(int j = 0; j < 5 ;++j)
         {
->>>>>>> Stashed changes
 
 
 
