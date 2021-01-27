@@ -121,7 +121,9 @@ overStat HPFpre_emptive (List * input_list)
                 // if the process name is already recorded in time chart, its response time is already computed
                 if (std::find(time_chart.begin(),time_chart.end(),hpf_queue.queue_list[i][0].getName()) == time_chart.end())
                 {
-                    stat_list[i].response_time += quantum - hpf_queue.queue_list[i][0].getArr(); // compute the respone time 
+                    stat_list[i].response_time += quantum - hpf_queue.queue_list[i][0].getArr(); // compute the respone time
+                    stat_list[i].processed_jobs++;     // increment the jobs processed thus far
+
                 }
                 
                 // log job to time chart
@@ -129,7 +131,6 @@ overStat HPFpre_emptive (List * input_list)
                 time_chart_log = hpf_queue.queue_list[i][0].getName() + "-p" + to_string(hpf_queue.queue_list[i][0].getPri());
                 time_chart.push_back(time_chart_log);
                 
-                stat_list[i].processed_jobs++;     // increment the jobs processed thus far
                 
                 // compute time left of job
                 int time_left;
