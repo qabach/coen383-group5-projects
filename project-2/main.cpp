@@ -61,7 +61,7 @@ int main()
 	cout << "Note: this is C++" <<endl;
     
     // keep track of the running total stats for each algorithm
-    overStat statEndingValue;
+    overStat srt_endingStats;
     
     for (int i = 0; i < WORKLOAD; i++)
     {
@@ -86,27 +86,22 @@ int main()
         cout <<"Starting # of Jobs: " << yay.length() << endl;
         
         // keep track of the running total stats for each algorithm
-        overStat statRunningValue;
+        overStat srt_stats;
         
         //run 6 algorithm
-        statRunningValue = FCFS(&yay);     // First Come First Serve
-        //round_robin_scheduler(&yay);    
-  	    // sjf(yay);                       // Shortest Job First 
-        // srt(yay);                       // Shortest Remaining Time First 
-        // hpfnp(yay);                     // Highest Priority First - non_preemptive
-        // HPFpre_emptive(&yay);           // Highest Priority First - preemptive
+        srt_stats = srt(yay);              // Shortest Remaining Time First 
         
-        statEndingValue.AveResponseTime += statRunningValue.AveResponseTime;
-        statEndingValue.AveWaitTime += statRunningValue.AveWaitTime;
-        statEndingValue.AveTurnaroundTime += statRunningValue.AveTurnaroundTime;
-        statEndingValue.AveThroughput += statRunningValue.AveThroughput;
+        // SRT overall avg stats after WORKLOAD runs
+        srt_endingStats.AveResponseTime += srt_stats.AveResponseTime;
+        srt_endingStats.AveWaitTime += srt_stats.AveWaitTime;
+        srt_endingStats.AveTurnaroundTime += srt_stats.AveTurnaroundTime;
+        srt_endingStats.AveThroughput += srt_stats.AveThroughput;
         
         yay.clr();
     }
-    printOverStat(statEndingValue);
+    cout << endl << "********************************* SRT OVERALL STATS *************************" << endl;
+    printOverStat(srt_endingStats);
 	
-    // Round Robin Demo
-    //round_robin_demo();
     
     cout << "end of program" <<endl;
     return 0;
