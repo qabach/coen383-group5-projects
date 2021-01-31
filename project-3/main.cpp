@@ -18,9 +18,14 @@
 #include <iostream>
 #include <pthread.h>
 #include <string>
+#include "jobs.hpp"
+
+using namespace std;
 
 pthread_cond_t cond = PTHREAD_COND_INITIALIZER;
 pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
+
+Seat seats[100][100];
 
 /* function declarations */
 // thread function
@@ -66,7 +71,7 @@ int main(int argc, const char * argv[])
     
     // Print out similation results
     
-    
+    cout << "testing" <<endl;
     return 0;
 }
 
