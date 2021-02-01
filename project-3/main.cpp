@@ -96,11 +96,11 @@ int main(int argc, const char * argv[])
     n = stoi(yay);
     for(int i = 0; i < n * 6; ++i)
     {
-    	queues[i/n].push_back(generateAJob("L00" + to_string(i),0));
+    	queues[i/n].push_back(generateAJob("L" + to_string(i),0));
     }
     for(int i = 0; i < n * 3; ++i)
     {
-    	queues[(i/n)+ 6 ].push_back(generateAJob("M" + to_string(i)+ to_string(i),1));
+    	queues[(i/n)+ 6 ].push_back(generateAJob("M" + to_string(i),1));
     }
     for(int i = 0; i < n; ++i)
     {
