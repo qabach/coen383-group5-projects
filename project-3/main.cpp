@@ -18,9 +18,18 @@
 #include <iostream>
 #include <pthread.h>
 #include <string>
+#include <cctype>
+#include <deque>
+#include <algorithm>
+#include "jobs.hpp"
+
+using namespace std;
 
 pthread_cond_t cond = PTHREAD_COND_INITIALIZER;
 pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
+
+Seat seats[100][100];
+deque<Job> queues[10];
 
 /* function declarations */
 // thread function
@@ -30,12 +39,78 @@ void * sell (void * seller_type); //**Note: char * is implemented in the origina
 void wakeup_all_seller_threads();
 
 
+//Miselanoues functions
+//generates a job, serve time depends on priority
+//0 = low, 1 == middle. else = high
+Job generateAJob(const string &name, const int &pri)
+{
+    Job job;
+    int arr, serv;
+    arr = rand() % 60;
+    if(pri ==0)
+    {
+		serv = (rand() % 4) + 4;
+    }
+    else if(pri == 1)
+    {
+    	serv = (rand() % 3) + 2;
+    }
+    else
+    {
+    	serv = (rand() % 2) + 1;
+    }
+    job = Job(arr, serv, pri, name);
+    return job;
+    
+}
 
+//for sorting the queue based on arrival time
+bool compareFunc(Job a, Job b)
+{
+    return a.getArr() < b.getArr();
+}
 
 int main(int argc, const char * argv[])
 {
     pthread_t threadID[10];
     std::string seller_type;
+    deque<Job> totalQueues;
+    int n;
+    
+    if(argc !=2)
+    {
+    	cout << "not enough arguements" << endl;
+    	return -1;
+    }
+    //note that this might create an error maybe.
+    string yay = string(argv[1]);
+    for(int i =0; i < yay.length(); ++i)
+    {
+    	if(!isdigit(argv[1][i]))
+    	{
+    		cout << "Argument is not a number" << endl;
+    		return -2;
+    	}
+    }
+    n = stoi(yay);
+    for(int i = 0; i < n * 6; ++i)
+    {
+    	totalQueues.push_back(generateAJob("L" + to_string(i),0));
+    }
+    for(int i = 0; i < n * 3; ++i)
+    {
+    	totalQueues.push_back(generateAJob("M" + to_string(i),1));
+    }
+    for(int i = 0; i < n; ++i)
+    {
+    	totalQueues.push_back(generateAJob("H" + to_string(i),2));
+    }
+    sort(totalQueues.begin(), totalQueues.end(), compareFunc);
+    for(int i =0; i < n * 10; ++i)
+    {
+    	cout << totalQueues[i].name <<":" 
+    	<< totalQueues[i].getArr()<< endl;
+    }
     
     //Create necessary data structures for simulator
     //Create buyers list for each seller ticket queue based on
@@ -66,7 +141,7 @@ int main(int argc, const char * argv[])
     
     // Print out similation results
     
-    
+    cout << "testing" <<endl;
     return 0;
 }
 
