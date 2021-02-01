@@ -27,8 +27,8 @@ using namespace std;
 
 pthread_cond_t cond = PTHREAD_COND_INITIALIZER;
 pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
-
-Seat seats[100][100];
+int counter;
+Seat seats[10][10];
 deque<Job> queues[10];
 
 /* function declarations */
@@ -75,6 +75,7 @@ int main(int argc, const char * argv[])
     pthread_t threadID[10];
     std::string seller_type;
     deque<Job> totalQueues;
+    counter = 0;
     int n;
     
     if(argc !=2)
@@ -95,21 +96,24 @@ int main(int argc, const char * argv[])
     n = stoi(yay);
     for(int i = 0; i < n * 6; ++i)
     {
-    	totalQueues.push_back(generateAJob("L" + to_string(i),0));
+    	queues[i/n].push_back(generateAJob("L00" + to_string(i),0));
     }
     for(int i = 0; i < n * 3; ++i)
     {
-    	totalQueues.push_back(generateAJob("M" + to_string(i),1));
+    	queues[(i/n)+ 6 ].push_back(generateAJob("M" + to_string(i)+ to_string(i),1));
     }
     for(int i = 0; i < n; ++i)
     {
-    	totalQueues.push_back(generateAJob("H" + to_string(i),2));
+    	queues[9].push_back(generateAJob("H" + to_string(i),2));
     }
-    sort(totalQueues.begin(), totalQueues.end(), compareFunc);
+    for(int i = 0; i< 10;++i)
+    {
+    	    sort(queues[i].begin(), queues[i].end(), compareFunc);
+    }
     for(int i =0; i < n * 10; ++i)
     {
-    	cout << totalQueues[i].name <<":" 
-    	<< totalQueues[i].getArr()<< endl;
+    	cout << queues[i/n][i%n].name <<":" 
+    	<< queues[i/n][i%n].getArr()<< endl;
     }
     
     //Create necessary data structures for simulator
