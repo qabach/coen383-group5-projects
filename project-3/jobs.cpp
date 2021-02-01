@@ -43,3 +43,14 @@ Seat::~Seat()
 	int rc = pthread_mutex_destroy(&lock);
 	assert(rc ==0);
 }
+
+
+bool Seat::isFinished()
+{
+
+	if(timeLeft)
+	{
+		return false;
+	}
+	return true;
+}

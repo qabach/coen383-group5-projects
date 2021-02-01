@@ -3,7 +3,12 @@
 #include <iostream>
 #include <pthread.h>
 #include <cassert>
-
+struct Stat{
+	std::string sellerType;
+	int waitTime;
+	int responseTime;
+	int turnaroundTime;
+};
 //class for your basic Job;
 class Job{	
 	public:
@@ -34,6 +39,7 @@ class Seat{
 	public:
 	pthread_mutex_t lock;
 	bool isServed;
+	struct Stat stats;
 	
 	Seat();
 	Seat(Job j);
@@ -51,7 +57,8 @@ class Seat{
 	const int getTimeLeft() const{return timeLeft;}
 	
 	//setters
-	void incrementTime(){++timeLeft;}
+	void decrementTime(){--timeLeft;}
+	bool isFinished();
 	
 };
 #endif
