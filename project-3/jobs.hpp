@@ -9,11 +9,11 @@ class Job{
 	public:
 	//public variables (yay?)
 	std::string name;
-	int arrivalTime, serviceTime;
+	int arrivalTime, serviceTime, priority;
 	
 	//constructors
 	Job();
-	Job(int a, int s, std::string name);
+	Job(int a, int s, int p, std::string name);
     
 		
 	//getter stuff

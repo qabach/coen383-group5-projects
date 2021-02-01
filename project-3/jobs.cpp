@@ -5,15 +5,17 @@ Job::Job()
 {
 	arrivalTime = 0;
 	serviceTime = 0;
+	priority = -1;
 	name = "None";	
 }
 
 //Makes the Job Class with parameters
-//Param: a->arrival, b->service, nam-> name of service
-Job::Job(int a, int b, std::string nam = "None")
+//Param: a->arrival, b->service,c->prioirty nam-> name of service
+Job::Job(int a, int b, int c, std::string nam = "None")
 {
 	arrivalTime = a;
 	serviceTime = b;
+	priority = c;
 	name = nam;
 	
 }
