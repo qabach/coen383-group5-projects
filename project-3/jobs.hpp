@@ -3,33 +3,29 @@
 #include <iostream>
 #include <pthread.h>
 #include <cassert>
-struct Stat{
-	std::string sellerType;
-	int waitTime;
-	int responseTime;
-	int turnaroundTime;
-};
-//class for your basic Job;
-class Job{	
-	public:
-	//public variables (yay?)
-	std::string name;
-	int arrivalTime, serviceTime, priority;
-	
-	//constructors
-	Job();
-	Job(int a, int s, int p, std::string name);
-    
-		
-	//getter stuff
-	std::string getName(){return name;}
-	int getArr(){return arrivalTime;}
-	const int getArr() const{return arrivalTime;}
-	int getServ(){return serviceTime;}
-	const int getServ() const{return serviceTime;}  
-	 
-	
-};
+#include "linked.hpp"
+
+////class for your basic Job;
+//class Job{	
+//	public:
+//	//public variables (yay?)
+//	std::string name;
+//	int arrivalTime, serviceTime, priority;
+//	
+//	//constructors
+//	Job();
+//	Job(int a, int s, int p, std::string name);
+//    
+//		
+//	//getter stuff
+//	std::string getName(){return name;}
+//	int getArr(){return arrivalTime;}
+//	const int getArr() const{return arrivalTime;}
+//	int getServ(){return serviceTime;}
+//	const int getServ() const{return serviceTime;}  
+//	 
+//	
+//};
 
 class Seat{
 	private:
@@ -39,7 +35,6 @@ class Seat{
 	public:
 	pthread_mutex_t lock;
 	bool isServed;
-	struct Stat stats;
 	
 	Seat();
 	Seat(Job j);
@@ -57,8 +52,8 @@ class Seat{
 	const int getTimeLeft() const{return timeLeft;}
 	
 	//setters
-	void decrementTime(){--timeLeft;}
-	bool isFinished();
-	
+    void decrementTime(){--timeLeft;}
+    bool isFinished();
+
 };
 #endif

@@ -22,6 +22,7 @@
 #include <deque>
 #include <algorithm>
 #include "jobs.hpp"
+#include "multithreads_seller.hpp"
 
 using namespace std;
 
@@ -49,15 +50,15 @@ Job generateAJob(const string &name, const int &pri)
     arr = rand() % 60;
     if(pri ==0)
     {
-		serv = (rand() % 4) + 4;
+        serv = (rand() % 4) + 4;
     }
     else if(pri == 1)
     {
-    	serv = (rand() % 3) + 2;
+        serv = (rand() % 3) + 2;
     }
     else
     {
-    	serv = (rand() % 2) + 1;
+        serv = (rand() % 2) + 1;
     }
     job = Job(arr, serv, pri, name);
     return job;
@@ -72,101 +73,114 @@ bool compareFunc(Job a, Job b)
 
 int main(int argc, const char * argv[])
 {
+    // **** THIS SECTION IS BEING COMMENTED OUT FOR TESTING ******
+    /* comment out for now since creating error while testing
     pthread_t threadID[10];
     std::string seller_type;
     deque<Job> totalQueues;
     counter = 0;
     int n;
-    
     if(argc !=2)
     {
-    	cout << "not enough arguements" << endl;
-    	return -1;
+        cout << "not enough arguements" << endl;
+        return -1;
     }
+     
     //note that this might create an error maybe.
     string yay = string(argv[1]);
     for(int i =0; i < yay.length(); ++i)
     {
-    	if(!isdigit(argv[1][i]))
-    	{
-    		cout << "Argument is not a number" << endl;
-    		return -2;
-    	}
+        if(!isdigit(argv[1][i]))
+        {
+            cout << "Argument is not a number" << endl;
+            return -2;
+        }
     }
     n = stoi(yay);
     for(int i = 0; i < n * 6; ++i)
     {
-    	queues[i/n].push_back(generateAJob("L" + to_string(i),0));
+        queues[i/n].push_back(generateAJob("L" + to_string(i),0));
     }
     for(int i = 0; i < n * 3; ++i)
     {
-    	queues[(i/n)+ 6 ].push_back(generateAJob("M" + to_string(i),1));
+        queues[(i/n)+ 6 ].push_back(generateAJob("M" + to_string(i),1));
     }
     for(int i = 0; i < n; ++i)
     {
-    	queues[9].push_back(generateAJob("H" + to_string(i),2));
+        queues[9].push_back(generateAJob("H" + to_string(i),2));
     }
     for(int i = 0; i< 10;++i)
     {
-    	    sort(queues[i].begin(), queues[i].end(), compareFunc);
+            sort(queues[i].begin(), queues[i].end(), compareFunc);
     }
     for(int i =0; i < n * 10; ++i)
     {
-    	cout << queues[i/n][i%n].name <<":" 
-    	<< queues[i/n][i%n].getArr()<< endl;
+        cout << queues[i/n][i%n].name <<":"
+        << queues[i/n][i%n].getArr()<< endl;
     }
     
-    //Create necessary data structures for simulator
-    //Create buyers list for each seller ticket queue based on
-    //the N value within an hour (60 count of 1 min) and have them in the sller queue
+//    //Create necessary data structures for simulator
+//    //Create buyers list for each seller ticket queue based on
+//    //the N value within an hour (60 count of 1 min) and have them in the sller queue
+//
+//    //Create 10 threads representing the 10 sellers
+//
+//    //create the H seller
+//    seller_type = "H";
+//    pthread_create(&threadID[0], NULL, sell, &seller_type);
+//
+//    //create 3 M's sellers
+//    seller_type = "M";
+//    for (int i = 1; i < 5; i++)
+//        pthread_create(&threadID[i], NULL, sell, &seller_type);
+//
+//    //create 6 L's sellers
+//    seller_type = "L";
+//    for (int i = 4; i < 10; i++)
+//        pthread_create(&threadID[i], NULL, sell, &seller_type);
+//
+//    //wakeup all seller threads
+//    wakeup_all_seller_threads();
+//
+//    //wakit for all the seller threads to exit
+//    for (int i = 0; i < 10; i++)
+//        pthread_join(threadID[i], NULL); //**Note &tids[i] was used in the original preview which causes 'no matching func' error.
+//
+//    // Print out similation results
+//
+//    cout << "testing" <<endl;
+    */
     
-    //Create 10 threads representing the 10 sellers
-
-    //create the H seller
-    seller_type = "H";
-    pthread_create(&threadID[0], NULL, sell, &seller_type);
     
-    //create 3 M's sellers
-    seller_type = "M";
-    for (int i = 1; i < 5; i++)
-        pthread_create(&threadID[i], NULL, sell, &seller_type);
     
-    //create 6 L's sellers
-    seller_type = "L";
-    for (int i = 4; i < 10; i++)
-        pthread_create(&threadID[i], NULL, sell, &seller_type);
     
-    //wakeup all seller threads
-    wakeup_all_seller_threads();
+    // CURRENT TESTING
     
-    //wakit for all the seller threads to exit
-    for (int i = 0; i < 10; i++)
-        pthread_join(threadID[i], NULL); //**Note &tids[i] was used in the original preview which causes 'no matching func' error.
+    multithreads_ticket_seller(14);
     
-    // Print out similation results
+    std::cout << "Done " << std::endl;
     
-    cout << "testing" <<endl;
     return 0;
 }
 
 
-
-/* Implementation of  declared functions */
+/* THIS SECTION IS BEING COMMENTED OUT FOR TESTING
+// Implementation of  declared functions
 
 // thread function
 void * sell (void * seller_type)
 {
     bool moreWork = false;
-    
+
     while(moreWork)
     {
         pthread_mutex_lock(&mutex);
         pthread_cond_wait(&cond, &mutex);
         pthread_mutex_unlock(&mutex);
-        
+
         //serve any buyer available in this seller queue that is ready
         // now buy ticket till done with all relevant buyers in their queue
-        
+
     }
     return NULL; //thread exits
 }
@@ -179,3 +193,5 @@ void wakeup_all_seller_threads()
     pthread_cond_broadcast(&cond);
     pthread_mutex_unlock(&mutex);
 }
+
+*/
