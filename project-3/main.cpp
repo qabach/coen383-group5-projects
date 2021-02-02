@@ -28,7 +28,7 @@ using namespace std;
 
 pthread_cond_t cond = PTHREAD_COND_INITIALIZER;
 pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
-int counter;
+//int counter;
 Seat seats[10][10];
 deque<Job> queues[10];
 
