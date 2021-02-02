@@ -17,6 +17,7 @@
 #include <ctime>
 #include <set>
 #include "linked.hpp"
+#include "displayMatrix.hpp"
 
 void multithreads_ticket_seller (int count);
 

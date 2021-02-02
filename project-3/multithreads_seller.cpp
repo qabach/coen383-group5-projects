@@ -435,6 +435,10 @@ void multithreads_ticket_seller (int count)
         std::cout << std::endl;
     }
     
+    displayMatrix(H_log, M_log, L_log);
+    
 }
+
+
 
 
