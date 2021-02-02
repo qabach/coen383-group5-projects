@@ -26,6 +26,7 @@ std::deque<Job> ticketbooth_queues [10];
 
 
 /* CRITICAL SECTION */
+
 //number of seats
 int num_of_seats = 100;
 // logs for each type of
@@ -34,10 +35,13 @@ std::vector<std::string> M_log;
 std::vector<std::string> L_log;
 //chronicle log of events
 std::multimap <std::string, std::string> chronicle_log;
+
 /* END OF CRITICAL SECTION */
 
 //key set for chronicle log
 std::set<std::string> keySet;
+
+
 /* FUNCTION DEFINITION: wake up all threads */
 //function to wake up all threads
 void wakeup_all_seller_threads()
@@ -51,12 +55,16 @@ void wakeup_all_seller_threads()
 /* FUNCTION DEFINITION: thread function */
 void * sell (void * data)
 {
+    //get the incoming data
     auto *incoming = (std::tuple<std::string,int> *) data;
     
+    //print out infomation about the seller
+    //need to lock output s.t. the message is not interrupted
     pthread_mutex_lock(&stdout_lock);
     std::cout << std::get<0>(*incoming) << ", " << std::get<1>(*incoming) << " " << int_to_string(std::get<1>(*incoming)) << std::endl;
     pthread_mutex_unlock(&stdout_lock);
     
+    //thread variables
     int booth_ID = std::get<1>(*incoming);
     auto seller_name = std::get<0>(*incoming);
     int time_now = 0; //initialize time now for each thread; each thread will track its own time
@@ -83,8 +91,9 @@ void * sell (void * data)
             switch (booth_ID) //perform tasks based on seller type
             {
                 case 0:
+                    //lock to edit critical section data
                     pthread_mutex_lock(&lock);
-                    if (num_of_seats == 0)//check again if seat is still available
+                    if (num_of_seats == 0)// FINAL CHECK if seat is still available
                     {
                         pthread_mutex_unlock(&lock);
                         continue; //exit
@@ -126,8 +135,9 @@ void * sell (void * data)
                     pthread_mutex_unlock(&lock);
                     break;
                 case 1 ... 3:
+                    //lock to edit critical section data
                     pthread_mutex_lock(&lock);
-                    if (num_of_seats == 0)//check again if seat is still available
+                    if (num_of_seats == 0)// FINAL CHECK if seat is still available
                     {
                         pthread_mutex_unlock(&lock);
                         continue; //exit
@@ -169,8 +179,9 @@ void * sell (void * data)
                     pthread_mutex_unlock(&lock);
                     break;
                 case 4 ... 9:
+                    //lock to edit critical section data
                     pthread_mutex_lock(&lock);
-                    if (num_of_seats == 0)//check again if seat is still available
+                    if (num_of_seats == 0)// FINAL CHECK if seat is still available
                     {
                         pthread_mutex_unlock(&lock);
                         continue; //exit
@@ -225,11 +236,11 @@ void * sell (void * data)
 //function to populate jobs in to 10 queues
 void populate_jobs(int count)
 {
+    //seed randome each queue
+    srand(int(time(NULL)));
     // populate each queue
     for (int i = 0; i < 10; i++)
     {
-        //seed randome each queue
-        srand(int(time(NULL)));
         List yay;
         yay = List();
         int arr, serv, pri;

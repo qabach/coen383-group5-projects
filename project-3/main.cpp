@@ -156,7 +156,7 @@ int main(int argc, const char * argv[])
     
     // CURRENT TESTING
     
-    multithreads_ticket_seller(14);
+    multithreads_ticket_seller(15);
     
     std::cout << "Done " << std::endl;
     
