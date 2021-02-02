@@ -1,6 +1,6 @@
 CC = g++
 
-edit : main.o jobs.o 
+edit : main.o jobs.o linked.o multithreads_seller.o 
 	g++ -std=c++11 -pthread -o test main.o jobs.o linked.o multithreads_seller.o
 
 main.o: main.cpp jobs.hpp
