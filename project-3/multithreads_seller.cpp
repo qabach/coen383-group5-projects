@@ -12,7 +12,7 @@
 pthread_cond_t condition    = PTHREAD_COND_INITIALIZER;
 pthread_mutex_t stdout_lock = PTHREAD_MUTEX_INITIALIZER;
 pthread_mutex_t lock        = PTHREAD_MUTEX_INITIALIZER;
-
+pthread_mutex_t cond_lock        = PTHREAD_MUTEX_INITIALIZER;
 
 
 
@@ -29,6 +29,10 @@ std::deque<Job> ticketbooth_queues [10];
 
 //number of seats
 int num_of_seats = 100;
+//keep track of threads
+int counter =0;
+//now a global timer
+int time_now = 0;
 // logs for each type of
 std::vector<std::string> H_log;
 std::vector<std::string> M_log;
@@ -46,9 +50,30 @@ std::set<std::string> keySet;
 //function to wake up all threads
 void wakeup_all_seller_threads()
 {
-    pthread_mutex_lock(&lock);
+    pthread_mutex_lock(&cond_lock);
     pthread_cond_broadcast(&condition);
-    pthread_mutex_unlock(&lock);
+    pthread_mutex_unlock(&cond_lock);
+}
+
+int incrementTime()
+{
+	int timeL;
+    pthread_mutex_lock(&cond_lock);
+    if(counter >=9)
+    {
+    	counter =0;
+    	timeL = ++time_now; //increment time
+		pthread_mutex_unlock(&cond_lock);
+		wakeup_all_seller_threads();
+	}
+	else
+	{
+		++counter;
+		pthread_cond_wait(&condition,&cond_lock);
+		timeL = time_now;
+		pthread_mutex_unlock(&cond_lock);
+	}
+	return timeL;
 }
 
 
@@ -62,170 +87,94 @@ void * sell (void * data)
     //need to lock output s.t. the message is not interrupted
     pthread_mutex_lock(&stdout_lock);
     std::cout << std::get<0>(*incoming) << ", " << std::get<1>(*incoming) << " " << int_to_string(std::get<1>(*incoming)) << std::endl;
+    time_now = 0;
     pthread_mutex_unlock(&stdout_lock);
     
     //thread variables
     int booth_ID = std::get<1>(*incoming);
     auto seller_name = std::get<0>(*incoming);
-    int time_now = 0; //initialize time now for each thread; each thread will track its own time
+    int time_now_local = 0; //the local timer to prevent pesky Same accessing stuff
+    
     int customer_ID = 1; //starting number of customer ID
     
     //main loop
     //condition for loop to run: still have time left, still have seat left
-    while (time_now <= END_TIME && num_of_seats > 0)
+    while (time_now_local <= END_TIME)
     {
         //serving customers
         if (ticketbooth_queues[booth_ID].size() == 0)
         {
-            time_now++; //increment time
+            time_now_local = incrementTime();
             continue; //just sleep if no customer
         }
         else // service customers in line
         {
-            //update time now if customer has not arrived
-            if (time_now < ticketbooth_queues[booth_ID][0].getArr())
+            //just increment time now if customer has not arrived
+            if (time_now_local < ticketbooth_queues[booth_ID][0].getArr())
             {
-                time_now = ticketbooth_queues[booth_ID][0].getArr();
+            	time_now_local= incrementTime();
+            	continue; //just sleep b/c not time yet
             }
-            
-            switch (booth_ID) //perform tasks based on seller type
+            //lock to edit critical section data
+            pthread_mutex_lock(&lock);
+            if (num_of_seats == 0)// FINAL CHECK if seat is still available
             {
-                case 0:
-                    //lock to edit critical section data
-                    pthread_mutex_lock(&lock);
-                    if (num_of_seats == 0)// FINAL CHECK if seat is still available
-                    {
-                        pthread_mutex_unlock(&lock);
-                        continue; //exit
-                    }
-                    else
-                    {
-                        
-                        //create the log message
-                        auto log_str = seller_name + " starts serving a new customer";
-                        chronicle_log.insert(std::pair<std::string,std::string>(int_to_string(time_now),log_str)); //insert to log
-                        
-                        //add key to keySet
-                        keySet.insert(int_to_string(time_now));
-                        
-                        num_of_seats--; //issue ticket
-                        
-                        //create ticket number
-                        auto ticket_str = seller_name + int_to_string(customer_ID);
-                        
-                        //update log based on seller type
-                        H_log.push_back(ticket_str);
-                        
-                        //update time now with the service time
-                        time_now += ticketbooth_queues[booth_ID][0].getServ();
-                        
-                        //new log message
-                        log_str = seller_name + " issued ticket " + ticket_str;
-                        chronicle_log.insert(std::pair<std::string,std::string>(int_to_string(time_now),log_str)); //insert to log
-                        
-                        //add key to keySet
-                        keySet.insert(int_to_string(time_now));
-                        
-                        //increment customer ID
-                        customer_ID++;
-                        
-                        //remove served customer
-                        ticketbooth_queues[booth_ID].pop_front();
-                    }
-                    pthread_mutex_unlock(&lock);
-                    break;
-                case 1 ... 3:
-                    //lock to edit critical section data
-                    pthread_mutex_lock(&lock);
-                    if (num_of_seats == 0)// FINAL CHECK if seat is still available
-                    {
-                        pthread_mutex_unlock(&lock);
-                        continue; //exit
-                    }
-                    else
-                    {
-                        
-                        //create the log message
-                        auto log_str = seller_name + " starts serving a new customer";
-                        chronicle_log.insert(std::pair<std::string,std::string>(int_to_string(time_now),log_str)); //insert to log
-                        
-                        //add key to keySet
-                        keySet.insert(int_to_string(time_now));
-                        
-                        num_of_seats--; //issue ticket
-                        
-                        //create ticket number
-                        auto ticket_str = seller_name + int_to_string(customer_ID);
-                        
-                        //update log based on seller type
-                        M_log.push_back(ticket_str);
-                        
-                        //update time now with the service time
-                        time_now += ticketbooth_queues[booth_ID][0].getServ();
-                        
-                        //new log message
-                        log_str = seller_name + " issued ticket " + ticket_str;
-                        chronicle_log.insert(std::pair<std::string,std::string>(int_to_string(time_now),log_str)); //insert to log
-                        
-                        //add key to keySet
-                        keySet.insert(int_to_string(time_now));
-                        
-                        //increment customer ID
-                        customer_ID++;
-                        
-                        //remove served customer
-                        ticketbooth_queues[booth_ID].pop_front();
-                    }
-                    pthread_mutex_unlock(&lock);
-                    break;
-                case 4 ... 9:
-                    //lock to edit critical section data
-                    pthread_mutex_lock(&lock);
-                    if (num_of_seats == 0)// FINAL CHECK if seat is still available
-                    {
-                        pthread_mutex_unlock(&lock);
-                        continue; //exit
-                    }
-                    else
-                    {
-                        
-                        //create the log message
-                        auto log_str = seller_name + " starts serving a new customer";
-                        chronicle_log.insert(std::pair<std::string,std::string>(int_to_string(time_now),log_str)); //insert to log
-                        
-                        //add key to keySet
-                        keySet.insert(int_to_string(time_now));
-                        
-                        num_of_seats--; //issue ticket
-                        
-                        //create ticket number
-                        auto ticket_str = seller_name + int_to_string(customer_ID);
-                        
-                        //update log based on seller type
-                        L_log.push_back(ticket_str);
-                        
-                        //update time now with the service time
-                        time_now += ticketbooth_queues[booth_ID][0].getServ();
-                        
-                        //new log message
-                        log_str = seller_name + " issued ticket " + ticket_str;
-                        chronicle_log.insert(std::pair<std::string,std::string>(int_to_string(time_now),log_str)); //insert to log
-                        
-                        //add key to keySet
-                        keySet.insert(int_to_string(time_now));
-                        
-                        //increment customer ID
-                        customer_ID++;
-                        
-                        //remove served customer
-                        ticketbooth_queues[booth_ID].pop_front();
-                    }
-                    pthread_mutex_unlock(&lock);
-                    break;
-                
-                default:
-                    break;
+            	pthread_mutex_unlock(&lock);
+            	time_now_local= incrementTime();
+				continue; //still has to be in sync with other threads
             }
+			else
+            {
+                        
+				//create the log message
+				auto log_str = seller_name + " starts serving a new customer";
+				chronicle_log.insert(std::pair<std::string,std::string>(int_to_string(time_now_local),log_str)); //insert to log
+                        
+                //add key to keySet
+                keySet.insert(int_to_string(time_now_local));
+				num_of_seats--; //issue ticket
+				
+				//create ticket number
+				auto ticket_str = seller_name + int_to_string(customer_ID);
+                        
+				//update log based on seller type
+				if(booth_ID ==0)
+				{
+					H_log.push_back(ticket_str);
+				}
+				else if(booth_ID >=1 && booth_ID <=3)
+				{
+					M_log.push_back(ticket_str);
+				}
+				else
+				{
+					L_log.push_back(ticket_str);
+				}
+                //update time now with the service time
+				int timeLeft = ticketbooth_queues[booth_ID][0].getServ();
+				pthread_mutex_unlock(&lock);
+				while(timeLeft && time_now_local <= END_TIME )
+				{	
+					time_now_local = incrementTime();
+					--timeLeft;
+				}
+				pthread_mutex_lock(&lock);
+				time_now_local += timeLeft; //finish the job if past time.
+                std::cout << time_now_local <<std::endl;
+				//new log message
+				log_str = seller_name + " issued ticket " + ticket_str;
+				chronicle_log.insert(std::pair<std::string,std::string>(int_to_string(time_now_local),log_str)); //insert to log
+                        
+				//add key to keySet
+				keySet.insert(int_to_string(time_now_local));
+                        
+				//increment customer ID
+				customer_ID++;
+                        
+				//remove served customer
+				ticketbooth_queues[booth_ID].pop_front();
+			}
+			pthread_mutex_unlock(&lock);
         }
     }
     return NULL;
