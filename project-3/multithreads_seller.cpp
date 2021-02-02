@@ -105,7 +105,7 @@ void * sell (void * data)
         if (ticketbooth_queues[booth_ID].size() == 0)
         {
             time_now_local = incrementTime();
-            continue; //just sleep if no customer
+            continue; //just sleep if no more customer
         }
         else // service customers in line
         {
@@ -119,6 +119,10 @@ void * sell (void * data)
             pthread_mutex_lock(&lock);
             if (num_of_seats == 0)// FINAL CHECK if seat is still available
             {
+            	//Log turnaways
+            	auto log_str = seller_name + " tells a new customer concert is sold out";
+            	chronicle_log.insert(std::pair<std::string,std::string>(int_to_string(time_now_local),log_str)); //insert to log
+            	ticketbooth_queues[booth_ID].pop_front(); //asumes it takes 1 minute to turn away customer
             	pthread_mutex_unlock(&lock);
             	time_now_local= incrementTime();
 				continue; //still has to be in sync with other threads
@@ -128,6 +132,10 @@ void * sell (void * data)
                         
 				//create the log message
 				auto log_str = seller_name + " starts serving a new customer";
+				if (ticketbooth_queues[booth_ID].size() == 1)
+				{
+					log_str = seller_name + " starts serving its last customer";
+				}
 				chronicle_log.insert(std::pair<std::string,std::string>(int_to_string(time_now_local),log_str)); //insert to log
                         
                 //add key to keySet
