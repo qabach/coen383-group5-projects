@@ -85,8 +85,8 @@ void * sell (void * data)
                 case 0:
                     pthread_mutex_lock(&lock);
                     if (num_of_seats == 0)//check again if seat is still available
-
                     {
+                        pthread_mutex_unlock(&lock);
                         continue; //exit
                     }
                     else
@@ -128,8 +128,8 @@ void * sell (void * data)
                 case 1 ... 3:
                     pthread_mutex_lock(&lock);
                     if (num_of_seats == 0)//check again if seat is still available
-
                     {
+                        pthread_mutex_unlock(&lock);
                         continue; //exit
                     }
                     else
@@ -171,8 +171,8 @@ void * sell (void * data)
                 case 4 ... 9:
                     pthread_mutex_lock(&lock);
                     if (num_of_seats == 0)//check again if seat is still available
-
                     {
+                        pthread_mutex_unlock(&lock);
                         continue; //exit
                     }
                     else
@@ -371,7 +371,11 @@ void multithreads_ticket_seller (int count)
     
     //wait for all the seller threads to exit
     for (int i = 0; i < 10; i++)
+    {
         pthread_join(threadID[i], NULL); //**Note &tids[i] was used in the original preview which causes 'no matching func' error.
+        std::cout << "thread: " << i << " returned." << std::endl;
+    }
+        
     
     // Print out simulation results
     std::cout << "***** LOG OF H_TYPE SELLER *****" << std::endl;
