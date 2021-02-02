@@ -421,7 +421,7 @@ void multithreads_ticket_seller (int count)
 
     
     //Chronicle log of events
-    std::cout << "***** CHRONICLE LOG OF EVENTS *****" << std::endl;
+    std::cout << "***** CHRONOLOGICAL LOG OF EVENTS *****" << std::endl;
     for (auto setItr = keySet.begin(); setItr != keySet.end(); setItr++)
     {
         std::cout << "Time stamp: 00:" << setItr->data() << std::endl;

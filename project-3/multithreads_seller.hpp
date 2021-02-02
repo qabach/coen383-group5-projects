@@ -16,7 +16,6 @@
 #include <map>
 #include <ctime>
 #include <set>
-#include "jobs.hpp"
 #include "linked.hpp"
 
 void multithreads_ticket_seller (int count);
