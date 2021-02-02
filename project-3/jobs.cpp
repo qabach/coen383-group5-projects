@@ -1,23 +1,23 @@
 #include "jobs.hpp"
 
 //class for your basic Job; (copied from project2)
-Job::Job()
+Jobs::Jobs()
 {
 	arrivalTime = 0;
 	serviceTime = 0;
 	priority = -1;
-	name = "None";	
+	name = "None";
 }
 
 //Makes the Job Class with parameters
 //Param: a->arrival, b->service,c->prioirty nam-> name of service
-Job::Job(int a, int b, int c, std::string nam = "None")
+Jobs::Jobs(int a, int b, int c, std::string nam = "None")
 {
 	arrivalTime = a;
 	serviceTime = b;
 	priority = c;
 	name = nam;
-	
+
 }
 
 Seat::Seat()
@@ -28,7 +28,7 @@ Seat::Seat()
 	isServed = false;
 }
 
-Seat::Seat(Job j)
+Seat::Seat(Jobs j)
 {
 	job = j;
 	int rc = pthread_mutex_init(&lock,NULL);
@@ -47,10 +47,9 @@ Seat::~Seat()
 
 bool Seat::isFinished()
 {
-
-	if(timeLeft)
-	{
-		return false;
-	}
-	return true;
+    if(timeLeft)
+    {
+        return false;
+    }
+    return true;
 }
