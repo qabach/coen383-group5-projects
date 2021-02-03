@@ -85,12 +85,6 @@ void * sell (void * data)
     //get the incoming data
     auto *incoming = (std::tuple<std::string,int> *) data;
     
-    //print out infomation about the seller
-    //need to lock output s.t. the message is not interrupted
-    pthread_mutex_lock(&stdout_lock);
-    std::cout << std::get<0>(*incoming) << ", " << std::get<1>(*incoming) << " " << int_to_string(std::get<1>(*incoming)) << std::endl;
-    pthread_mutex_unlock(&stdout_lock);
-    
     //thread variables
     int booth_ID = std::get<1>(*incoming);
     auto seller_name = std::get<0>(*incoming);
@@ -207,7 +201,6 @@ void * sell (void * data)
 					--timeLeft;
 				}
 				time_now_local += timeLeft; //finish the job if past time.
-                std::cout << time_now_local <<std::endl;
 				
                 //new log message
 				log_str = seller_name + " issued ticket " + ticket_str;
@@ -324,6 +317,10 @@ std::string int_to_string(int i)
 /* FUNCTION DEFINITION: main function */
 void multithreads_ticket_seller (int count)
 {
+    //Welcome program
+    std::cout << "COEN 383 - Group 5 - Project 3" << std::endl << std::endl;
+    std::cout << "***** Program Report ******" << std::endl;
+    
     pthread_t threadID[10];
     std::string seller_type;
     
@@ -337,10 +334,6 @@ void multithreads_ticket_seller (int count)
 
     // Create seller list
     std::vector<std::tuple<std::string,int>> seller_list;
-    
-    
-    //Print out the description of each seller thread info
-    std::cout << "Seller Type / Seller queue ID / Test add leading 0" << std::endl;
     
     //create the H seller
     seller_type = "H";
@@ -379,19 +372,23 @@ void multithreads_ticket_seller (int count)
     //wakeup all seller threads
     wakeup_all_seller_threads();
     
+    
     //wait for all the seller threads to exit
     for (int i = 0; i < 10; i++)
     {
         pthread_join(threadID[i], NULL); //**Note &tids[i] was used in the original preview which causes 'no matching func' error.
         std::cout << "thread: " << i << " returned." << std::endl;
     }
-        
+    
+    std::cout << std::endl;
     
     // Print out simulation results
     std::cout << "***** LOG OF H_TYPE SELLER *****" << std::endl;
     for (int x = 0; x < H_log.size();x++)
     {
         std::cout << std::get<0>(H_log[x]) << " ";
+        if (x % 5 == 0)
+            std::cout << std::endl;
     }
     std::cout << std::endl;
     std::cout << std::endl;
@@ -399,6 +396,8 @@ void multithreads_ticket_seller (int count)
     for (int x = 0; x < M_log.size();x++)
     {
         std::cout << std::get<0>(M_log[x]) << " ";
+        if (x % 5 == 0)
+            std::cout << std::endl;
     }
     
     
@@ -408,6 +407,8 @@ void multithreads_ticket_seller (int count)
     for (int x = 0; x < L_log.size();x++)
     {
         std::cout << std::get<0>(L_log[x]) << " ";
+        if (x % 5 == 0)
+            std::cout << std::endl;
     }
     std::cout << std::endl;
     std::cout << std::endl;
