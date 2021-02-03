@@ -387,7 +387,7 @@ void multithreads_ticket_seller (int count)
     for (int x = 0; x < H_log.size();x++)
     {
         std::cout << std::get<0>(H_log[x]) << " ";
-        if (x % 5 == 0)
+        if ((x+1) % 5 == 0)
             std::cout << std::endl;
     }
     std::cout << std::endl;
@@ -396,7 +396,7 @@ void multithreads_ticket_seller (int count)
     for (int x = 0; x < M_log.size();x++)
     {
         std::cout << std::get<0>(M_log[x]) << " ";
-        if (x % 5 == 0)
+        if ((x+1) % 5 == 0)
             std::cout << std::endl;
     }
     
@@ -407,7 +407,7 @@ void multithreads_ticket_seller (int count)
     for (int x = 0; x < L_log.size();x++)
     {
         std::cout << std::get<0>(L_log[x]) << " ";
-        if (x % 5 == 0)
+        if ((x+1) % 5 == 0)
             std::cout << std::endl;
     }
     std::cout << std::endl;
