@@ -77,24 +77,29 @@ int main(int argc, const char * argv[])
     //comment out for now since creating error while testing
     deque<Job> totalQueues;
     int n;
-//    if(argc !=2)
-//    {
-//        cout << "not enough arguements" << endl;
-//        return -1;
-//    }
+    //check if there are only 2 arguments
+    if(argc !=2)
+	{
+        cout << "not enough arguements" << endl;
+        return -1;
+    }
      
     //note that this might create an error maybe.
-//    string yay = string(argv[1]);
-//    for(int i =0; i < yay.length(); ++i)
-//    {
-//        if(!isdigit(argv[1][i]))
-//        {
-//            cout << "Argument is not a number" << endl;
-//            return -2;
-//        }
-//    }
-//    n = stoi(yay);
+    string yay = string(argv[1]);
+    //make sure that the argument is a number
+    for(int i =0; i < yay.length(); ++i)
+    {
+        if(!isdigit(argv[1][i]))
+        {
+            cout << "Argument is not a number" << endl;
+            return -2;
+        }
+    }
+    //store number in n
+    n = stoi(yay);
     
+    //was for initating queues but replaced with something else
+    /*
     for(int i = 0; i < n * 6; ++i)
     {
         queues[i/n].push_back(generateAJob("L" + to_string(i),0));
@@ -111,6 +116,7 @@ int main(int argc, const char * argv[])
     {
             sort(queues[i].begin(), queues[i].end(), compareFunc);
     }
+    */
 //    for(int i =0; i < n * 10; ++i)
 //    {
 //        cout << queues[i/n][i%n].name <<":"
@@ -119,8 +125,8 @@ int main(int argc, const char * argv[])
     
     
     // CURRENT TESTING
-    
-    multithreads_ticket_seller(10);
+    //pass to multi threads for actual function
+    multithreads_ticket_seller(n);
     
     std::cout << "Done " << std::endl;
     
