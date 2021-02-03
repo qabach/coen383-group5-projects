@@ -263,7 +263,7 @@ void populate_jobs(int count)
             case 1 ... 3:
                 for (int j = 0; j < count; j++)
                 {
-                    auto n = "C" + std::to_string(j);
+                    auto n = "C" + std::to_string(rand() % 1000);
                     //rand() % (max_number + 1 - minimum_number) + minimum_number for range min-max
                     arr = rand() % (59 + 1 - 0) + 0;
                     serv = rand() % (4 + 1 - 2) + 2;
@@ -275,7 +275,7 @@ void populate_jobs(int count)
             case 4 ... 9:
                 for (int j = 0; j < count; j++)
                 {
-                    auto n = "C" + std::to_string(j);
+                    auto n = "C" + std::to_string(rand() % 1000);
                     //rand() % (max_number + 1 - minimum_number) + minimum_number for range min-max
                     arr = rand() % (59 + 1 - 0) + 0;
                     serv = rand() % (7 + 1 - 4) + 4;
@@ -485,7 +485,7 @@ void multithreads_ticket_seller (int count)
     
     std::cout << "*** SELLER TYPE L ***" << std::endl;
     std::cout << "  - Average Response Time: " << double((total_response/L_log.size())/5) << std::endl;
-    std::cout << "  - Average TAT Time: " << double((total_waiting_time + total_service_time)/L_log.size()) << std::endl;
+    std::cout << "  - Average TAT Time: "  <<  double((total_waiting_time + total_service_time)/L_log.size()) << std::endl;
     std::cout << "  - Average throughtput: " << double(L_log.size()/60.0) << std::endl;
     
 }
