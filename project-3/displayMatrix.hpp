@@ -11,7 +11,7 @@
 #include <stdio.h>
 #include <cmath>
 #include "multithreads_seller.hpp"
-#include "jobs.hpp"
+#include "seat.hpp"
 //using namespace std;
 
 void displayMatrix(std::vector<std::tuple<std::string, Seat>> logH, std::vector<std::tuple<std::string, Seat>> logM, std::vector<std::tuple<std::string, Seat>> logL);
