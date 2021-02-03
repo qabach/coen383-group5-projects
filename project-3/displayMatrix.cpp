@@ -297,7 +297,7 @@ void displayMatrix(std::vector<std::tuple<std::string, Seat>> VectorLogH, std::v
         {
             bool gotSeat = false;
             
-            for(int i = 10; i > 0; i--)         // access from bottom up
+            for(int i = 9; i >= 0; i--)         // access from bottom up
             {
                 for(int j = 0; j < 10; j++)     // access from left to right
                 {

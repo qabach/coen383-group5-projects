@@ -1,7 +1,7 @@
 CC = g++
 
-edit : main.o jobs.o linked.o multithreads_seller.o 
-	g++ -std=c++11 -pthread -o test main.o jobs.o linked.o multithreads_seller.o
+edit : main.o jobs.o linked.o multithreads_seller.o displayMatrix.o
+	g++ -std=c++11 -pthread -o test main.o jobs.o linked.o displayMatrix.o multithreads_seller.o
 
 main.o: main.cpp jobs.hpp
 	cc -c main.cpp
@@ -15,7 +15,10 @@ linked.o: linked.cpp linked.hpp
 multithreads_seller.o: multithreads_seller.cpp multithreads_seller.hpp
 	cc -c multithreads_seller.cpp
 	
+displayMatrix.o: displayMatrix.cpp displayMatrix.hpp
+	cc -c displayMatrix.cpp
+	
 clean:
-	rm test main.o jobs.o multithreads_seller.o linked.o
+	rm test main.o jobs.o multithreads_seller.o linked.o displayMatrix.o
 
 	
