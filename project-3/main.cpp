@@ -111,16 +111,16 @@ int main(int argc, const char * argv[])
     {
             sort(queues[i].begin(), queues[i].end(), compareFunc);
     }
-    for(int i =0; i < n * 10; ++i)
-    {
-        cout << queues[i/n][i%n].name <<":"
-        << queues[i/n][i%n].getArr()<< endl;
-    }
+//    for(int i =0; i < n * 10; ++i)
+//    {
+//        cout << queues[i/n][i%n].name <<":"
+//        << queues[i/n][i%n].getArr()<< endl;
+//    }
     
     
     // CURRENT TESTING
     
-    multithreads_ticket_seller(15);
+    multithreads_ticket_seller(10);
     
     std::cout << "Done " << std::endl;
     
