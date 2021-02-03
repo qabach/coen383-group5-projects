@@ -414,9 +414,9 @@ void multithreads_ticket_seller (int count)
     std::cout << std::endl;
     //Size of each log; this should sum up to less than or equal to 100
     std::cout << "*** SIZE OF EACH LOG ***" << std::endl;
-    std::cout << H_log.size() << std::endl;
-    std::cout << M_log.size() << std::endl;
-    std::cout << L_log.size() << std::endl;
+    std::cout << "H: " << H_log.size() << std::endl;
+    std::cout << "M: " << M_log.size() << std::endl;
+    std::cout << "L: " <<L_log.size() << std::endl;
     std::cout << "*** CHECK IF: SUM <= 100 ***" << std::endl;
 
     
