@@ -489,5 +489,7 @@ void multithreads_ticket_seller (int count)
     std::cout << "  - Average TAT Time: "  <<  double((total_waiting_time + total_service_time)/L_log.size()) << std::endl;
     std::cout << "  - Average throughtput: " << double(L_log.size()/60.0) << std::endl;
     
+    displayMatrix(H_log, M_log, L_log);
+    
 }
 
