@@ -37,9 +37,9 @@ void displayMatrix(std::vector<std::tuple<std::string, Seat>> VectorLogH, std::v
     auto sizeL = VectorLogL.size();
     
     // *** TESTING print out for testing only ***
-    std:: cout << "Size of H: " << sizeH << std::endl;
-    std:: cout << "Size of M: " << sizeM << std::endl;
-    std:: cout << "Size of L: " << sizeL << std::endl;
+    std:: cout << "Number of customers served by H: " << sizeH << std::endl;
+    std:: cout << "Number of customers served by M: " << sizeM << std::endl;
+    std:: cout << "Number of customers served by L: " << sizeL << std::endl;
     
     
     
@@ -275,7 +275,7 @@ void displayMatrix(std::vector<std::tuple<std::string, Seat>> VectorLogH, std::v
         {
             bool gotSeat = false;
             
-            for(int i = 10; i > 0; i--)         // access from bottom up
+            for(int i = 9; i >= 0; i--)         // access from bottom up
             {
                 for(int j = 0; j < 10; j++)     // access from left to right
                 {
