@@ -434,9 +434,6 @@ void multithreads_ticket_seller (int count)
         std::cout << std::endl;
     }
     
-    
-    
-    
     //print out statistics for each seller type
     
     //compute statistics to print out for H
@@ -454,7 +451,7 @@ void multithreads_ticket_seller (int count)
     std::cout << "********** STATISTICS REPORT **********" << std::endl;
     std::cout << "*** SELLER TYPE H ***" << std::endl;
     std::cout << "  - Average Response Time: " << double(total_response/H_log.size()) << std::endl;
-    std::cout << "  - Average TAT Time: " << double((total_response + total_service_time)/H_log.size()) << std::endl;
+    std::cout << "  - Average TAT Time: " << double((total_waiting_time + total_service_time)/H_log.size()) << std::endl;
     std::cout << "  - Average throughtput: " << double(H_log.size()/60.0) << std::endl;
 
     //compute statistics to print out for M
@@ -471,8 +468,8 @@ void multithreads_ticket_seller (int count)
     
     std::cout << "*** SELLER TYPE M ***" << std::endl;
     std::cout << "  - Average Response Time: " << double((total_response/M_log.size())/4) << std::endl;
-    std::cout << "  - Average TAT Time: " << double(((total_response + total_service_time)/M_log.size())/4) << std::endl;
-    std::cout << "  - Average throughtput: " << double((M_log.size()/60.0)/4) << std::endl;
+    std::cout << "  - Average TAT Time: " << double((total_waiting_time + total_service_time)/M_log.size()) << std::endl;
+    std::cout << "  - Average throughtput: " << double(M_log.size()/60.0) << std::endl;
     
     //compute statistics to print out for L
     total_response      = 0;
@@ -488,8 +485,8 @@ void multithreads_ticket_seller (int count)
     
     std::cout << "*** SELLER TYPE L ***" << std::endl;
     std::cout << "  - Average Response Time: " << double((total_response/L_log.size())/5) << std::endl;
-    std::cout << "  - Average TAT Time: " << double(((total_response + total_service_time)/L_log.size())/5) << std::endl;
-    std::cout << "  - Average throughtput: " << double((L_log.size()/60.0)/5) << std::endl;
+    std::cout << "  - Average TAT Time: " << double((total_waiting_time + total_service_time)/L_log.size()) << std::endl;
+    std::cout << "  - Average throughtput: " << double(L_log.size()/60.0) << std::endl;
     
 }
 

@@ -74,29 +74,27 @@ bool compareFunc(Job a, Job b)
 int main(int argc, const char * argv[])
 {
     // **** THIS SECTION IS BEING COMMENTED OUT FOR TESTING ******
-    /* comment out for now since creating error while testing
-    pthread_t threadID[10];
-    std::string seller_type;
+    //comment out for now since creating error while testing
     deque<Job> totalQueues;
-    counter = 0;
     int n;
-    if(argc !=2)
-    {
-        cout << "not enough arguements" << endl;
-        return -1;
-    }
+//    if(argc !=2)
+//    {
+//        cout << "not enough arguements" << endl;
+//        return -1;
+//    }
      
     //note that this might create an error maybe.
-    string yay = string(argv[1]);
-    for(int i =0; i < yay.length(); ++i)
-    {
-        if(!isdigit(argv[1][i]))
-        {
-            cout << "Argument is not a number" << endl;
-            return -2;
-        }
-    }
-    n = stoi(yay);
+//    string yay = string(argv[1]);
+//    for(int i =0; i < yay.length(); ++i)
+//    {
+//        if(!isdigit(argv[1][i]))
+//        {
+//            cout << "Argument is not a number" << endl;
+//            return -2;
+//        }
+//    }
+//    n = stoi(yay);
+    
     for(int i = 0; i < n * 6; ++i)
     {
         queues[i/n].push_back(generateAJob("L" + to_string(i),0));
@@ -118,7 +116,7 @@ int main(int argc, const char * argv[])
         cout << queues[i/n][i%n].name <<":"
         << queues[i/n][i%n].getArr()<< endl;
     }
-    */
+    
     
     // CURRENT TESTING
     
@@ -129,35 +127,3 @@ int main(int argc, const char * argv[])
     return 0;
 }
 
-
-/* THIS SECTION IS BEING COMMENTED OUT FOR TESTING
-// Implementation of  declared functions
-
-// thread function
-void * sell (void * seller_type)
-{
-    bool moreWork = false;
-
-    while(moreWork)
-    {
-        pthread_mutex_lock(&mutex);
-        pthread_cond_wait(&cond, &mutex);
-        pthread_mutex_unlock(&mutex);
-
-        //serve any buyer available in this seller queue that is ready
-        // now buy ticket till done with all relevant buyers in their queue
-
-    }
-    return NULL; //thread exits
-}
-
-
-//function to wake up all threads
-void wakeup_all_seller_threads()
-{
-    pthread_mutex_lock(&mutex);
-    pthread_cond_broadcast(&cond);
-    pthread_mutex_unlock(&mutex);
-}
-
-*/
