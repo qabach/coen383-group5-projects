@@ -3,6 +3,7 @@ CC = g++
 edit : main.o seat.o linked.o multithreads_seller.o displayMatrix.o
 	g++ -std=c++11 -pthread -o test main.o seat.o linked.o multithreads_seller.o displayMatrix.o
 
+
 main.o: main.cpp multithreads_seller.hpp
 	cc -c main.cpp
 
@@ -18,7 +19,11 @@ multithreads_seller.o: multithreads_seller.cpp multithreads_seller.hpp
 displayMatrix.o: displayMatrix.cpp displayMatrix.hpp
 	cc -c displayMatrix.cpp
 	
+displayMatrix.o: displayMatrix.cpp displayMatrix.hpp
+	cc -c displayMatrix.cpp
+	
 clean:
 	rm test main.o seat.o multithreads_seller.o linked.o displayMatrix.o
+
 
 	
