@@ -1,0 +1,512 @@
+COEN 383 - Group 5 - Project 3
+
+***** Program Report ******
+thread: 0 returned.
+thread: 1 returned.
+thread: 2 returned.
+thread: 3 returned.
+thread: 4 returned.
+thread: 5 returned.
+thread: 6 returned.
+thread: 7 returned.
+thread: 8 returned.
+thread: 9 returned.
+
+***** LOG OF H_TYPE SELLER *****
+H001 H002 H003 H004 H005 
+H006 H007 H008 H009 H010 
+H011 H012 H013 H014 
+
+***** LOG OF M_TYPE SELLER *****
+M201 M301 M101 M202 M302 
+M102 M203 M303 M204 M103 
+M205 M104 M206 M304 M207 
+M208 M209 M105 M210 M305 
+M211 M106 M212 M306 M107 
+M307 M108 M308 M213 M109 
+M309 M110 M214 M111 M310 
+M215 M311 
+
+***** LOG OF L_TYPE SELLER *****
+L501 L401 L101 L201 L601 
+L502 L301 L402 L602 L202 
+L302 L503 L403 L102 L603 
+L404 L203 L303 L504 L103 
+L604 L304 L405 L204 L505 
+L104 L605 L406 L205 L305 
+L506 L105 L606 L407 L206 
+L507 L306 L106 L607 L207 
+L608 L508 L307 L107 L408 
+L208 L509 L409 L609 
+
+***** CHRONOLOGICAL LOG OF EVENTS *****
+Time stamp: 00:00
+   - C348 arrived at queue L5
+   - L5 starts serving a new customer
+
+Time stamp: 00:01
+   - C254 arrived at queue M2
+   - M2 starts serving a new customer
+   - C802 arrived at queue L4
+   - L4 starts serving a new customer
+   - C321 arrived at queue L1
+   - L1 starts serving a new customer
+   - C922 arrived at queue L5
+
+Time stamp: 00:02
+   - C334 arrived at queue L2
+   - L2 starts serving a new customer
+
+Time stamp: 00:04
+   - C870 arrived at queue L6
+   - L6 starts serving a new customer
+   - L5 issued ticket L501
+   - L5 starts serving a new customer
+
+Time stamp: 00:05
+   - M2 issued ticket M201
+   - C564 arrived at queue H0
+   - H0 starts serving a new customer
+   - C493 arrived at queue L3
+   - L3 starts serving a new customer
+   - L4 issued ticket L401
+   - C422 arrived at queue L4
+   - L4 starts serving a new customer
+
+Time stamp: 00:06
+   - C424 arrived at queue M3
+   - M3 starts serving a new customer
+   - C692 arrived at queue M1
+   - M1 starts serving a new customer
+   - H0 issued ticket H001
+   - C502 arrived at queue L6
+   - C400 arrived at queue L4
+
+Time stamp: 00:07
+   - C813 arrived at queue H0
+   - H0 starts serving a new customer
+   - C464 arrived at queue M3
+
+Time stamp: 00:08
+   - C348 arrived at queue M2
+   - M2 starts serving a new customer
+   - L1 issued ticket L101
+   - M1 issued ticket M101
+   - L2 issued ticket L201
+
+Time stamp: 00:09
+   - M3 issued ticket M301
+   - M3 starts serving a new customer
+   - H0 issued ticket H002
+   - C179 arrived at queue M3
+
+Time stamp: 00:10
+   - C162 arrived at queue M1
+   - M1 starts serving a new customer
+   - L3 issued ticket L301
+   - L6 issued ticket L601
+   - L6 starts serving a new customer
+
+Time stamp: 00:11
+   - C120 arrived at queue L2
+   - L2 starts serving a new customer
+   - M2 issued ticket M202
+   - C71 arrived at queue H0
+   - H0 starts serving a new customer
+   - C823 arrived at queue M2
+   - M2 starts serving a new customer
+   - L5 issued ticket L502
+   - C582 arrived at queue M1
+
+Time stamp: 00:12
+   - C466 arrived at queue L3
+   - L3 starts serving a new customer
+   - C632 arrived at queue L5
+   - L5 starts serving a new customer
+   - M3 issued ticket M302
+   - M3 starts serving a new customer
+   - L4 issued ticket L402
+   - L4 starts serving a new customer
+   - H0 issued ticket H003
+   - C985 arrived at queue M2
+   - C287 arrived at queue L2
+
+Time stamp: 00:14
+   - M2 issued ticket M203
+   - M2 starts serving a new customer
+   - M1 issued ticket M102
+   - M1 starts serving a new customer
+   - C673 arrived at queue L1
+   - L1 starts serving a new customer
+   - C426 arrived at queue M2
+   - C857 arrived at queue L6
+   - C96 arrived at queue L6
+   - C230 arrived at queue L4
+
+Time stamp: 00:15
+   - M3 issued ticket M303
+   - C772 arrived at queue M2
+   - C104 arrived at queue L3
+
+Time stamp: 00:16
+   - M1 issued ticket M103
+   - M2 issued ticket M204
+   - M2 starts serving a new customer
+   - L5 issued ticket L503
+   - C100 arrived at queue H0
+   - H0 starts serving a new customer
+   - L6 issued ticket L602
+   - L6 starts serving a new customer
+   - C622 arrived at queue L3
+
+Time stamp: 00:17
+   - C727 arrived at queue M1
+   - M1 starts serving a new customer
+   - C564 arrived at queue M2
+
+Time stamp: 00:18
+   - M2 issued ticket M205
+   - M2 starts serving a new customer
+   - L4 issued ticket L403
+   - L4 starts serving a new customer
+   - H0 issued ticket H004
+   - L2 issued ticket L202
+   - L2 starts serving a new customer
+   - L3 issued ticket L302
+   - L3 starts serving a new customer
+   - C347 arrived at queue M2
+   - C401 arrived at queue M2
+   - C139 arrived at queue L2
+
+Time stamp: 00:20
+   - C355 arrived at queue M3
+   - M3 starts serving a new customer
+   - M1 issued ticket M104
+   - C304 arrived at queue H0
+   - H0 starts serving a new customer
+   - C865 arrived at queue L5
+   - L5 starts serving a new customer
+   - L1 issued ticket L102
+   - C178 arrived at queue M2
+   - C652 arrived at queue L3
+
+Time stamp: 00:21
+   - C138 arrived at queue L1
+   - L1 starts serving a new customer
+   - M2 issued ticket M206
+   - M2 starts serving a new customer
+   - C743 arrived at queue L5
+
+Time stamp: 00:22
+   - H0 issued ticket H005
+   - C429 arrived at queue H0
+   - H0 starts serving a new customer
+
+Time stamp: 00:23
+   - L6 issued ticket L603
+   - M2 issued ticket M207
+   - M2 starts serving a new customer
+   - M3 issued ticket M304
+   - L6 starts serving a new customer
+   - C694 arrived at queue L4
+   - C47 arrived at queue L5
+   - C447 arrived at queue L6
+   - C10 arrived at queue L6
+   - C231 arrived at queue L6
+
+Time stamp: 00:24
+   - L4 issued ticket L404
+   - L3 issued ticket L303
+   - L3 starts serving a new customer
+   - L4 starts serving a new customer
+   - H0 issued ticket H006
+   - C963 arrived at queue H0
+   - H0 starts serving a new customer
+   - C360 arrived at queue H0
+   - C667 arrived at queue L2
+   - C159 arrived at queue L4
+
+Time stamp: 00:25
+   - M2 issued ticket M208
+   - M2 starts serving a new customer
+   - L2 issued ticket L203
+   - L2 starts serving a new customer
+   - C840 arrived at queue L2
+   - C587 arrived at queue L4
+
+Time stamp: 00:26
+   - H0 issued ticket H007
+   - H0 starts serving a new customer
+
+Time stamp: 00:27
+   - L5 issued ticket L504
+   - L5 starts serving a new customer
+   - C448 arrived at queue L3
+   - C19 arrived at queue L4
+
+Time stamp: 00:28
+   - L1 issued ticket L103
+   - C957 arrived at queue L1
+   - L1 starts serving a new customer
+   - C963 arrived at queue M1
+   - M1 starts serving a new customer
+   - H0 issued ticket H008
+   - M2 issued ticket M209
+   - M2 starts serving a new customer
+   - C718 arrived at queue M2
+   - C34 arrived at queue M1
+
+Time stamp: 00:30
+   - C182 arrived at queue M3
+   - M3 starts serving a new customer
+   - M2 issued ticket M210
+   - M2 starts serving a new customer
+   - L6 issued ticket L604
+   - L6 starts serving a new customer
+   - L4 issued ticket L405
+   - L4 starts serving a new customer
+   - C561 arrived at queue M2
+   - C228 arrived at queue L1
+   - C389 arrived at queue L5
+   - C251 arrived at queue L2
+   - C797 arrived at queue L3
+   - C307 arrived at queue L4
+
+Time stamp: 00:31
+   - M1 issued ticket M105
+   - M1 starts serving a new customer
+   - L2 issued ticket L204
+   - L2 starts serving a new customer
+   - L3 issued ticket L304
+   - L3 starts serving a new customer
+   - C655 arrived at queue M3
+   - C217 arrived at queue M1
+   - C131 arrived at queue M1
+   - C438 arrived at queue L2
+   - C370 arrived at queue L3
+   - C636 arrived at queue L6
+
+Time stamp: 00:32
+   - L5 issued ticket L505
+   - L5 starts serving a new customer
+   - M2 issued ticket M211
+   - M2 starts serving a new customer
+   - C190 arrived at queue H0
+   - H0 starts serving a new customer
+   - M3 issued ticket M305
+   - M3 starts serving a new customer
+
+Time stamp: 00:33
+   - H0 issued ticket H009
+   - C724 arrived at queue H0
+   - H0 starts serving a new customer
+   - M1 issued ticket M106
+   - M1 starts serving a new customer
+   - L1 issued ticket L104
+   - L1 starts serving a new customer
+   - C298 arrived at queue L1
+
+Time stamp: 00:34
+   - L6 issued ticket L605
+   - L6 starts serving a new customer
+   - H0 issued ticket H010
+   - M3 issued ticket M306
+   - C913 arrived at queue M3
+   - M3 starts serving a new customer
+   - C426 arrived at queue L1
+
+Time stamp: 00:35
+   - C770 arrived at queue H0
+   - H0 starts serving a new customer
+   - M1 issued ticket M107
+   - M2 issued ticket M212
+   - M1 starts serving a new customer
+   - C365 arrived at queue L2
+
+Time stamp: 00:36
+   - H0 issued ticket H011
+   - L4 issued ticket L406
+   - L4 starts serving a new customer
+   - L2 issued ticket L205
+   - L2 starts serving a new customer
+
+Time stamp: 00:37
+   - L5 issued ticket L506
+   - L5 starts serving a new customer
+   - C485 arrived at queue L1
+
+Time stamp: 00:38
+   - L3 issued ticket L305
+   - M3 issued ticket M307
+   - C617 arrived at queue M3
+   - M3 starts serving a new customer
+   - L3 starts serving a new customer
+   - L1 issued ticket L105
+   - L1 starts serving a new customer
+   - L6 issued ticket L606
+   - L6 starts serving a new customer
+   - C405 arrived at queue L5
+
+Time stamp: 00:39
+   - C730 arrived at queue M2
+   - M2 starts serving a new customer
+   - M1 issued ticket M108
+   - C811 arrived at queue M1
+   - M1 starts serving a new customer
+
+Time stamp: 00:41
+   - M3 issued ticket M308
+
+Time stamp: 00:42
+   - L6 issued ticket L607
+   - L5 issued ticket L507
+   - L2 issued ticket L206
+   - L2 starts serving a new customer
+   - L6 starts serving a new customer
+   - L5 starts serving a new customer
+
+Time stamp: 00:43
+   - M2 issued ticket M213
+   - C659 arrived at queue M3
+   - M3 starts serving a new customer
+   - M1 issued ticket M109
+   - C268 arrived at queue M1
+   - M1 starts serving a new customer
+   - L3 issued ticket L306
+   - L3 starts serving a new customer
+   - L1 issued ticket L106
+   - L1 starts serving a new customer
+   - L4 issued ticket L407
+   - L4 starts serving a new customer
+   - C357 arrived at queue L5
+
+Time stamp: 00:44
+   - C203 arrived at queue M2
+   - M2 starts serving a new customer
+
+Time stamp: 00:45
+   - M3 issued ticket M309
+   - C435 arrived at queue M2
+
+Time stamp: 00:46
+   - M1 issued ticket M110
+   - C642 arrived at queue M1
+   - M1 starts serving a new customer
+   - C281 arrived at queue M3
+   - M3 starts serving a new customer
+   - C650 arrived at queue L5
+
+Time stamp: 00:47
+   - C501 arrived at queue H0
+   - H0 starts serving a new customer
+   - L2 issued ticket L207
+   - L2 starts serving a new customer
+   - L5 issued ticket L508
+   - L5 starts serving a new customer
+   - C905 arrived at queue H0
+   - C405 arrived at queue M3
+
+Time stamp: 00:48
+   - H0 issued ticket H012
+   - M2 issued ticket M214
+   - M2 starts serving its last customer
+   - H0 starts serving a new customer
+
+Time stamp: 00:49
+   - H0 issued ticket H013
+   - C979 arrived at queue H0
+   - H0 starts serving a new customer
+   - L4 issued ticket L408
+   - L4 starts serving a new customer
+   - M3 issued ticket M310
+   - M3 starts serving a new customer
+   - L6 issued ticket L608
+   - L6 starts serving a new customer
+
+Time stamp: 00:50
+   - L3 issued ticket L307
+   - L3 tells a new customer the concert is sold out
+   - *** NOTICE: L3 CLOSED THE BOOTH ***
+   - *** NOTICE: L3 turned away 8 customers ***
+   - L1 issued ticket L107
+   - L1 tells a new customer the concert is sold out
+   - *** NOTICE: L1 CLOSED THE BOOTH ***
+   - *** NOTICE: L1 turned away 8 customers ***
+   - H0 issued ticket H014
+   - M1 issued ticket M111
+   - C630 arrived at queue M1
+   - M1 tells a new customer the concert is sold out
+   - *** NOTICE: M1 CLOSED THE BOOTH ***
+   - *** NOTICE: M1 turned away 4 customers ***
+   - C136 arrived at queue M3
+
+Time stamp: 00:52
+   - M2 issued ticket M215
+   - M3 issued ticket M311
+   - M3 tells a new customer the concert is sold out
+   - *** NOTICE: M3 CLOSED THE BOOTH ***
+   - *** NOTICE: M3 turned away 4 customers ***
+
+Time stamp: 00:53
+   - L4 issued ticket L409
+   - L4 tells a new customer the concert is sold out
+   - *** NOTICE: L4 CLOSED THE BOOTH ***
+   - *** NOTICE: L4 turned away 6 customers ***
+
+Time stamp: 00:54
+   - L5 issued ticket L509
+   - L5 tells a new customer the concert is sold out
+   - *** NOTICE: L5 CLOSED THE BOOTH ***
+   - *** NOTICE: L5 turned away 6 customers ***
+   - L2 issued ticket L208
+   - L2 tells a new customer the concert is sold out
+   - *** NOTICE: L2 CLOSED THE BOOTH ***
+   - *** NOTICE: L2 turned away 7 customers ***
+
+Time stamp: 00:55
+   - C252 arrived at queue H0
+   - H0 tells a new customer the concert is sold out
+   - *** NOTICE: H0 CLOSED THE BOOTH ***
+   - *** NOTICE: H0 turned away 1 customers ***
+   - L6 issued ticket L609
+   - L6 tells a new customer the concert is sold out
+   - *** NOTICE: L6 CLOSED THE BOOTH ***
+   - *** NOTICE: L6 turned away 6 customers ***
+
+********** STATISTICS REPORT **********
+
+*** SELLER TYPE H ***
+  - Average Response Time: 0.214286
+  - Average TAT Time: 1.64286
+  - Average throughput: 0.233333
+
+*** SELLER TYPE M ***
+  - Average Response Time: 0.391892
+  - Average TAT Time: 4.45946
+  - Average throughput: 0.205556
+
+*** SELLER TYPE L ***
+  - Average Response Time: 1.10884
+  - Average TAT Time: 12.4898
+  - Average throughput: 0.136111
+
+
+********************** DISPLAY MATRIX PROCESS *********************
+Number of customers served by H: 14
+Number of customers served by M: 37
+Number of customers served by L: 49
+
+********************** TICKET SEATING MATRIX **********************
+Row 01:  H001  H002  H003  H004  H005  H006  H007  H008  H009  H010  
+Row 02:  H011  H012  L208  L509  H013  M215  H014  M311  L409  L609  
+Row 03:  L608  L508  M309  M110  L307  L107  L408  M214  M111  M310  
+Row 04:  M211  M106  M212  M306  M107  M307  M108  M308  M213  M109  
+Row 05:  M201  M301  M101  M202  M302  M102  M203  M303  M204  M103  
+Row 06:  M205  M104  M206  M304  M207  M208  M209  M105  M210  M305  
+Row 07:  L506  L105  L606  L407  L206  L507  L306  L106  L607  L207  
+Row 08:  L604  L304  L405  L204  L505  L104  L605  L406  L205  L305  
+Row 09:  L302  L503  L403  L102  L603  L404  L203  L303  L504  L103  
+Row 10:  L501  L401  L101  L201  L601  L502  L301  L402  L602  L202  
+
+
+Program ended with exit code: 0

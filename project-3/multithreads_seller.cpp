@@ -463,7 +463,7 @@ void multithreads_ticket_seller (int count)
     std::cout << "*** SELLER TYPE M ***" << std::endl;
     std::cout << "  - Average Response Time: " << double((total_response/M_log.size())/4) << std::endl;
     std::cout << "  - Average TAT Time: " << double((total_waiting_time + total_service_time)/M_log.size()) << std::endl;
-    std::cout << "  - Average throughput: " << double(M_log.size()/60.0) << std::endl;
+    std::cout << "  - Average throughput: " << double((M_log.size()/60.0)/3) << std::endl;
     std::cout << std::endl;
 
     //compute statistics to print out for L
@@ -479,9 +479,9 @@ void multithreads_ticket_seller (int count)
     }
     
     std::cout << "*** SELLER TYPE L ***" << std::endl;
-    std::cout << "  - Average Response Time: " << double((total_response/L_log.size())/5) << std::endl;
+    std::cout << "  - Average Response Time: " << double((total_response/L_log.size())/6) << std::endl;
     std::cout << "  - Average TAT Time: "  <<  double((total_waiting_time + total_service_time)/L_log.size()) << std::endl;
-    std::cout << "  - Average throughput: " << double(L_log.size()/60.0) << std::endl;
+    std::cout << "  - Average throughput: " << double((L_log.size()/60.0)/6) << std::endl;
     std::cout << std::endl;
 
     displayMatrix(H_log, M_log, L_log);
