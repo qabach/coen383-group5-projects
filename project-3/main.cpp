@@ -118,41 +118,7 @@ int main(int argc, const char * argv[])
         cout << queues[i/n][i%n].name <<":"
         << queues[i/n][i%n].getArr()<< endl;
     }
-    
-//    //Create necessary data structures for simulator
-//    //Create buyers list for each seller ticket queue based on
-//    //the N value within an hour (60 count of 1 min) and have them in the sller queue
-//
-//    //Create 10 threads representing the 10 sellers
-//
-//    //create the H seller
-//    seller_type = "H";
-//    pthread_create(&threadID[0], NULL, sell, &seller_type);
-//
-//    //create 3 M's sellers
-//    seller_type = "M";
-//    for (int i = 1; i < 5; i++)
-//        pthread_create(&threadID[i], NULL, sell, &seller_type);
-//
-//    //create 6 L's sellers
-//    seller_type = "L";
-//    for (int i = 4; i < 10; i++)
-//        pthread_create(&threadID[i], NULL, sell, &seller_type);
-//
-//    //wakeup all seller threads
-//    wakeup_all_seller_threads();
-//
-//    //wakit for all the seller threads to exit
-//    for (int i = 0; i < 10; i++)
-//        pthread_join(threadID[i], NULL); //**Note &tids[i] was used in the original preview which causes 'no matching func' error.
-//
-//    // Print out similation results
-//
-//    cout << "testing" <<endl;
     */
-    
-    
-    
     
     // CURRENT TESTING
     

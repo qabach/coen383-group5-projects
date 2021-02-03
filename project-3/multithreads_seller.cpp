@@ -9,10 +9,10 @@
 
 
 //initialize pthread utility variables
-pthread_cond_t condition    = PTHREAD_COND_INITIALIZER;
-pthread_mutex_t stdout_lock = PTHREAD_MUTEX_INITIALIZER;
-pthread_mutex_t lock        = PTHREAD_MUTEX_INITIALIZER;
-pthread_mutex_t cond_lock        = PTHREAD_MUTEX_INITIALIZER;
+pthread_cond_t condition        = PTHREAD_COND_INITIALIZER;
+pthread_mutex_t stdout_lock     = PTHREAD_MUTEX_INITIALIZER;
+pthread_mutex_t lock            = PTHREAD_MUTEX_INITIALIZER;
+pthread_mutex_t cond_lock       = PTHREAD_MUTEX_INITIALIZER;
 
 
 
@@ -34,11 +34,11 @@ int counter =0;
 //now a global timer
 int time_now = 0;
 // logs for each type of
-std::vector<std::string> H_log;
-std::vector<std::string> M_log;
-std::vector<std::string> L_log;
+std::vector<std::tuple<std::string,Seat>> H_log;
+std::vector<std::tuple<std::string,Seat>> M_log;
+std::vector<std::tuple<std::string,Seat>> L_log;
 //chronicle log of events
-std::multimap <std::string, std::string> chronicle_log;
+std::multimap <std::string, std::string> chronological_log;
 
 /* END OF CRITICAL SECTION */
 
@@ -55,6 +55,8 @@ void wakeup_all_seller_threads()
     pthread_mutex_unlock(&cond_lock);
 }
 
+
+/* FUNCTION DEFINITION: increment global time for each thread */
 int incrementTime()
 {
 	int timeL;
@@ -87,7 +89,6 @@ void * sell (void * data)
     //need to lock output s.t. the message is not interrupted
     pthread_mutex_lock(&stdout_lock);
     std::cout << std::get<0>(*incoming) << ", " << std::get<1>(*incoming) << " " << int_to_string(std::get<1>(*incoming)) << std::endl;
-    time_now = 0;
     pthread_mutex_unlock(&stdout_lock);
     
     //thread variables
@@ -115,74 +116,117 @@ void * sell (void * data)
             	time_now_local= incrementTime();
             	continue; //just sleep b/c not time yet
             }
+            
+            /* ENTRY TO CRITICAL SECTION */
             //lock to edit critical section data
             pthread_mutex_lock(&lock);
             if (num_of_seats == 0)// FINAL CHECK if seat is still available
             {
-            	//Log turnaways
-            	auto log_str = seller_name + " tells a new customer concert is sold out";
-            	chronicle_log.insert(std::pair<std::string,std::string>(int_to_string(time_now_local),log_str)); //insert to log
-            	ticketbooth_queues[booth_ID].pop_front(); //asumes it takes 1 minute to turn away customer
-            	pthread_mutex_unlock(&lock);
+                //log customer arrivale
+                auto customer_log = ticketbooth_queues[booth_ID][0].getName() + " arrived at queue " + seller_name;
+                chronological_log.insert(std::pair<std::string,std::string>(int_to_string(ticketbooth_queues[booth_ID][0].getArr()),customer_log)); //insert to log
+                
+            	//log turn away cutomers
+            	auto log_str = seller_name + " tells a new customer the concert is sold out";
+            	chronological_log.insert(std::pair<std::string,std::string>(int_to_string(time_now_local),log_str)); //insert to log
+            
+                
+                //log closing message
+                auto closed_msg = "*** NOTICE: " + seller_name + " CLOSED THE BOOTH ***";
+                chronological_log.insert(std::pair<std::string,std::string>(int_to_string(time_now_local),closed_msg)); //insert to log
+                auto turn_away_msg = "*** NOTICE: " + seller_name + " turned away " + std::to_string(ticketbooth_queues[booth_ID].size()) + " customers ***";
+                chronological_log.insert(std::pair<std::string,std::string>(int_to_string(time_now_local),turn_away_msg)); //insert to log
+               
+                ticketbooth_queues[booth_ID].clear(); //turn away all remaining customers
+            	
+                pthread_mutex_unlock(&lock);
+                /* EXIT CRITICAL SECTION */
+
             	time_now_local= incrementTime();
 				continue; //still has to be in sync with other threads
             }
 			else
             {
-                        
+                //statistics variable to return
+                int response_time   = 0;
+                int waiting_time    = 0;
+                
+                
+                //log customer arrival
+                auto customer_log = ticketbooth_queues[booth_ID][0].getName() + " arrived at queue " + seller_name;
+                chronological_log.insert(std::pair<std::string,std::string>(int_to_string(ticketbooth_queues[booth_ID][0].getArr()),customer_log)); //insert to log
+                
 				//create the log message
 				auto log_str = seller_name + " starts serving a new customer";
 				if (ticketbooth_queues[booth_ID].size() == 1)
 				{
 					log_str = seller_name + " starts serving its last customer";
 				}
-				chronicle_log.insert(std::pair<std::string,std::string>(int_to_string(time_now_local),log_str)); //insert to log
-                        
+				chronological_log.insert(std::pair<std::string,std::string>(int_to_string(time_now_local),log_str)); //insert to log
+
+                
                 //add key to keySet
                 keySet.insert(int_to_string(time_now_local));
 				num_of_seats--; //issue ticket
 				
 				//create ticket number
 				auto ticket_str = seller_name + int_to_string(customer_ID);
-                        
+                
+                //compute statistics
+                response_time = time_now_local - ticketbooth_queues[booth_ID][0].getArr();
+                waiting_time = response_time;
+                
+                //create new seat obj
+                Seat newSeat = Seat(ticketbooth_queues[booth_ID][0], response_time, waiting_time, ticket_str, time_now_local, true);
+                
+                
+                
 				//update log based on seller type
 				if(booth_ID ==0)
 				{
-					H_log.push_back(ticket_str);
+					H_log.push_back(std::make_tuple(ticket_str,newSeat));
 				}
 				else if(booth_ID >=1 && booth_ID <=3)
 				{
-					M_log.push_back(ticket_str);
+                    M_log.push_back(std::make_tuple(ticket_str,newSeat));
 				}
 				else
 				{
-					L_log.push_back(ticket_str);
+                    L_log.push_back(std::make_tuple(ticket_str,newSeat));
 				}
                 //update time now with the service time
 				int timeLeft = ticketbooth_queues[booth_ID][0].getServ();
-				pthread_mutex_unlock(&lock);
-				while(timeLeft && time_now_local <= END_TIME )
+				
+                pthread_mutex_unlock(&lock);
+                /* EXIT CRITICAL SECTION */
+
+                //Working on issuing ticket
+                while(timeLeft && time_now_local <= END_TIME )
 				{	
 					time_now_local = incrementTime();
 					--timeLeft;
 				}
-				pthread_mutex_lock(&lock);
 				time_now_local += timeLeft; //finish the job if past time.
                 std::cout << time_now_local <<std::endl;
-				//new log message
+				
+                //new log message
 				log_str = seller_name + " issued ticket " + ticket_str;
-				chronicle_log.insert(std::pair<std::string,std::string>(int_to_string(time_now_local),log_str)); //insert to log
-                        
+                
+                
+                /* ENTRY TO CRITICAL SECTION */
+                pthread_mutex_lock(&lock);
+				chronological_log.insert(std::pair<std::string,std::string>(int_to_string(time_now_local),log_str)); //insert to log
 				//add key to keySet
 				keySet.insert(int_to_string(time_now_local));
-                        
+                pthread_mutex_unlock(&lock);
+                /* EXIT CRITICAL SECTION */
+
 				//increment customer ID
 				customer_ID++;
                         
 				//remove served customer
 				ticketbooth_queues[booth_ID].pop_front();
 			}
-			pthread_mutex_unlock(&lock);
         }
     }
     return NULL;
@@ -193,7 +237,7 @@ void * sell (void * data)
 //function to populate jobs in to 10 queues
 void populate_jobs(int count)
 {
-    //seed randome each queue
+    //seed random each queue
     srand(int(time(NULL)));
     // populate each queue
     for (int i = 0; i < 10; i++)
@@ -207,7 +251,7 @@ void populate_jobs(int count)
             case 0:
                 for (int j = 0; j < count; j++)
                 {
-                    auto n = "C" + std::to_string(j);
+                    auto n = "C" + std::to_string(rand() % 1000); //just random customer names
                     //rand() % (max_number + 1 - minimum_number) + minimum_number for range min-max
                     arr = rand() % (59 + 1 - 0) + 0;
                     serv = rand() % (2 + 1 - 1) + 1;
@@ -307,11 +351,11 @@ void multithreads_ticket_seller (int count)
 
     
     //create 3 M's sellers
-    std::string seller_type1 = "M";
+    seller_type = "M";
     for (int i = 1; i < 4; i++)
     {
-        std::string seller_name1 = seller_type1 + std::to_string(i);
-        data = std::make_tuple(seller_name1,i);
+        std::string seller_name = seller_type + std::to_string(i);
+        data = std::make_tuple(seller_name,i);
         seller_list.push_back(data);
     }
     
@@ -332,8 +376,6 @@ void multithreads_ticket_seller (int count)
         pthread_create(&threadID[i], NULL, sell, &seller_list[i]);
     }
     
-    
-    
     //wakeup all seller threads
     wakeup_all_seller_threads();
     
@@ -349,14 +391,14 @@ void multithreads_ticket_seller (int count)
     std::cout << "***** LOG OF H_TYPE SELLER *****" << std::endl;
     for (int x = 0; x < H_log.size();x++)
     {
-        std::cout << H_log[x] << " ";
+        std::cout << std::get<0>(H_log[x]) << " ";
     }
     std::cout << std::endl;
     std::cout << std::endl;
     std::cout << "***** LOG OF M_TYPE SELLER *****" << std::endl;
     for (int x = 0; x < M_log.size();x++)
     {
-        std::cout << M_log[x] << " ";
+        std::cout << std::get<0>(M_log[x]) << " ";
     }
     
     
@@ -365,7 +407,7 @@ void multithreads_ticket_seller (int count)
     std::cout << "***** LOG OF L_TYPE SELLER *****" << std::endl;
     for (int x = 0; x < L_log.size();x++)
     {
-        std::cout << L_log[x] << " ";
+        std::cout << std::get<0>(L_log[x]) << " ";
     }
     std::cout << std::endl;
     std::cout << std::endl;
@@ -382,7 +424,7 @@ void multithreads_ticket_seller (int count)
     for (auto setItr = keySet.begin(); setItr != keySet.end(); setItr++)
     {
         std::cout << "Time stamp: 00:" << setItr->data() << std::endl;
-        for (auto itr = chronicle_log.begin(); itr != chronicle_log.end(); itr++)
+        for (auto itr = chronological_log.begin(); itr != chronological_log.end(); itr++)
         {
             if (itr->first == setItr->data())
             {
@@ -392,6 +434,62 @@ void multithreads_ticket_seller (int count)
         std::cout << std::endl;
     }
     
-}
+    
+    
+    
+    //print out statistics for each seller type
+    
+    //compute statistics to print out for H
+    double total_response = 0;
+    double total_waiting_time = 0;
+    double total_service_time = 0;
+    
+    for (int i = 0; i < H_log.size();i++)
+    {
+        total_response       += std::get<1>(H_log[i])._response_time;
+        total_waiting_time  += std::get<1>(H_log[i])._waiting_time;
+        total_service_time  += std::get<1>(H_log[i]).getCustServ();
+    }
+    
+    std::cout << "********** STATISTICS REPORT **********" << std::endl;
+    std::cout << "*** SELLER TYPE H ***" << std::endl;
+    std::cout << "  - Average Response Time: " << double(total_response/H_log.size()) << std::endl;
+    std::cout << "  - Average TAT Time: " << double((total_response + total_service_time)/H_log.size()) << std::endl;
+    std::cout << "  - Average throughtput: " << double(H_log.size()/60.0) << std::endl;
 
+    //compute statistics to print out for M
+    total_response      = 0;
+    total_waiting_time  = 0;
+    total_service_time  = 0;
+    
+    for (int i = 0; i < M_log.size();i++)
+    {
+        total_response      += std::get<1>(M_log[i])._response_time;
+        total_waiting_time  += std::get<1>(M_log[i])._waiting_time;
+        total_service_time  += std::get<1>(M_log[i]).getCustServ();
+    }
+    
+    std::cout << "*** SELLER TYPE M ***" << std::endl;
+    std::cout << "  - Average Response Time: " << double((total_response/M_log.size())/4) << std::endl;
+    std::cout << "  - Average TAT Time: " << double(((total_response + total_service_time)/M_log.size())/4) << std::endl;
+    std::cout << "  - Average throughtput: " << double((M_log.size()/60.0)/4) << std::endl;
+    
+    //compute statistics to print out for L
+    total_response      = 0;
+    total_waiting_time  = 0;
+    total_service_time  = 0;
+    
+    for (int i = 0; i < L_log.size();i++)
+    {
+        total_response      += std::get<1>(L_log[i])._response_time;
+        total_waiting_time  += std::get<1>(L_log[i])._waiting_time;
+        total_service_time  += std::get<1>(L_log[i]).getCustServ();
+    }
+    
+    std::cout << "*** SELLER TYPE L ***" << std::endl;
+    std::cout << "  - Average Response Time: " << double((total_response/L_log.size())/5) << std::endl;
+    std::cout << "  - Average TAT Time: " << double(((total_response + total_service_time)/L_log.size())/5) << std::endl;
+    std::cout << "  - Average throughtput: " << double((L_log.size()/60.0)/5) << std::endl;
+    
+}
 

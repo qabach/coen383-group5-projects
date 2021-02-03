@@ -29,15 +29,21 @@ class Jobs{
 
 class Seat{
 	private:
-	Jobs job;
+	Job job;
 	int timeLeft;
 	
 	public:
-	pthread_mutex_t lock;
+	pthread_mutex_t lockTEST;
 	bool isServed;
+    
+    //for statistics purposes
+    std::string _ticket_number;
+    int _ticket_issued_time;
+    int _response_time;
+    int _waiting_time;
 	
 	Seat();
-	Seat(Jobs j);
+    Seat(Job j, int reponse_time, int waiting_time, std::string ticket_num, int ticket_issued_time, bool served);
 	
 	//destrucor
 	~Seat();
