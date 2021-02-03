@@ -17,7 +17,11 @@
 #include <ctime>
 #include <set>
 #include "linked.hpp"
+<<<<<<< HEAD
 #include "displayMatrix.hpp"
+=======
+#include "jobs.hpp"
+>>>>>>> 40a2a87be9c90184baacf8c7b20545fec799a803
 
 void multithreads_ticket_seller (int count);
 
