@@ -16,7 +16,7 @@ void displayMatrix(std::vector<std::tuple<std::string, Seat>> VectorLogH, std::v
 {
    
     
-    std::cout << std::endl << "************************** DISPLAY MATRIX PROCESS ***************************" << std::endl;
+    std::cout << std::endl << "********************** DISPLAY MATRIX PROCESS *********************" << std::endl;
     // seating matrix of 10 rows and 10 columns
     int row = 10;
     int col = 10;
@@ -32,37 +32,23 @@ void displayMatrix(std::vector<std::tuple<std::string, Seat>> VectorLogH, std::v
     }
     
     // size of each logs
-    int sizeH = VectorLogH.size();
-    int sizeM = VectorLogM.size();
-    int sizeL = VectorLogL.size();
+    auto sizeH = VectorLogH.size();
+    auto sizeM = VectorLogM.size();
+    auto sizeL = VectorLogL.size();
     
     // *** TESTING print out for testing only ***
-    std:: cout << "Size of H: " << sizeH << std::endl;
-    std:: cout << "Size of M: " << sizeM << std::endl;
-    std:: cout << "Size of L: " << sizeL << std::endl;
+    std:: cout << "Number of customers served by H: " << sizeH << std::endl;
+    std:: cout << "Number of customers served by M: " << sizeM << std::endl;
+    std:: cout << "Number of customers served by L: " << sizeL << std::endl;
     
-    // number of rows occupy by each seller type
-    int rowH = int(ceil(sizeH / 10.0));
-    int rowM = int(ceil(sizeM / 10.0));
-    int rowL = int(ceil(sizeL / 10.0));
     
-    // *** TESTING print out for testing only ***
-    std:: cout << "Num of RowH: " << rowH << std::endl;
-    std:: cout << "Num of RowM: " << rowM << std::endl;
-    std:: cout << "Num of RowL: " << rowL << std::endl;
     
     int timeH1 = LARGETIME;
     int timeM1 = LARGETIME;
     int timeL1 = LARGETIME;
-    
-    int k = 0;
-    
-    std:: cout << std::endl << "************* START FILLING SEAT ***************** " << k << std::endl;
-    
-    while (VectorLogH.size() != 0 | VectorLogM.size() != 0 | VectorLogL.size() != 0 )
+            
+    while (VectorLogH.size() != 0 || VectorLogM.size() != 0 || VectorLogL.size() != 0 )
     {
-        k++;
-        std:: cout << std::endl << "Filling seat number: " << k << std::endl;
         // get first ticket of each seller type time if the seller log is not empty
         if (VectorLogH.size() >0)
         {
@@ -73,9 +59,6 @@ void displayMatrix(std::vector<std::tuple<std::string, Seat>> VectorLogH, std::v
             timeH1 = LARGETIME;
         }
         
-        // *** TESTING
-        std:: cout << "TimeH1: " << timeH1 << std::endl;
-        
         if (VectorLogM.size() >0)
         {
             timeM1 = std::get<1>(VectorLogM[0])._ticket_issued_time;
@@ -84,10 +67,7 @@ void displayMatrix(std::vector<std::tuple<std::string, Seat>> VectorLogH, std::v
         {
             timeM1 = LARGETIME;
         }
-        
-        //*** TESTING
-        std:: cout << "TimeM1: " << timeM1 << std::endl;
-        
+                
         if (VectorLogL.size() >0)
         {
             timeL1 = std::get<1>(VectorLogL[0])._ticket_issued_time;
@@ -96,9 +76,7 @@ void displayMatrix(std::vector<std::tuple<std::string, Seat>> VectorLogH, std::v
         {
             timeL1 = LARGETIME;
         }
-        
-        //*** TESTING
-        std:: cout << "TimeL1: " << timeL1 << std::endl;
+
         
         // ticket in front of log H has the smallest timestamp so get filled first
         if(timeH1 <= timeM1 && timeH1 <= timeL1 && timeH1 != LARGETIME && VectorLogH.size() >0)

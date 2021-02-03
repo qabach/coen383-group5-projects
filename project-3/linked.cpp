@@ -168,7 +168,6 @@ void List::deleteHeadNode()
 //clear everything in the List
 void List::clr()
 {
-	Node *temp;
 	int size = this->len;
 	//make the next one a head and free whatever was in head
 	for(int i =0; i< size; ++i)

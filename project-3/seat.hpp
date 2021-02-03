@@ -1,31 +1,10 @@
-#ifndef JOBSNOW
-#define JOBSNOW
+#ifndef SEAT
+#define SEAT
 #include <iostream>
 #include <pthread.h>
 #include <cassert>
 #include "linked.hpp"
 
-//class for your basic Jobs;
-class Jobs{
-	public:
-	//public variables (yay?)
-	std::string name;
-	int arrivalTime, serviceTime, priority;
-	
-	//constructors
-	Jobs();
-	Jobs(int a, int s, int p, std::string name);
-    
-		
-	//getter stuff
-	std::string getName(){return name;}
-	int getArr(){return arrivalTime;}
-	const int getArr() const{return arrivalTime;}
-	int getServ(){return serviceTime;}
-	const int getServ() const{return serviceTime;}
-	 
-	
-};
 
 class Seat{
 	private:

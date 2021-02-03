@@ -412,13 +412,6 @@ void multithreads_ticket_seller (int count)
     }
     std::cout << std::endl;
     std::cout << std::endl;
-    //Size of each log; this should sum up to less than or equal to 100
-    std::cout << "*** SIZE OF EACH LOG ***" << std::endl;
-    std::cout << "H: " << H_log.size() << std::endl;
-    std::cout << "M: " << M_log.size() << std::endl;
-    std::cout << "L: " <<L_log.size() << std::endl;
-    std::cout << "*** CHECK IF: SUM <= 100 ***" << std::endl;
-
     
     //Chronicle log of events
     std::cout << "***** CHRONOLOGICAL LOG OF EVENTS *****" << std::endl;
@@ -449,12 +442,12 @@ void multithreads_ticket_seller (int count)
         total_service_time  += std::get<1>(H_log[i]).getCustServ();
     }
     
-    std::cout << "********** STATISTICS REPORT **********" << std::endl;
+    std::cout << "********** STATISTICS REPORT **********" << std::endl << std::endl;
     std::cout << "*** SELLER TYPE H ***" << std::endl;
     std::cout << "  - Average Response Time: " << double(total_response/H_log.size()) << std::endl;
     std::cout << "  - Average TAT Time: " << double((total_waiting_time + total_service_time)/H_log.size()) << std::endl;
-    std::cout << "  - Average throughtput: " << double(H_log.size()/60.0) << std::endl;
-
+    std::cout << "  - Average throughput: " << double(H_log.size()/60.0) << std::endl;
+    std::cout << std::endl;
     //compute statistics to print out for M
     total_response      = 0;
     total_waiting_time  = 0;
@@ -470,8 +463,9 @@ void multithreads_ticket_seller (int count)
     std::cout << "*** SELLER TYPE M ***" << std::endl;
     std::cout << "  - Average Response Time: " << double((total_response/M_log.size())/4) << std::endl;
     std::cout << "  - Average TAT Time: " << double((total_waiting_time + total_service_time)/M_log.size()) << std::endl;
-    std::cout << "  - Average throughtput: " << double(M_log.size()/60.0) << std::endl;
-    
+    std::cout << "  - Average throughput: " << double(M_log.size()/60.0) << std::endl;
+    std::cout << std::endl;
+
     //compute statistics to print out for L
     total_response      = 0;
     total_waiting_time  = 0;
@@ -487,8 +481,9 @@ void multithreads_ticket_seller (int count)
     std::cout << "*** SELLER TYPE L ***" << std::endl;
     std::cout << "  - Average Response Time: " << double((total_response/L_log.size())/5) << std::endl;
     std::cout << "  - Average TAT Time: "  <<  double((total_waiting_time + total_service_time)/L_log.size()) << std::endl;
-    std::cout << "  - Average throughtput: " << double(L_log.size()/60.0) << std::endl;
-    
+    std::cout << "  - Average throughput: " << double(L_log.size()/60.0) << std::endl;
+    std::cout << std::endl;
+
     displayMatrix(H_log, M_log, L_log);
     
 }

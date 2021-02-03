@@ -1,24 +1,29 @@
 CC = g++
 
-edit : main.o jobs.o linked.o multithreads_seller.o displayMatrix.o
-	g++ -std=c++11 -pthread -o test main.o jobs.o linked.o displayMatrix.o multithreads_seller.o
+edit : main.o seat.o linked.o multithreads_seller.o displayMatrix.o
+	g++ -std=c++11 -pthread -o test main.o seat.o linked.o multithreads_seller.o displayMatrix.o
 
-main.o: main.cpp jobs.hpp
+
+main.o: main.cpp multithreads_seller.hpp
 	cc -c main.cpp
 
-jobs.o: jobs.cpp jobs.hpp
-	cc -c jobs.cpp
+seats.o: seat.cpp seat.hpp
+	cc -c seat.cpp
 
 linked.o: linked.cpp linked.hpp
 	cc -c linked.cpp
 
 multithreads_seller.o: multithreads_seller.cpp multithreads_seller.hpp
 	cc -c multithreads_seller.cpp
+
+displayMatrix.o: displayMatrix.cpp displayMatrix.hpp
+	cc -c displayMatrix.cpp
 	
 displayMatrix.o: displayMatrix.cpp displayMatrix.hpp
 	cc -c displayMatrix.cpp
 	
 clean:
-	rm test main.o jobs.o multithreads_seller.o linked.o displayMatrix.o
+	rm test main.o seat.o multithreads_seller.o linked.o displayMatrix.o
+
 
 	
