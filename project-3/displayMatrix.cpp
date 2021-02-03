@@ -47,7 +47,7 @@ void displayMatrix(std::vector<std::tuple<std::string, Seat>> VectorLogH, std::v
     int timeM1 = LARGETIME;
     int timeL1 = LARGETIME;
             
-    while (VectorLogH.size() != 0 | VectorLogM.size() != 0 | VectorLogL.size() != 0 )
+    while (VectorLogH.size() != 0 || VectorLogM.size() != 0 || VectorLogL.size() != 0 )
     {
         // get first ticket of each seller type time if the seller log is not empty
         if (VectorLogH.size() >0)
