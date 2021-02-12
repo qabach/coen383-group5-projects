@@ -11,6 +11,19 @@ Page::Page(int pn,int pnm )
 {
 
 }
+
+ExtPage::ExtPage() : Page(), name(""), time(0)
+{
+}
+
+ExtPage::ExtPage(Page a): Page(a.getPageNum(), a.getPageInMemory())
+{
+
+}
+ExtPage::ExtPage(int pn,int pnm, int timestamp, std::string n ) : Page(pn,pnm), time(timestamp), name(n)
+{
+}
+
 //Makes the Default Job Class
 Job::Job()
 {
@@ -38,36 +51,66 @@ Job::Job(int a, int b, int s, std::string nam = "None")
 	stats.turnaroundTime = 0;
 	
 }
-//check if page inside the process, if not, insert and return true.
-//note true if page was inserted, false if not.
-bool Job::requestPage(int pageNum, int pageInMem)
+
+//deconstructs Job
+Job::~Job()
 {
-	for(std::vector<Page>::iterator it = pages.begin();
+	for(std::vector<Page *>::iterator it = pages.begin();
 	it != pages.end(); ++it)
 	{
-		if(it->getPageNum() == pageNum)
+		if(*it!= nullptr)
+		{
+			free(*it);
+		}
+	}
+}
+//check if page inside the process, if not, insert and return true.
+//note true if page was inserted, false if not.
+bool Job::insertPage(int pageNum, int pageInMem)
+{
+	for(std::vector<Page *>::iterator it = pages.begin();
+	it != pages.end(); ++it)
+	{
+		if((*it)->getPageNum() == pageNum)
 		{
 			return false;
 		}
 	}
-	pages.push_back(Page(pageNum, pageInMem));
+	pages.push_back(new Page(pageNum, pageInMem));
 	return true;
 }
 
 //just put in the page without checking anything 
-void Job::requestPageNoCheck(int pageNum, int pageInMem)
+void Job::insertPageNoCheck(int pageNum, int pageInMem)
 {
-	pages.push_back(Page(pageNum, pageInMem));
+	pages.push_back(new Page(pageNum, pageInMem));
 }
 
+//returns a page requested by user
+const Page * Job::requestPage(int pn) const
+{
+	for(std::vector<Page *>::const_iterator it = pages.cbegin();
+	it != pages.cend(); ++it)
+	{
+		if((*it)->getPageNum() == pn)
+		{
+			return *it;
+		}
+	}
+	return NULL;
+}
 //removes a Page
 void Job::removePage(int pageNum)
 {
-	for(std::vector<Page>::iterator it = pages.begin();
+	for(std::vector<Page *>::iterator it = pages.begin();
 	it != pages.end(); ++it)
 	{
-		if(it->getPageNum() == pageNum)
+		if((*it)->getPageNum() == pageNum)
 		{
+			if(*it!= nullptr)
+			{
+				free(*it);
+			}
 			pages.erase(it);
 			return;
 		}
@@ -77,10 +120,10 @@ void Job::removePage(int pageNum)
 //checks to see if page is inside job. if not return false
 bool Job::isListed(int pageNum)
 {
-	for(std::vector<Page>::iterator it = pages.begin();
+	for(std::vector<Page *>::iterator it = pages.begin();
 	it != pages.end(); ++it)
 	{
-		if(it->getPageNum() == pageNum)
+		if((*it)->getPageNum() == pageNum)
 		{
 			return true;
 		}
@@ -109,11 +152,23 @@ void CustomQueue::generateProcesses()
 	sort(processes.begin(),processes.end(), compareJobs);
 	
 	//just output change later
+	/*
 	for(int i = 0; i < 100; ++i)
 	{
 		std::cout<< processes[i].getName() << " " 
 			<< processes[i].getArr()  << std::endl;
 	}
+	*/
+}
+
+Job CustomQueue::popProcess()
+{
+	if(processes.begin() != processes.end())
+	{
+		return *processes.erase(processes.begin());
+	}
+	return Job();
+		
 }
 
 

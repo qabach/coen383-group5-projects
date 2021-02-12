@@ -27,6 +27,13 @@ int main(int argc, const char * argv[])
     int n;
     CustomQueue q;
     q.generateProcesses();
+    Job a = q.popProcess();
+    a.insertPage(1,1);
+    a.insertPage(3,4);
+    cout << a.isListed(1) << endl;
+    a.removePage(1);
+    cout << a.isListed(1) << endl;
+    
     if(argc !=2)
     {
         cout << "not enough arguements" << endl;
