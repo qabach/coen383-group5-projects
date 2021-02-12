@@ -31,10 +31,31 @@ class Page{
 	void setInMemory(int a){pageInMem = a;}
 };
 
+class ExtPage: public Page
+{
+	private:
+	std::string name;
+	int time;
+	
+	public:
+	ExtPage();
+	ExtPage(Page a);
+	ExtPage(int pageNum,int pageInMem, int timestamp, std::string name);
+	
+	///getters
+	std::string getName(){return name;}
+	int getTime(){return time;}
+	
+	//setters
+	void setName(std::string a){name = a;}
+	void setTime(int a){time = a;}
+
+};
+
 //class for your basic Job;
 class Job{	
 	private:
-	std::vector<Page> pages;
+	std::vector<Page *> pages;
 
 	public:
 	//public variables (yay?)
@@ -46,9 +67,13 @@ class Job{
 	Job();
 	Job(int a, int b, int s, std::string name);
 	
+	//destructor
+	~Job();
+	
 	//More Methods.
-	bool requestPage(int pageNum, int pageInMem);
-	void requestPageNoCheck(int pageNum, int pageInMem);
+	bool insertPage(int pageNum, int pageInMem);
+	void insertPageNoCheck(int pageNum, int pageInMem);
+	const Page * requestPage (int pn) const;
 	void removePage(int pageNum);  
     bool isListed(int pageNum);
 	
