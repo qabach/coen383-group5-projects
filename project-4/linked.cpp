@@ -1,26 +1,32 @@
 #include <iostream>
 #include "linked.hpp"
 
-Page::Page() : pNum(0), pageInMem(0)
+Page::Page() : pNum(0), pageInMem(0), time(0), inMem(false)
 {
 
 }
 
-Page::Page(int pn,int pnm ) 
-	: pNum(pn), pageInMem(pnm)
+Page::Page(int pn,int pnm, int t, bool b ) 
+	: pNum(pn), pageInMem(pnm), time(t), inMem(b)
+{
+
+}
+Page::Page(const Page &a) 
+	: pNum(a.pNum), pageInMem(a.pageInMem), time(a.time), inMem(a.inMem)
 {
 
 }
 
-ExtPage::ExtPage() : Page(), name(""), time(0)
+ExtPage::ExtPage() : Page(), name("")
 {
 }
 
-ExtPage::ExtPage(Page a): Page(a.getPageNum(), a.getPageInMemory())
+ExtPage::ExtPage(Page a): 
+	Page(a.getPageNum(), a.getPageInMemory(), a.getTime(), a.isInMem())
 {
 
 }
-ExtPage::ExtPage(int pn,int pnm, int timestamp, std::string n ) : Page(pn,pnm), time(timestamp), name(n)
+ExtPage::ExtPage(int pn,int pnm, int timestamp, std::string n ) : Page(pn,pnm, timestamp, false), name(n)
 {
 }
 
@@ -49,68 +55,63 @@ Job::Job(int a, int b, int s, std::string nam = "None")
 	stats.waitTime = 0;
 	stats.responseTime = 0;
 	stats.turnaroundTime = 0;
+	for(int i = 0; i < s; ++i)
+	{
+		pages.push_back(Page(i, 0,0, false));
+	}
 	
 }
+
 
 //deconstructs Job
 Job::~Job()
 {
-	for(std::vector<Page *>::iterator it = pages.begin();
-	it != pages.end(); ++it)
-	{
-		if(*it!= nullptr)
-		{
-			free(*it);
-		}
-	}
+
 }
 //check if page inside the process, if not, insert and return true.
-//note true if page was inserted, false if not.
+//note true if page was inserted, false if not. (Deprecated)
 bool Job::insertPage(int pageNum, int pageInMem)
 {
-	for(std::vector<Page *>::iterator it = pages.begin();
+	for(std::vector<Page>::iterator it = pages.begin();
 	it != pages.end(); ++it)
 	{
-		if((*it)->getPageNum() == pageNum)
+		if(it->getPageNum() == pageNum)
 		{
 			return false;
 		}
 	}
-	pages.push_back(new Page(pageNum, pageInMem));
+	pages.push_back(Page(pageNum, pageInMem,0, false ));
 	return true;
 }
 
-//just put in the page without checking anything 
+//check if page inside the process, if not, insert and return true.
+//note true if page was inserted, false if not. (Deprecated)
 void Job::insertPageNoCheck(int pageNum, int pageInMem)
 {
-	pages.push_back(new Page(pageNum, pageInMem));
+	pages.push_back(Page(pageNum, pageInMem, 0, false));
 }
 
 //returns a page requested by user
-const Page * Job::requestPage(int pn) const
+const Page Job::requestPage(int pn) const
 {
-	for(std::vector<Page *>::const_iterator it = pages.cbegin();
+	for(std::vector<Page >::const_iterator it = pages.cbegin();
 	it != pages.cend(); ++it)
 	{
-		if((*it)->getPageNum() == pn)
+		if(it->getPageNum() == pn)
 		{
 			return *it;
 		}
 	}
-	return NULL;
+	return Page();
 }
 //removes a Page
 void Job::removePage(int pageNum)
 {
-	for(std::vector<Page *>::iterator it = pages.begin();
+	for(std::vector<Page >::iterator it = pages.begin();
 	it != pages.end(); ++it)
 	{
-		if((*it)->getPageNum() == pageNum)
+		if(it->getPageNum() == pageNum)
 		{
-			if(*it!= nullptr)
-			{
-				free(*it);
-			}
 			pages.erase(it);
 			return;
 		}
@@ -120,12 +121,20 @@ void Job::removePage(int pageNum)
 //checks to see if page is inside job. if not return false
 bool Job::isListed(int pageNum)
 {
-	for(std::vector<Page *>::iterator it = pages.begin();
+	for(std::vector<Page >::iterator it = pages.begin();
 	it != pages.end(); ++it)
 	{
-		if((*it)->getPageNum() == pageNum)
+		if(it->getPageNum() == pageNum)
 		{
-			return true;
+			if(it->isInMem())
+			{
+				return true;
+			
+			}
+			else
+			{
+				return false;
+			}
 		}
 	}
 	return false;
