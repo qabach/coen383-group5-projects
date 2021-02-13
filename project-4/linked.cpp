@@ -72,15 +72,7 @@ Job::~Job()
 //note true if page was inserted, false if not. (Deprecated)
 bool Job::insertPage(int pageNum, int pageInMem)
 {
-	for(std::vector<Page>::iterator it = pages.begin();
-	it != pages.end(); ++it)
-	{
-		if(it->getPageNum() == pageNum)
-		{
-			return false;
-		}
-	}
-	pages.push_back(Page(pageNum, pageInMem,0, false ));
+	insertPageNoCheck(pageNum,pageInMem);
 	return true;
 }
 
@@ -88,56 +80,27 @@ bool Job::insertPage(int pageNum, int pageInMem)
 //note true if page was inserted, false if not. (Deprecated)
 void Job::insertPageNoCheck(int pageNum, int pageInMem)
 {
-	pages.push_back(Page(pageNum, pageInMem, 0, false));
+	pages[pageNum].setInMemory(pageInMem);
+	if(!pages[pageNum].isInMem())
+		pages[pageNum].changeMem();
 }
 
-//returns a page requested by user
+//returns a page requested by user 
 const Page Job::requestPage(int pn) const
 {
-	for(std::vector<Page >::const_iterator it = pages.cbegin();
-	it != pages.cend(); ++it)
-	{
-		if(it->getPageNum() == pn)
-		{
-			return *it;
-		}
-	}
-	return Page();
+	return pages[pn];
 }
-//removes a Page
+//removes a Page from mem( please make sure 
 void Job::removePage(int pageNum)
 {
-	for(std::vector<Page >::iterator it = pages.begin();
-	it != pages.end(); ++it)
-	{
-		if(it->getPageNum() == pageNum)
-		{
-			pages.erase(it);
-			return;
-		}
-	}
+	if(pages[pageNum].isInMem())
+		pages[pageNum].changeMem();
 }
 
 //checks to see if page is inside job. if not return false
 bool Job::isListed(int pageNum)
 {
-	for(std::vector<Page >::iterator it = pages.begin();
-	it != pages.end(); ++it)
-	{
-		if(it->getPageNum() == pageNum)
-		{
-			if(it->isInMem())
-			{
-				return true;
-			
-			}
-			else
-			{
-				return false;
-			}
-		}
-	}
-	return false;
+	return pages[pageNum].isInMem();
 }
 
 //the comparision function for jobs in sort
