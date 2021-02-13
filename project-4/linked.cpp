@@ -152,13 +152,13 @@ void CustomQueue::generateProcesses()
 	sort(processes.begin(),processes.end(), compareJobs);
 	
 	//just output change later
-	/*
+
 	for(int i = 0; i < 100; ++i)
 	{
-		std::cout<< processes[i].getName() << " " 
+		std::cout<< processes[i].getName() << " "
 			<< processes[i].getArr()  << std::endl;
 	}
-	*/
+	
 }
 
 Job CustomQueue::popProcess()

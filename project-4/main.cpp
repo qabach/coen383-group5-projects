@@ -34,6 +34,11 @@ int main(int argc, const char * argv[])
     a.removePage(1);
     cout << a.isListed(1) << endl;
     
+    Memory myMem;
+    myMem = Memory();
+    myMem.printMem();
+    
+    
     if(argc !=2)
     {
         cout << "not enough arguements" << endl;
