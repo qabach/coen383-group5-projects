@@ -10,6 +10,7 @@
 
 #include <stdio.h>
 #include <set>
+#include <tuple>
 #include "linked.hpp"
 #include <iostream>
 
