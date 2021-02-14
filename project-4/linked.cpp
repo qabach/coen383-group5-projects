@@ -1,7 +1,7 @@
 #include <iostream>
 #include "linked.hpp"
 
-Page::Page() : pNum(0), pageInMem(0), time(0), inMem(false)
+Page::Page() : pNum(0), pageInMem(-1), time(0), inMem(false)
 {
 
 }
