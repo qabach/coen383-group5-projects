@@ -164,6 +164,8 @@ void Memory::removePageFromMem(Job * process, int pageNum)
     (itt+pageNum)->setInMemory(-1);
     
     _memMap.erase(it+memLoc);
+    _inMemNum--;
+    _freePageNum++;
 }
 
 

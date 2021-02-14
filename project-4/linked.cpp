@@ -91,16 +91,28 @@ const Page Job::requestPage(int pn) const
 	return pages[pn];
 }
 //removes a Page from mem( please make sure 
-void Job::removePage(int pageNum)
+int Job::removePage(int pageNum)
 {
 	if(pages[pageNum].isInMem())
+	{
 		pages[pageNum].changeMem();
+		return pages[pageNum].getPageInMemory();
+	}
+	return -1;
 }
 
 //checks to see if page is inside job. if not return false
 bool Job::isListed(int pageNum)
 {
 	return pages[pageNum].isInMem();
+}
+
+void Job::advTime()
+{
+	for(int i; i< size; ++i)
+	{
+		pages[i].incrementTime();
+	}
 }
 
 //the comparision function for jobs in sort

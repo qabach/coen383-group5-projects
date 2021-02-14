@@ -29,7 +29,7 @@ void LRU(CustomQueue myQueue)
     
     std::cout << "freeMemSize: " << freeMemSize << std::endl;
     //please put in memory until full?
-	while(freeMemSize >= 4 && !myQueue.isEmpty())
+	while(myMem.getFreeMemNum() >=50 && !myQueue.isEmpty())
 	{
 		Job * process = new Job(myQueue.popProcess());
 		int memLoc = myMem.getFreePage();
@@ -63,7 +63,7 @@ void LRU(CustomQueue myQueue)
 					continue;
 				}
 				//if if not and size not free perform LRU
-				else if(freeMemSize <=0)
+				else if(myMem.getFreeMemNum() <=0)
 				{
 					pLRU(myMem, inMem, pos, lastAccessed[pos]);
 				}
@@ -71,7 +71,7 @@ void LRU(CustomQueue myQueue)
 				else
 				{
 					int memLoc = myMem.getFreePage();
-					std::cout << "memLoc: " << memLoc << std::endl;
+					std::cout << "memLocb: " << memLoc << std::endl;
 					myMem.insertPageToMem(*k, lastAccessed[pos]);
 					inMem[pos]->insertPage(lastAccessed[pos],memLoc);
 					
@@ -113,9 +113,11 @@ void pLRU(Memory &m, std::vector<Job *> &jobs, int &insert, int num)
 		}
 	}
 	int memLoc = (*kpos)->removePage(pos);
-    std::cout << "memLoc: " << memLoc << std::endl;
+	m.removePageFromMem(*kpos,pos);
+    std::cout << "memLoct: " << num << std::endl;
 	m.insertPageToMem(jobs[insert], num);
 	jobs[insert]->insertPage(num,memLoc);
+	std::cout << "a: " <<std::endl;
 
 
 }
