@@ -32,7 +32,7 @@ public:
     int getInMemNum() { return _inMemNum;}
     int getFreeMemNum() { return _freePageNum;}
     int getNumProcess (std::vector<std::tuple<int, Job>> memMap);
-    int getFreePage(Memory memMap);
+    int getFreePage();
     void printMem();
     void printFreePageList();
    
@@ -42,7 +42,8 @@ public:
     void setInMemNum(int inMemNum) { _inMemNum = inMemNum;}
     void setFreeMemNum(int freePageNum) { _freePageNum = freePageNum;}
     
-    void insertPageToMem(Job process, int pageNumc, int memLoc);
+    void insertPageToMem(Job process, int pageNumc);
+    void removePageFromMem(Job process, int pageNum);
     
 
     

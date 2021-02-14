@@ -17,25 +17,39 @@ class Page{
 	private:
 	int pNum;
 	int pageInMem;
+	bool inMem;
+	int time;
 	
 	public:
 	Page();
-	Page(int pageNum,int pageInMem );
+	Page(const Page &a);
+	Page(int pageNum,int pageInMem, int t, bool b);
+	
+	//other
+	void changeMem() { inMem = !inMem;}
 	
 	///getters
 	int getPageNum(){return pNum;}
 	int getPageInMemory(){return pageInMem;}
+	bool isInMem(){return inMem;}
+	int getTime(){return time;}
+	const int getPageNum() const {return pNum;}
+	const int getPageInMemory() const {return pageInMem;}
+	const bool isInMem() const {return inMem;}
+	const int getTime() const {return time;}
 	
 	//setters
 	void setPageNum(int a){pNum = a;}
 	void setInMemory(int a){pageInMem = a;}
+	void setTime(int a){time = a;}
+    //friend void setInMem{inMem = true;}
+
 };
 
 class ExtPage: public Page
 {
 	private:
 	std::string name;
-	int time;
 	
 	public:
 	ExtPage();
@@ -44,18 +58,16 @@ class ExtPage: public Page
 	
 	///getters
 	std::string getName(){return name;}
-	int getTime(){return time;}
 	
 	//setters
 	void setName(std::string a){name = a;}
-	void setTime(int a){time = a;}
 
 };
 
 //class for your basic Job;
 class Job{	
 	private:
-	std::vector<Page *> pages;
+	std::vector<Page> pages;
 
 	public:
 	//public variables (yay?)
@@ -65,6 +77,7 @@ class Job{
 	
 	//constructors
 	Job();
+	//Job(const Job &b);
 	Job(int a, int b, int s, std::string name);
 	
 	//destructor
@@ -73,7 +86,7 @@ class Job{
 	//More Methods.
 	bool insertPage(int pageNum, int pageInMem);
 	void insertPageNoCheck(int pageNum, int pageInMem);
-	const Page * requestPage (int pn) const;
+	const Page requestPage (int pn) const;
 	void removePage(int pageNum);  
     bool isListed(int pageNum);
 	
@@ -91,6 +104,9 @@ class Job{
 	const int getRes() const{return stats.responseTime;}
 	int getTurn(){return stats.turnaroundTime;}
 	const int getTurn() const{return stats.turnaroundTime;}
+    
+    void printProcessPages();       // ****** AT ******
+    void printProcessPagesBool();    // ****** AT ******
 	
   
 	//setter Stuff
@@ -98,6 +114,8 @@ class Job{
 	void setWait(int w){stats.waitTime =w;}
 	void setRes(int s){stats.responseTime =s;}
 	void setTurn(int t){stats.turnaroundTime =t;}
+    
+    void setPageInMem(int pageNum);         // ***** AT ******
     
 };
 

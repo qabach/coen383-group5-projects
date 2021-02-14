@@ -22,7 +22,6 @@ Memory::Memory()
     }
     _inMemNum = 0;
     
-    std::vector<int> _freePage;
     for( int i = 0; i < 100; i++)
     {
         _freePage.push_back(i);
@@ -111,13 +110,9 @@ void Memory::printFreePageList()
 }
 
 
-int Memory::getFreePage(Memory memMap)
+int Memory::getFreePage()
 {
-    return 4;       // *******NEED TO FIX the RETURN HERE *****
-    
-    //return memMap._freePage.front();
-    
-    
+    return _freePage.front();
 }
 
 
@@ -127,14 +122,25 @@ int Memory::getFreePage(Memory memMap)
 // ******************************************************************************
 //             SETTER
 // ******************************************************************************
-void Memory::insertPageToMem(Job process, int pageNum, int memLoc)
+void Memory::insertPageToMem(Job process, int pageNum)
 {
     auto it = _memMap.begin();
+    int memLoc = getFreePage();
+    std::cout << "memLoc: " << memLoc << std::endl;
     _memMap.insert(it+memLoc, std::make_tuple(memLoc, process));
     //_memMap.push_back(std::make_tuple(memLoc, process));
     
+    auto it2 = _freePage.begin();
+    _freePage.erase(it2);
+    
+    process.setPageInMem(pageNum);
 }
 
+
+void Memory::removePageFromMem(Job process, int pageNum)
+{
+    
+}
 
 
 
