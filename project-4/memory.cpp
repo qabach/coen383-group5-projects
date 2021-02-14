@@ -13,8 +13,8 @@
 // ******************************************************************************
 Memory::Memory()
 {
-    Job process;
-    process = Job();
+    Job * process;
+    process = new Job();
     
     for( int i = 0; i < 100; i++)
     {
@@ -32,7 +32,7 @@ Memory::Memory()
 }
 
 
-Memory:: Memory(std::vector<std::tuple<int, Job>> memMap, int inMemNum )
+Memory:: Memory(std::vector<std::tuple<int, Job *>> memMap, int inMemNum )
 {
     for(auto it = memMap.begin() ; it != memMap.end(); ++it)
     {
@@ -43,7 +43,7 @@ Memory:: Memory(std::vector<std::tuple<int, Job>> memMap, int inMemNum )
 
 
 
-Memory::Memory(std::vector<std::tuple<int, Job>> memMap, int inMemNum, std::vector<int> freePage, int freePageNum )
+Memory::Memory(std::vector<std::tuple<int, Job *>> memMap, int inMemNum, std::vector<int> freePage, int freePageNum )
 {
     
     
@@ -84,15 +84,14 @@ void Memory::printMem()
 {
     //sort(_memMap.begin(), _memMap.end());
 
-   
     std::cout << "Number of Processes in Memory: " << _inMemNum << std::endl;
     std::cout << "Number of Free Page in Memory: " << _freePageNum << std::endl;
     std::cout << "Memory Map " << std::endl;
-    std::cout << "<";
+    std::cout << "< ";
 
     for(auto it = _memMap.begin() ; it != _memMap.end(); ++it)
     {
-        std::cout << std::get<1>(*it).getName() << "  " ;
+        std::cout << std::get<1>(*it)->getName() << "  " ;
     }
     std::cout << ">";
 }
@@ -100,7 +99,7 @@ void Memory::printMem()
 void Memory::printFreePageList()
 {
     std::cout << std::endl << "Free Page List " << std::endl;
-    std::cout << "<";
+    std::cout << "< ";
 
     for(auto it = _freePage.begin() ; it != _freePage.end(); ++it)
     {
@@ -112,7 +111,14 @@ void Memory::printFreePageList()
 
 int Memory::getFreePage()
 {
-    return _freePage.front();
+    if(_freePage.size() > 1)
+    {
+        return _freePage.front();
+    }
+    else
+    {
+        return -1;      // -1 means no freePage
+    }
 }
 
 
@@ -128,7 +134,7 @@ void Memory::insertPageToMem(Job * process, int pageNum)
     int memLoc = getFreePage();
     std::cout << "memLoc: " << memLoc << std::endl;
     _memMap.erase(it+memLoc);
-    _memMap.insert(it+memLoc, std::make_tuple(memLoc, *process));
+    _memMap.insert(it+memLoc, std::make_tuple(memLoc, process));
     _inMemNum++;
     //_memMap.push_back(std::make_tuple(memLoc, process));
     
@@ -154,18 +160,30 @@ void Memory::insertPageToMem(Job * process, int pageNum)
 
 void Memory::removePageFromMem(Job * process, int pageNum)
 {
-    auto it = _memMap.begin();
+    
     
     int memLoc = process->getPageVec()->at(pageNum).getPageInMemory();
     std::cout << "memLoc: " << memLoc << std::endl;
     
-    auto itt = process->getPageVec()->begin();
-    (itt+pageNum)->changeMem();
-    (itt+pageNum)->setInMemory(-1);
+    auto it2 = process->getPageVec()->begin();
+    (it2 + pageNum)->changeMem();
+    (it2 + pageNum)->setInMemory(-1);         // -1 means not in memory
+    
+    auto it = _memMap.begin();
+    _memMap.erase(it+memLoc);               // erase process page out of mem
+    
+    Job * noneProcess;
+    noneProcess = new Job();
+    _memMap.push_back(std::make_tuple(memLoc, noneProcess));        // push a None process to the memMap
+    _inMemNum--;
+    
+   
+    _freePage.push_back(memLoc);
+    
+    _freePageNum++;
     
     _memMap.erase(it+memLoc);
-    _inMemNum--;
-    _freePageNum++;
+
 }
 
 
