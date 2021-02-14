@@ -17,25 +17,33 @@
 class Memory
 {
 private:
-    std::vector<std::tuple<int, std::string>> _memMap;
+    std::vector<std::tuple<int, Job>> _memMap;
     int _inMemNum;
-    std::vector<std::tuple<int, std::string>> _freePage;
+    std::vector<int> _freePage;
     int _freePageNum;
     
 public:
     Memory();
-    Memory(std::vector<std::tuple<int, std::string>> memMap, int inMemNum );
-    Memory(std::vector<std::tuple<int, std::string>> memMap, int inMemNum, std::vector<std::tuple<int, std::string>> frePage, int freePageNum );
+    Memory(std::vector<std::tuple<int, Job>> memMap, int inMemNum );
+    Memory(std::vector<std::tuple<int, Job>> memMap, int inMemNum, std::vector<int> frePage, int freePageNum );
     
     
     // getter
     int getInMemNum() { return _inMemNum;}
-    int getNumProcess (std::vector<std::tuple<int, std::string>> memMap);
+    int getFreeMemNum() { return _freePageNum;}
+    int getNumProcess (std::vector<std::tuple<int, Job>> memMap);
+    int getFreePage(Memory memMap);
     void printMem();
+    void printFreePageList();
+   
     
     
     //setter
     void setInMemNum(int inMemNum) { _inMemNum = inMemNum;}
+    void setFreeMemNum(int freePageNum) { _freePageNum = freePageNum;}
+    
+    void insertPageToMem(Job process, int pageNumc, int memLoc);
+    
 
     
 };
