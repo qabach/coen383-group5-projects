@@ -23,27 +23,24 @@ void FIFO(CustomQueue myQueue)
     
     std::cout << "freeMemSize: " << freeMemSize << std::endl;
     
+    Job process = myQueue.popProcess();
     if (freeMemSize >= 4)
     {
-        Job process = myQueue.popProcess();
         
-        std::cout << "Print Pages In Process" << std::endl;
+        std::cout << "Pages In Process Virtual Address" << std::endl;
         process.printProcessPages();
         
-        std::cout << "Print Pages of Process Bool" << std::endl;
-        process.printProcessPagesBool();
+       process.printProcessPagesBool();
         
+        myMem.insertPageToMem(&process, 0);
         
-        myMem.insertPageToMem(process, 0);
-        
-        std::cout << "Print Pages of Process Bool" << std::endl;
         process.printProcessPagesBool();
 
     }
     
-    
     myMem.printMem();
     myMem.printFreePageList();
+    //process.printProcessPagesBool();
     
     
 }
