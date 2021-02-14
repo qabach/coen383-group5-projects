@@ -137,6 +137,7 @@ class CustomQueue
 	//some functions
 	void generateProcesses();
 	Job popProcess();
+	bool isEmpty(){return processes.empty();}
 	
 	
 	
