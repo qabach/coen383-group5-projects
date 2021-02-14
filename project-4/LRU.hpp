@@ -9,7 +9,9 @@
 
 #include <stdio.h>
 #include "memory.hpp"
+#include "utils.hpp"
 
 void LRU(CustomQueue queue);
+
 
 #endif /* FIFO_hpp */
