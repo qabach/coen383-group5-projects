@@ -18,7 +18,6 @@ void LRU(CustomQueue myQueue)
     std::cout << std::endl <<"************************* LRU ****************************" << std::endl;
     
     // check memory free page size
-    int globalTime = 0;
     Memory myMem;
     myMem = Memory();
     
@@ -28,58 +27,59 @@ void LRU(CustomQueue myQueue)
     std::vector<int> lastAccessed;
     
     std::cout << "freeMemSize: " << freeMemSize << std::endl;
-    
     //please put in memory until full?
-    if (freeMemSize >= 4)
+	if (freeMemSize >= 4)
+	{
+		Job process = myQueue.popProcess();
+		int memLoc = myMem.getFreePage(myMem);
+		std::cout << "memLoc: " << memLoc << std::endl;
+		myMem.insertPageToMem(process, 0, memLoc);
+		inMem.push_back(process);
+		inMem.back().insertPage(0,memLoc);
+		lastAccessed.push_back(0);
+		    
+	}
+    for(int globalTime = 0; globalTime < 60; ++globalTime)
     {
-        Job process = myQueue.popProcess();
-        int memLoc = myMem.getFreePage(myMem);
-        std::cout << "memLoc: " << memLoc << std::endl;
-        myMem.insertPageToMem(process, 0, memLoc);
-        inMem.push_back(process);
-        inMem.back().insertPage(0,memLoc);
-        lastAccessed.push_back(0);
-        
-    }
-    
-    //the 10ms that happens
-    for(int i =0 ; i < 100; ++i)
-    {
-    	for(std::vector<Job>::iterator k = inMem.begin(); k != inMem.end(); ++k)
-    	{
-    		//for each job find the locality reference
-    		int pos = k - inMem.begin();
-    		int freeMemSize = myMem.getFreeMemNum();
-    		std::cout << lastAccessed[pos] << " " <<k->size<<std::endl;
-    		lastAccessed[pos] = locality_reference(
-    			lastAccessed[pos], k->size);
-    		//if its listed reset timer of last accessed
-    		if(k->isListed(pos)){
-    			k->resetTime(pos);
-    			continue;
-    		}
-    		//if if not and size not free perform LRU
-    		else if(freeMemSize <=0)
-    		{
-    			pLRU(myMem, inMem, pos, lastAccessed[pos]);
-    		}
-    		//just insert page inside memoryMap
-    		else
-    		{
-    			int memLoc = myMem.getFreePage(myMem);
-    			std::cout << "memLoc: " << memLoc << std::endl;
-				myMem.insertPageToMem(*k, lastAccessed[pos], memLoc);
-				inMem[pos].insertPage(lastAccessed[pos],memLoc);
-    			
-    		}
-    		k->advTime();
-    	}
-    	
+		
+		//the 10ms that happens
+		for(int i =0 ; i < 100; ++i)
+		{
+			for(std::vector<Job>::iterator k = inMem.begin(); k != inMem.end(); ++k)
+			{
+				//for each job find the locality reference
+				int pos = k - inMem.begin();
+				int freeMemSize = myMem.getFreeMemNum();
+				std::cout << lastAccessed[pos] << " " <<k->size<<std::endl;
+				lastAccessed[pos] = locality_reference(
+					lastAccessed[pos], k->size);
+				//if its listed reset timer of last accessed
+				if(k->isListed(pos)){
+					k->resetTime(pos);
+					continue;
+				}
+				//if if not and size not free perform LRU
+				else if(freeMemSize <=0)
+				{
+					pLRU(myMem, inMem, pos, lastAccessed[pos]);
+				}
+				//just insert page inside memoryMap if found something free
+				else
+				{
+					int memLoc = myMem.getFreePage(myMem);
+					std::cout << "memLoc: " << memLoc << std::endl;
+					myMem.insertPageToMem(*k, lastAccessed[pos], memLoc);
+					inMem[pos].insertPage(lastAccessed[pos],memLoc);
+					
+				}
+				k->advTime();
+			}
+			
 
+		} 
+    	myMem.printMem();
+    	myMem.printFreePageList();
     }
-    
-    myMem.printMem();
-    myMem.printFreePageList();
 }
 
 
