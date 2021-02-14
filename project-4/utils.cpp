@@ -15,7 +15,7 @@
  */
 
 #include "utils.hpp"
-
+#include <stdlib.h>
 
 int locality_reference(int reference_page, int num_of_pages) // num_of_pages can get from Jobs size
 {
