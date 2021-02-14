@@ -30,17 +30,21 @@ void FIFO(CustomQueue myQueue)
         std::cout << "Pages In Process Virtual Address" << std::endl;
         process.printProcessPages();
         
-       process.printProcessPagesBool();
+        process.printProcessPagesBool();
         
         myMem.insertPageToMem(&process, 0);
         
         process.printProcessPagesBool();
-
+        myMem.printMem();
+        myMem.printFreePageList();
     }
     
+   
+    
+    myMem.removePageFromMem(&process, 0);
     myMem.printMem();
     myMem.printFreePageList();
-    //process.printProcessPagesBool();
+    process.printProcessPagesBool();
     
     
 }

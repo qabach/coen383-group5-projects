@@ -127,11 +127,14 @@ void Memory::insertPageToMem(Job * process, int pageNum)
     auto it = _memMap.begin();
     int memLoc = getFreePage();
     std::cout << "memLoc: " << memLoc << std::endl;
+    _memMap.erase(it+memLoc);
     _memMap.insert(it+memLoc, std::make_tuple(memLoc, *process));
+    _inMemNum++;
     //_memMap.push_back(std::make_tuple(memLoc, process));
     
     auto it2 = _freePage.begin();
     _freePage.erase(it2);
+    _freePageNum--;
     
     //std::vector<Page> myPage = process.getPageVec();
     //std::cout << "Page Vector: " << std::endl;
@@ -140,20 +143,27 @@ void Memory::insertPageToMem(Job * process, int pageNum)
 //        itt->changeMem();
 //        std::cout << itt->isInMem() << " ";
 //    }
-    
     //process.getPageVec().at(pageNum).changeMem();
     
     auto itt = process->getPageVec()->begin();
-    itt->changeMem();
+    (itt+pageNum)->changeMem();
+    (itt+pageNum)->setInMemory(memLoc);
     //std::cout << itt->isInMem() << " ";
-    _memMap.insert(it+memLoc, std::make_tuple(memLoc, *process));
-    
 }
 
 
-void Memory::removePageFromMem(Job process, int pageNum)
+void Memory::removePageFromMem(Job * process, int pageNum)
 {
+    auto it = _memMap.begin();
     
+    int memLoc = process->getPageVec()->at(pageNum).getPageInMemory();
+    std::cout << "memLoc: " << memLoc << std::endl;
+    
+    auto itt = process->getPageVec()->begin();
+    (itt+pageNum)->changeMem();
+    (itt+pageNum)->setInMemory(-1);
+    
+    _memMap.erase(it+memLoc);
 }
 
 

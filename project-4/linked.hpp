@@ -27,9 +27,6 @@ class Page{
 	
 	//other
 	void changeMem() { inMem = !inMem;}
-
-	void setMem(bool m) { inMem = m;}
-	void incrementTime(){ ++time;}
 	
 	///getters
 	int getPageNum(){return pNum;}
@@ -45,6 +42,7 @@ class Page{
 	void setPageNum(int a){pNum = a;}
 	void setInMemory(int a){pageInMem = a;}
 	void setTime(int a){time = a;}
+    //friend void setInMem{inMem = true;}
 
 };
 
@@ -86,16 +84,11 @@ class Job{
 	~Job();
 	
 	//More Methods.
-	bool insertPage(int pageNum, int pageInMem, int time);
 	bool insertPage(int pageNum, int pageInMem);
 	void insertPageNoCheck(int pageNum, int pageInMem);
 	const Page requestPage (int pn) const;
-	Page requestPage (int pn);
-	int removePage(int pageNum);  
-  bool isListed(int pageNum);
-  void advTime();
-  void resetTime(int i){pages[i].setTime(0);};
-  int returnTime(int pn){return pages[pn].getTime();};
+	void removePage(int pageNum);  
+    bool isListed(int pageNum);
 	
 	//getter stuff
 	std::string getName(){return processName;}
@@ -113,8 +106,8 @@ class Job{
 	const int getTurn() const{return stats.turnaroundTime;}
     std::vector<Page> * getPageVec() { return &pages;}
     
-  void printProcessPages();       // ****** AT ******
-  void printProcessPagesBool();    // ****** AT ******
+    void printProcessPages();       // ****** AT ******
+    void printProcessPagesBool();    // ****** AT ******
 	
   
 	//setter Stuff
@@ -123,7 +116,7 @@ class Job{
 	void setRes(int s){stats.responseTime =s;}
 	void setTurn(int t){stats.turnaroundTime =t;}
     
-    void setPageInMem(int pageNum);         // ***** AT ******
+    //void setPageInMem(int pageNum);         // ***** AT ******
     
 };
 

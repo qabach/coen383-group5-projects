@@ -10,7 +10,6 @@
 
 #include <stdio.h>
 #include <set>
-#include <tuple>
 #include "linked.hpp"
 #include <iostream>
 
@@ -36,6 +35,7 @@ public:
     int getFreePage();
     void printMem();
     void printFreePageList();
+    std::vector<std::tuple<int, Job>> getMemMap() { return _memMap ;}
    
     
     
@@ -44,7 +44,7 @@ public:
     void setFreeMemNum(int freePageNum) { _freePageNum = freePageNum;}
     
     void insertPageToMem(Job * process, int pageNum);
-    void removePageFromMem(Job process, int pageNum);
+    void removePageFromMem(Job * process, int pageNum);
     
 
     
