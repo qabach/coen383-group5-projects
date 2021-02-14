@@ -27,6 +27,7 @@ class Page{
 	
 	//other
 	void changeMem() { inMem = !inMem;}
+
 	void setMem(bool m) { inMem = m;}
 	void incrementTime(){ ++time;}
 	
@@ -91,10 +92,10 @@ class Job{
 	const Page requestPage (int pn) const;
 	Page requestPage (int pn);
 	int removePage(int pageNum);  
-    bool isListed(int pageNum);
-    void advTime();
-    void resetTime(int i){pages[i].setTime(0);};
-    int returnTime(int pn){return pages[pn].getTime();};
+  bool isListed(int pageNum);
+  void advTime();
+  void resetTime(int i){pages[i].setTime(0);};
+  int returnTime(int pn){return pages[pn].getTime();};
 	
 	//getter stuff
 	std::string getName(){return processName;}
@@ -110,6 +111,9 @@ class Job{
 	const int getRes() const{return stats.responseTime;}
 	int getTurn(){return stats.turnaroundTime;}
 	const int getTurn() const{return stats.turnaroundTime;}
+    
+  void printProcessPages();       // ****** AT ******
+  void printProcessPagesBool();    // ****** AT ******
 	
   
 	//setter Stuff
@@ -117,6 +121,8 @@ class Job{
 	void setWait(int w){stats.waitTime =w;}
 	void setRes(int s){stats.responseTime =s;}
 	void setTurn(int t){stats.turnaroundTime =t;}
+    
+    void setPageInMem(int pageNum);         // ***** AT ******
     
 };
 

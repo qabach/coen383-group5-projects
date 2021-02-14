@@ -26,12 +26,24 @@ void FIFO(CustomQueue myQueue)
     if (freeMemSize >= 4)
     {
         Job process = myQueue.popProcess();
-        int memLoc = myMem.getFreePage(myMem);
-        std::cout << "memLoc: " << memLoc << std::endl;
-        myMem.insertPageToMem(process, 0, memLoc);
+        
+        std::cout << "Print Pages In Process" << std::endl;
+        process.printProcessPages();
+        
+        std::cout << "Print Pages of Process Bool" << std::endl;
+        process.printProcessPagesBool();
+        
+        
+        myMem.insertPageToMem(process, 0);
+        
+        std::cout << "Print Pages of Process Bool" << std::endl;
+        process.printProcessPagesBool();
 
     }
     
+    
     myMem.printMem();
     myMem.printFreePageList();
+    
+    
 }

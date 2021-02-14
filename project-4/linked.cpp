@@ -66,8 +66,8 @@ Job::Job(int a, int b, int s, std::string nam = "None")
 //deconstructs Job
 Job::~Job()
 {
-
 }
+
 bool Job::insertPage(int pageNum, int pageInMem, int time)
 {
 	pages[pageNum].setTime(time);
@@ -161,6 +161,31 @@ Job CustomQueue::popProcess()
 	}
 	return Job();
 		
+}
+
+
+void Job::setPageInMem(int pageNum)
+{
+    pages.at(pageNum).setInMemory(pageNum);
+}
+
+void Job::printProcessPages()
+{
+    for(auto it = pages.begin(); it != pages.end(); it++)
+    {
+        std::cout << it->getPageNum() << "  " ;
+    }
+    std::cout << std::endl;
+}
+
+
+void Job::printProcessPagesBool()
+{
+    for(auto it = pages.begin(); it != pages.end(); it++)
+    {
+        std::cout << it->isInMem() << "  " ;
+    }
+    std::cout << std::endl;
 }
 
 
