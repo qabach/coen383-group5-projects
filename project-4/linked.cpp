@@ -68,6 +68,13 @@ Job::~Job()
 {
 
 }
+bool Job::insertPage(int pageNum, int pageInMem, int time)
+{
+	pages[pageNum].setTime(time);
+	insertPageNoCheck(pageNum,pageInMem);
+	return true;
+}
+
 //check if page inside the process, if not, insert and return true.
 //note true if page was inserted, false if not. (Deprecated)
 bool Job::insertPage(int pageNum, int pageInMem)
@@ -81,8 +88,7 @@ bool Job::insertPage(int pageNum, int pageInMem)
 void Job::insertPageNoCheck(int pageNum, int pageInMem)
 {
 	pages[pageNum].setInMemory(pageInMem);
-	if(!pages[pageNum].isInMem())
-		pages[pageNum].changeMem();
+	pages[pageNum].setMem(true);
 }
 
 //returns a page requested by user 
@@ -90,17 +96,31 @@ const Page Job::requestPage(int pn) const
 {
 	return pages[pn];
 }
-//removes a Page from mem( please make sure 
-void Job::removePage(int pageNum)
+
+//returns a page requested by user 
+Page Job::requestPage(int pn)
 {
-	if(pages[pageNum].isInMem())
-		pages[pageNum].changeMem();
+	return pages[pn];
+}
+//removes a Page from mem( please make sure 
+int Job::removePage(int pageNum)
+{
+	pages[pageNum].setMem(false);
+	return pages[pageNum].getPageInMemory();
 }
 
 //checks to see if page is inside job. if not return false
 bool Job::isListed(int pageNum)
 {
 	return pages[pageNum].isInMem();
+}
+
+void Job::advTime()
+{
+	for(int i = 0; i < size; ++i)
+	{
+		pages[i].incrementTime();
+	}
 }
 
 //the comparision function for jobs in sort

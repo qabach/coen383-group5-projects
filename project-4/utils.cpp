@@ -28,7 +28,7 @@ int locality_reference(int reference_page, int num_of_pages) // num_of_pages can
         
         // [0,1,-1]; one element will be add to page_num
         if (randnum == 2)
-            reference_page -= 1;
+            reference_page = (reference_page + num_of_pages -1) % num_of_pages;
         else
             reference_page += randnum;
         
@@ -47,13 +47,13 @@ int locality_reference(int reference_page, int num_of_pages) // num_of_pages can
         
         int new_page;
         int coin_toss = rand() % 2; //to choose range
-        if (coin_toss == 0) //first range 0 <= j <= i-2
+        if (coin_toss == 0 && reference_page - 2 >= 0) //first range 0 <= j <= i-2
         {
             //rand() % (max_number + 1 - minimum_number) + minimum_number for range min-max
             int max = reference_page - 2;
             new_page = rand() % (max + 1 - 0) + 0; // range 0:(i-2)
         }
-        else
+        else if(reference_page + 2 < num_of_pages)
         {
             //check if there are more than 10 pages
             if (num_of_pages < 10)
@@ -64,9 +64,15 @@ int locality_reference(int reference_page, int num_of_pages) // num_of_pages can
             else
             {
                 int min = reference_page + 2;
-                new_page = rand() % (10 + 1 - min) + min; // range (i+2):10
+                new_page = (rand() % (10) + min) % num_of_pages; // range (i+2):10
             }
             
+        }
+        else
+        {
+            //rand() % (max_number + 1 - minimum_number) + minimum_number for range min-max
+            int max = reference_page - 2;
+            new_page = rand() % (max + 1 - 0) + 0; // range 0:(i-2)
         }
         return new_page;
     }
