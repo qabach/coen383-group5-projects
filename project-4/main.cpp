@@ -15,6 +15,8 @@
  */
 #include <iostream>
 #include "linked.hpp"
+#include "memory.hpp"
+#include "LRU.hpp"
 #include <pthread.h>
 #include <vector>
 #include <ctime>
@@ -28,16 +30,13 @@ int main(int argc, const char * argv[])
     CustomQueue q;
     q.generateProcesses();
     Job a = q.popProcess();
-    a.insertPage(1,1);
-    a.insertPage(3,4);
+    //a.insertPage(1,1);
+    //a.insertPage(3,4);
     cout << a.isListed(1) << endl;
-    a.removePage(1);
+    //a.removePage(1);
     cout << a.isListed(1) << endl;
     
-    Memory myMem;
-    myMem = Memory();
-    myMem.printMem();
-    
+    LRU(q);
     
     if(argc !=2)
     {
