@@ -17,15 +17,15 @@
 class Memory
 {
 private:
-    std::vector<std::tuple<int, Job>> _memMap;
+    std::vector<std::tuple<int, Job *>> _memMap;
     int _inMemNum;
     std::vector<int> _freePage;
     int _freePageNum;
     
 public:
     Memory();
-    Memory(std::vector<std::tuple<int, Job>> memMap, int inMemNum );
-    Memory(std::vector<std::tuple<int, Job>> memMap, int inMemNum, std::vector<int> frePage, int freePageNum );
+    Memory(std::vector<std::tuple<int, Job *>> memMap, int inMemNum );
+    Memory(std::vector<std::tuple<int, Job *>> memMap, int inMemNum, std::vector<int> frePage, int freePageNum );
     
     
     // getter
@@ -35,7 +35,7 @@ public:
     int getFreePage();
     void printMem();
     void printFreePageList();
-    std::vector<std::tuple<int, Job>> getMemMap() { return _memMap ;}
+    std::vector<std::tuple<int, Job *>> getMemMap() { return _memMap ;}
    
     
     
