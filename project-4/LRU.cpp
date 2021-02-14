@@ -19,6 +19,7 @@ void LRU(CustomQueue myQueue)
     
     // check memory free page size
     Memory myMem;
+    size_t hit = 0, miss = 0;
     myMem = Memory();
     
     int freeMemSize = myMem.getFreeMemNum();
@@ -37,6 +38,7 @@ void LRU(CustomQueue myQueue)
 		inMem.push_back(process);
 		inMem.back().insertPage(0,memLoc);
 		lastAccessed.push_back(0);
+		++miss;
 		    
 	}
     for(int globalTime = 0; globalTime < 60; ++globalTime)
@@ -55,6 +57,7 @@ void LRU(CustomQueue myQueue)
 					lastAccessed[pos], k->size);
 				//if its listed reset timer of last accessed
 				if(k->isListed(pos)){
+					++hit;
 					k->resetTime(pos);
 					continue;
 				}
@@ -73,6 +76,7 @@ void LRU(CustomQueue myQueue)
 					
 				}
 				k->advTime();
+				++miss;
 			}
 			
 
