@@ -104,6 +104,7 @@ class Job{
 	const int getRes() const{return stats.responseTime;}
 	int getTurn(){return stats.turnaroundTime;}
 	const int getTurn() const{return stats.turnaroundTime;}
+    std::vector<Page> * getPageVec() { return &pages;}
     
     void printProcessPages();       // ****** AT ******
     void printProcessPagesBool();    // ****** AT ******

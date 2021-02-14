@@ -146,7 +146,7 @@ Job CustomQueue::popProcess()
 
 void Job::setPageInMem(int pageNum)
 {
-    pages.at(pageNum).setInMemory(pageNum);
+    pages.at(pageNum).changeMem();
 }
 
 void Job::printProcessPages()
@@ -161,6 +161,7 @@ void Job::printProcessPages()
 
 void Job::printProcessPagesBool()
 {
+    std::cout << std::endl << "Print Pages of Process Bool" << std::endl;
     for(auto it = pages.begin(); it != pages.end(); it++)
     {
         std::cout << it->isInMem() << "  " ;
