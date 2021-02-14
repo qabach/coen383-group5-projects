@@ -27,6 +27,7 @@ class Page{
 	
 	//other
 	void changeMem() { inMem = !inMem;}
+	void setMem(bool b) {inMem = b;}
 	void incrementTime(){++time;}
 	
 	///getters
