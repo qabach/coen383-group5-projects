@@ -20,5 +20,5 @@
 std::tuple<int,int,int> Random_paging(CustomQueue customer_queue);
 
 //print time log
-void print_time_log (Job *job, int time, int last_reference,Memory *memory_map, int free_space, Job * ptr, int page_to_evict);
+void print_time_log_rand (Job *job, int time, int last_reference,Memory *memory_map, int free_space, Job * ptr, int page_to_evict);
 #endif /* random2_h */

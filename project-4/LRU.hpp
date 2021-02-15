@@ -4,8 +4,8 @@
 //
 //
 
-#ifndef FIFO_hpp
-#define FIFO_hpp
+#ifndef LRU_hpp
+#define LRU_hpp
 
 #include <stdio.h>
 #include <set>
@@ -19,4 +19,4 @@ void LRUprintTimeStamp(Memory &m, Job * process, int timestamp, std::string in);
 void LRUprintTimeStampMS(std::string cProc, int cPage, int timestamp, int PageInMem, std::string rProc, int Page_TBE);
 
 
-#endif /* FIFO_hpp */
+#endif /* LRU_hpp */
