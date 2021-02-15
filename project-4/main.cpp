@@ -42,9 +42,9 @@ int main()
     
     std::vector<std::tuple<int,int,int>> stats_vec_rand;
     for (int i = 0; i < 5; i++)
-    {   CustomQueue cq;
-        cq.generateProcesses();
-        auto stats = Random_paging(cq);
+    {
+        std::cout << "******************** RUN " << i+1 << " ******************" << std::endl;
+        auto stats = Random_paging(q);
         stats_vec_rand.push_back(stats);
     }
     printStats(stats_vec_rand);
@@ -74,36 +74,24 @@ int main()
 //    << a2/5.0<<std::endl;
 //    std::cout <<"LRU avg # of processes of 100 References: "
 //    << b2/5.0<<std::endl;
-	std::vector<std::tuple<int,int,int>> stats_vecLFU1, stats_vecLFU2;
-    for (int i = 0; i < 5; i++)
-    {   CustomQueue cq;
-        cq.generateProcesses();
-        auto stats = LRU(cq, true);
-        auto stats2 = LRU(cq, false);
-        stats_vecLFU1.push_back(stats);
-        stats_vecLFU2.push_back(stats2);
-    }
-    printStats(stats_vecLFU1);
-    printStats(stats_vecLFU2);
-    std::cout << "***** END OF LRU *****" << std::endl << std::endl;
+	
 
     std::vector<std::tuple<int,int,int>> stats_vec;
     for (int i = 0; i < 5; i++)
-    {   
-    	CustomQueue cq;
-        cq.generateProcesses();
-        auto stats = LFU_paging(cq);
+    {
+        auto stats = LFU_paging(q);
         stats_vec.push_back(stats);
     }
     printStats(stats_vec);
     std::cout << "***** END OF LFU *****" << std::endl << std::endl;
 
+    
+    
     std::vector<std::tuple<int,int,int>> stats_vec_MFU;
     for (int i = 0; i < 5; i++)
     {
-    	CustomQueue cq;
-        cq.generateProcesses();
-        auto stats = MFU_paging(cq);
+        std::cout << "******************** RUN " << i+1 << " ******************" << std::endl;
+        auto stats = MFU_paging(q);
         stats_vec_MFU.push_back(stats);
     }
     printStats(stats_vec_MFU);
@@ -115,13 +103,27 @@ int main()
     for (int i = 0; i < 5; i++)
     {
         std::cout << "******************** RUN " << i+1 << " ******************" << std::endl;
-        CustomQueue cq;
-        cq.generateProcesses();
-        auto stats = FIFO(cq);
+        auto stats = FIFO(q);
         stats_vec_FIFO.push_back(stats);
     }
     printStats(stats_vec_FIFO);
     std::cout << "***** END OF FIFO *****" << std::endl << std::endl;
+    
+    
+    
+    std::vector<std::tuple<int,int,int>> stats_vecLFU1, stats_vecLFU2;
+    for (int i = 0; i < 5; i++)
+    {
+        std::cout << "******************** RUN " << i+1 << " ******************" << std::endl;
+        auto stats = LRU(q, true);
+        auto stats2 = LRU(q, false);
+        stats_vecLFU1.push_back(stats);
+        stats_vecLFU2.push_back(stats2);
+    }
+    printStats(stats_vecLFU1);
+    printStats(stats_vecLFU2);
+    std::cout << "***** END OF LRU *****" << std::endl << std::endl;
+    
     
     return 0;
 }
