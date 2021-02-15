@@ -85,6 +85,8 @@ std::tuple<int,int,int> LFU_paging (CustomQueue customer_queue)
             //pop job out of waitingt queue
             waiting_queue.pop_front();
             print_time_log(&servicing_queue.back(), time, last_reference.back(), &memory_map, memory_map.getFreeMemNum(),nullptr,0);
+            memory_map.printMem();
+            std::cout << std::endl << std::endl;
                            
         }
         
@@ -130,7 +132,6 @@ std::tuple<int,int,int> LFU_paging (CustomQueue customer_queue)
                         //evict page and add new page
                         //find the first idx with min
                         int minIdx = std::min_element(freq_array.begin(),freq_array.end()) - freq_array.begin();
-                        std::cout << minIdx << std::endl;
                         //remove page from memory
                         auto * job_to_evict = std::get<1>(memory_map.getMemMap()[minIdx]);
                         
@@ -182,10 +183,14 @@ std::tuple<int,int,int> LFU_paging (CustomQueue customer_queue)
                 for(int k = 0; k < servicing_queue[idx].getSize();k++)
                 {
                     if (servicing_queue[idx].requestPage(k).getPageInMemory() >= 0)
+                    {
+                        freq_array[servicing_queue[idx].requestPage(k).getPageInMemory()] = 0;
                         memory_map.removePageFromMem(&servicing_queue[idx], k); //remove pages from memory once job is done
+                        memory_map.printMem();
+                        std::cout << std::endl << std::endl;
+                    }
+
                 }
-//                servicing_queue.erase(servicing_queue.begin()+idx); //remove job
-//                last_reference.erase(last_reference.begin()+idx); //remove job
             }
         }
     }
@@ -222,6 +227,5 @@ void print_time_log (Job *job, int time, int last_reference,Memory *memory_map, 
     {
         std::cout << "      - Page to evicted   : " << job_evict << "/" << page_evict <<  std::endl;
     }
-    memory_map->printMem();
     std::cout << std::endl;
 }
