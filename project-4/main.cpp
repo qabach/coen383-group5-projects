@@ -89,7 +89,8 @@ int main()
 
     std::vector<std::tuple<int,int,int>> stats_vec;
     for (int i = 0; i < 5; i++)
-    {   CustomQueue cq;
+    {   
+    	CustomQueue cq;
         cq.generateProcesses();
         auto stats = LFU_paging(cq);
         stats_vec.push_back(stats);
@@ -100,7 +101,9 @@ int main()
     std::vector<std::tuple<int,int,int>> stats_vec_MFU;
     for (int i = 0; i < 5; i++)
     {
-        auto stats = MFU_paging(q);
+    	CustomQueue cq;
+        cq.generateProcesses();
+        auto stats = MFU_paging(cq);
         stats_vec_MFU.push_back(stats);
     }
     printStats(stats_vec_MFU);
