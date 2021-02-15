@@ -49,6 +49,7 @@ int main()
     }
     printStats(stats_vec_rand);
     std::cout << "***** END OF Random *****" << std::endl << std::endl;
+    
 //
 //
 //    for (int i =0; i < 5 ; ++i)
@@ -73,7 +74,18 @@ int main()
 //    << a2/5.0<<std::endl;
 //    std::cout <<"LRU avg # of processes of 100 References: "
 //    << b2/5.0<<std::endl;
-
+	std::vector<std::tuple<int,int,int>> stats_vecLFU1, stats_vecLFU2;
+    for (int i = 0; i < 5; i++)
+    {   CustomQueue cq;
+        cq.generateProcesses();
+        auto stats = LRU(cq, true);
+        auto stats2 = LRU(cq, false);
+        stats_vecLFU1.push_back(stats);
+        stats_vecLFU2.push_back(stats2);
+    }
+    printStats(stats_vecLFU1);
+    printStats(stats_vecLFU2);
+    std::cout << "***** END OF LRU *****" << std::endl << std::endl;
     
     std::vector<std::tuple<int,int,int>> stats_vec;
     for (int i = 0; i < 5; i++)

@@ -20,12 +20,11 @@ FIFO.o: FIFO.cpp FIFO.hpp
 	
 LRU.o: LRU.cpp LRU.hpp
 	cc -c LRU.cpp
-	
-utils.o: utils.cpp utils.hpp
-	cc -c utils.cpp
-
+		
 LFU.o: LFU.cpp LFU.hpp
 	cc -c LFU.cpp
+utils.o: utils.cpp utils.hpp
+	cc -c utils.cpp
 
 MFUfromLFU.o: MFUfromLFU.cpp MFUfromLFU.hpp
 	cc -c MFUfromLFU.cpp
