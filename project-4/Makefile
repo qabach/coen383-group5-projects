@@ -1,8 +1,8 @@
 CC = g++
 
-edit : main.o linked.o FIFO.o utils.o utils.o memory.o LRU.o
+edit : main.o linked.o FIFO.o utils.o utils.o memory.o LRU.o LFU.o
 	g++ -std=c++11 -pthread -Wall -o test main.o linked.o FIFO.o \
-	utils.o memory.o LRU.o
+	utils.o memory.o LRU.o LFU.o
 
 
 main.o: main.cpp 
@@ -20,12 +20,14 @@ FIFO.o: FIFO.cpp FIFO.hpp
 	
 LRU.o: LRU.cpp LRU.hpp
 	cc -c LRU.cpp
-	
+		
+LFU.o: LFU.cpp LFU.hpp
+	cc -c LFU.cpp
 utils.o: utils.cpp utils.hpp
 	cc -c utils.cpp
 	
 clean:
-	rm test main.o linked.o FIFO.o utils.o memory.o LRU.o
+	rm test main.o linked.o FIFO.o utils.o memory.o LRU.o LFU.o
 
 
 	

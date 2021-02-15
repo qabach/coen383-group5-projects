@@ -49,7 +49,7 @@ Job::Job(int a, int b, int s, std::string nam = "None")
 {
 	arrivalTime = a;
 	serviceTime = b;
-	completion =0;
+	completion = 0;
 	size = s;
 	processName = nam;
 	stats.waitTime = 0;
@@ -139,7 +139,7 @@ void CustomQueue::generateProcesses()
 	/*
 	for(int i = 0; i < 100; ++i)
 	{
-		std::cout<< processes[i].getName() << " "
+		std::cout<< processes[i].ggetName() << " "
 			<< processes[i].getArr()  << std::endl;
 	}
 	*/
