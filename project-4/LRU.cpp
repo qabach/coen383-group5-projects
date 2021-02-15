@@ -6,8 +6,6 @@
 
 std::tuple<int,int,int>  LRU(CustomQueue myQueue, bool sim)
 {
-//    CustomQueue myQueue;
-//    queue.
     
     
     std::cout << std::endl <<"************************* LRU ****************************" << std::endl;
@@ -28,21 +26,6 @@ std::tuple<int,int,int>  LRU(CustomQueue myQueue, bool sim)
     std::cout << "ProcessSize: " << myQueue.size() << std::endl;
     int count =0;
     //please put in memory until full?
-    /*
-	while(myMem.getFreeMemNum() >=95 && !myQueue.isEmpty() 
-		&& myQueue.front().getArr() < globalTime)
-	{
-		Job * process = new Job(myQueue.popProcess());
-		int memLoc = myMem.getFreePage();
-		myMem.insertPageToMem(process, 0);
-		inMem.push_back(process);
-		inMem.back()->insertPage(0,memLoc);
-		lastAccessed.push_back(0);
-		LRUpushMore(myMem, process);
-		miss+=4;
-		    
-	}
-	*/
     for(int globalTime = 0; globalTime < 60; ++globalTime)
     {
     	std::cout << "<-----------Second: " << globalTime
@@ -57,14 +40,11 @@ std::tuple<int,int,int>  LRU(CustomQueue myQueue, bool sim)
     			LRUprintTimeStamp(myMem, inMem[i], globalTime,"exit");
     			myMem.removeProcessFromMem(inMem[i]);
     			assert(myMem.getFreeMemNum() >=j);
-    			//delete inMem[i];
     			inMem.erase(inMem.begin() + i);
     			--i;
     		}
     	}
     	
-    	
-    	//std::cout<<myQueue.front().getArr()<<std::endl;
     	//load more processes in from queue
     	while(myMem.getFreeMemNum() >=4 && !myQueue.isEmpty() 
 		&& myQueue.front().getArr() <= globalTime)
@@ -94,12 +74,11 @@ std::tuple<int,int,int>  LRU(CustomQueue myQueue, bool sim)
 					break;
 				}
 				++count;
-				
+				//on the last second, increment completion time
 				if( i == 9)
 				{
 					(*k)->incrementComp(); 
 				}
-				//std::cout<<(*k)->getArr()<<std::endl;
 				if((*k)->getComp() >= (*k)->getServ())
     			{	
     				(*k)->advTime();
@@ -111,8 +90,6 @@ std::tuple<int,int,int>  LRU(CustomQueue myQueue, bool sim)
 				
 				lastAccessed[pos] = locality_reference(
 					lastAccessed[pos], (*k)->getSize());
-				//std::cout << lastAccessed[pos] << " " 
-					//<<(*k)->size<<std::endl;
 				//if its listed, reset timer of last accessed and increment hit
 				if((*k)->isListed(lastAccessed[pos])){
 					assert(lastAccessed[pos] < (*k)->getSize());
@@ -135,8 +112,6 @@ std::tuple<int,int,int>  LRU(CustomQueue myQueue, bool sim)
 				else
 				{
 					int memLoc = myMem.getFreePage();
-					//std::cout << "memLocb: " << memLoc << std::endl;
-					//(*k)->insertPage(lastAccessed[pos],memLoc);
 					(*k)->resetTime(lastAccessed[pos]);
 					myMem.insertPageToMem(*k, lastAccessed[pos]);
 					assert(memLoc == (*k)->requestPage(lastAccessed[pos]).getPageInMemory());
@@ -146,7 +121,6 @@ std::tuple<int,int,int>  LRU(CustomQueue myQueue, bool sim)
 				}
 				(*k)->advTime();
 				++miss;
-				//on the last second, increment completion time
 			}
 			
 
@@ -193,13 +167,8 @@ void pLRU(Memory &m, std::vector<Job *> &jobs, Job * insert, int num, int timest
 			
 		}
 	}
-	//std::cout << pos << "a" <<std::endl;
-	//int memLoc = (*kpos)->removePage(pos);
 	int memLoc = (*kpos)->requestPage(pos).getPageInMemory();
-	//std::cout << pos <<std::endl;
 	m.removePageFromMem(*kpos,pos);
-    //std::cout << "memLoct: " << pos << std::endl;
-    //insert->insertPage(num,memLoc);
 	insert->resetTime(num);
 	m.insertPageToMem(insert, num);
 	assert(insert->requestPage(num).isInMem());
@@ -207,7 +176,7 @@ void pLRU(Memory &m, std::vector<Job *> &jobs, Job * insert, int num, int timest
 		timestamp, -1,(*kpos)->getName(),pos);
 }
 
-//push the remaining 3 pages into memeory randomly
+//push the remaining 3 pages into memeory
 void LRUpushMore(Memory &m, Job * process)
 {
 	std::set<int> s;
@@ -215,20 +184,20 @@ void LRUpushMore(Memory &m, Job * process)
 	s.insert(0);
 	for(int i =0; i < 3; ++i)
 	{
-		while(s.find(num) == s.end())
+		while(s.find(num) != s.end())
 		{
 			num = rand() % (process->getSize());
 		}
 		assert(num < process->getSize());
 		s.insert(num);
+		std::cout <<num <<std::endl;
 		const int memLoc = m.getFreePage();
 		process->insertPage(num,memLoc);
 		process->resetTime(num);
 		m.insertPageToMem(process, num);
 		if(process->isListed(i))
     	{
-    		//std::cout<<process->getName()<<std::endl;
-    		assert(process->isListed(i) && memLoc == process->requestPage(i).getPageInMemory()) ;
+    		assert(process->isListed(i) && memLoc == process->requestPage(num).getPageInMemory()) ;
     	}
 	}
 
