@@ -96,8 +96,8 @@ std::tuple<int,int,int> MFU_paging (CustomQueue customer_queue)
             //each job will request a reference page
             for (int i = 0; i < servicing_queue.size(); i++)
             {
-                //skip if job is already completed i.e. service time == completion time
-                if (servicing_queue[i].getServ() == servicing_queue[i].completion)
+                //skip if job is already completed i.e. service time <= completion time
+                if (servicing_queue[i].getServ() <= servicing_queue[i].completion)
                 {
                     continue; //just skip to next one
                 }
@@ -178,7 +178,7 @@ std::tuple<int,int,int> MFU_paging (CustomQueue customer_queue)
         for (int idx = 0; idx < servicing_queue.size(); idx++)
         {
             //if job is complete i.e. service time == completion
-            if (servicing_queue[idx].getServ() == servicing_queue[idx].completion)
+            if (servicing_queue[idx].getServ() <= servicing_queue[idx].completion)
             {
                 for(int k = 0; k < servicing_queue[idx].getSize();k++)
                 {

@@ -96,8 +96,8 @@ std::tuple<int,int,int> LFU_paging (CustomQueue customer_queue)
             //each job will request a reference page
             for (int i = 0; i < servicing_queue.size(); i++)
             {
-                //skip if job is already completed i.e. service time == completion time
-                if (servicing_queue[i].getServ() == servicing_queue[i].completion)
+                //skip if job is already completed i.e. service time <= completion time
+                if (servicing_queue[i].getServ() <= servicing_queue[i].completion)
                 {
                     continue; //just skip to next one
                 }
@@ -132,10 +132,9 @@ std::tuple<int,int,int> LFU_paging (CustomQueue customer_queue)
                         //evict page and add new page
                         //find the first idx with min
                         int minIdx = std::min_element(freq_array.begin(),freq_array.end()) - freq_array.begin();
+                        
                         //remove page from memory
                         auto * job_to_evict = std::get<1>(memory_map.getMemMap()[minIdx]);
-                        
-                        
                         int page_to_evict = -1;
                         //need to get page number to evict
                         for (int x = 0; x < job_to_evict->getSize();x++)
@@ -162,12 +161,10 @@ std::tuple<int,int,int> LFU_paging (CustomQueue customer_queue)
                         memory_map.insertPageToMem(&servicing_queue[i], new_page);
                         //increment the frequency of this new page
                         freq_array[servicing_queue[i].requestPage(new_page).getPageInMemory()]++;
-
                     }
                 }
             }
         }
-        
         //increment service time for job in queue
         for (int i = 0; i < servicing_queue.size(); i++)
         {
@@ -198,6 +195,8 @@ std::tuple<int,int,int> LFU_paging (CustomQueue customer_queue)
     std::cout << "Swapped in: " << swapped_in << std::endl;
     std::cout << "Hit: " << hit << std::endl;
     std::cout << "Miss: " << miss << std::endl;
+    std::cout << "Hit/Miss ratio: " << double(hit)/double(miss) << std::endl;
+
     
     return std::make_tuple(swapped_in,hit,miss);
 }

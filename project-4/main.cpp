@@ -10,18 +10,17 @@
     Travis Le
     Yukun Zhang
  
- Project 3
+ Project 4
  
  */
 #include <iostream>
+#include <vector>
+#include <ctime>
 #include "linked.hpp"
 #include "memory.hpp"
 #include "LRU.hpp"
 #include "MFUfromLFU.hpp"
 #include "LFU.hpp"
-#include <pthread.h>
-#include <vector>
-#include <ctime>
 
 using namespace std;
 
@@ -98,7 +97,7 @@ void printStats(std::vector<std::tuple<int,int,int>> stats_vec)
     std::cout << "Average swapped in:  " << avg_swapped_in/double(stats_vec.size()) << std::endl;
     std::cout << "Average hit       :  " << avg_hit/double(stats_vec.size()) << std::endl;
     std::cout << "Average miss      :  " << avg_miss/double(stats_vec.size()) << std::endl;
-
+    std::cout << "Hit/Miss ratio: " << (avg_hit/double(stats_vec.size()))/(avg_miss/double(stats_vec.size())) << std::endl;
 }
 
 
