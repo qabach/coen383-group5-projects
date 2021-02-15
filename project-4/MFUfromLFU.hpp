@@ -10,8 +10,8 @@
     This file is the implementation of the Most Frequently Used swapping algorithm
  */
 
-#ifndef MFU_hpp
-#define MFU_hpp
+#ifndef MFUfromLFU_hpp
+#define MFUfromLFU_hpp
 
 #include <deque>
 #include <iostream>
