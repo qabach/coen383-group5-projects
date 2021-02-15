@@ -27,17 +27,18 @@ int main(int argc, const char * argv[])
 {
 	srand(time(0));
     int n;
+    double a;
     CustomQueue q;
     q.generateProcesses();
-    Job a = q.popProcess();
+    //Job a = q.popProcess();
     //a.insertPage(1,1);
     //a.insertPage(3,4);
-    cout << a.isListed(1) << endl;
+    //cout << a.isListed(1) << endl;
     //a.removePage(1);
-    cout << a.isListed(1) << endl;
+    //cout << a.isListed(1) << endl;
     
-    LRU(q);
-    
+    LRU(q, a);
+    /*
     if(argc !=2)
     {
         cout << "not enough arguements" << endl;
@@ -56,7 +57,7 @@ int main(int argc, const char * argv[])
     }
     n = stoi(yay);
     
-    
+    */
     return 0;
 }
 

@@ -1,7 +1,7 @@
 #include <iostream>
 #include "linked.hpp"
 
-Page::Page() : pNum(0), pageInMem(0), time(0), inMem(false)
+Page::Page() : pNum(0), pageInMem(-1), time(0), inMem(false)
 {
 
 }
@@ -57,7 +57,7 @@ Job::Job(int a, int b, int s, std::string nam = "None")
 	stats.turnaroundTime = 0;
 	for(int i = 0; i < s; ++i)
 	{
-		pages.push_back(Page(i, 0,0, false));
+		pages.push_back(Page(i, -1,0, false));
 	}
 	
 }
@@ -66,15 +66,8 @@ Job::Job(int a, int b, int s, std::string nam = "None")
 //deconstructs Job
 Job::~Job()
 {
-}
 
-bool Job::insertPage(int pageNum, int pageInMem, int time)
-{
-	pages[pageNum].setTime(time);
-	insertPageNoCheck(pageNum,pageInMem);
-	return true;
 }
-
 //check if page inside the process, if not, insert and return true.
 //note true if page was inserted, false if not. (Deprecated)
 bool Job::insertPage(int pageNum, int pageInMem)
@@ -88,7 +81,8 @@ bool Job::insertPage(int pageNum, int pageInMem)
 void Job::insertPageNoCheck(int pageNum, int pageInMem)
 {
 	pages[pageNum].setInMemory(pageInMem);
-	pages[pageNum].setMem(true);
+	if(!pages[pageNum].isInMem())
+		pages[pageNum].changeMem();
 }
 
 //returns a page requested by user 
@@ -96,17 +90,15 @@ const Page Job::requestPage(int pn) const
 {
 	return pages[pn];
 }
-
-//returns a page requested by user 
-Page Job::requestPage(int pn)
-{
-	return pages[pn];
-}
 //removes a Page from mem( please make sure 
 int Job::removePage(int pageNum)
 {
-	pages[pageNum].setMem(false);
-	return pages[pageNum].getPageInMemory();
+	if(pages[pageNum].isInMem())
+	{
+		pages[pageNum].changeMem();
+		return pages[pageNum].getPageInMemory();
+	}
+	return -1;
 }
 
 //checks to see if page is inside job. if not return false
@@ -117,7 +109,7 @@ bool Job::isListed(int pageNum)
 
 void Job::advTime()
 {
-	for(int i = 0; i < size; ++i)
+	for(int i; i< size; ++i)
 	{
 		pages[i].incrementTime();
 	}
@@ -144,15 +136,16 @@ void CustomQueue::generateProcesses()
 	sort(processes.begin(),processes.end(), compareJobs);
 	
 	//just output change later
-
+	/*
 	for(int i = 0; i < 100; ++i)
 	{
 		std::cout<< processes[i].getName() << " "
 			<< processes[i].getArr()  << std::endl;
 	}
+	*/
 	
 }
-
+//pops the job at the front.
 Job CustomQueue::popProcess()
 {
 	if(processes.begin() != processes.end())
@@ -163,11 +156,21 @@ Job CustomQueue::popProcess()
 		
 }
 
-
-void Job::setPageInMem(int pageNum)
+//gets the job at the front
+Job CustomQueue::front()
 {
-    pages.at(pageNum).setInMemory(pageNum);
+	if(processes.begin() != processes.end())
+	{
+		return *processes.begin();
+	}
+	return Job();
+		
 }
+
+//void Job::setPageInMem(int pageNum)
+//{
+//    pages.at(pageNum).changeMem();
+//}
 
 void Job::printProcessPages()
 {
@@ -181,6 +184,7 @@ void Job::printProcessPages()
 
 void Job::printProcessPagesBool()
 {
+    std::cout << std::endl << "Print Pages of Process Bool" << std::endl;
     for(auto it = pages.begin(); it != pages.end(); it++)
     {
         std::cout << it->isInMem() << "  " ;

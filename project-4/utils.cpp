@@ -30,9 +30,9 @@ int locality_reference(int reference_page, int num_of_pages) // num_of_pages can
         if (randnum == 2)
             reference_page = (reference_page + num_of_pages -1) % num_of_pages;
         else
-            reference_page += randnum;
+            reference_page = (reference_page + randnum) % num_of_pages;
         
-        return reference_page;
+        return reference_page % num_of_pages;
     }
     else
     {
@@ -74,7 +74,7 @@ int locality_reference(int reference_page, int num_of_pages) // num_of_pages can
             int max = reference_page - 2;
             new_page = rand() % (max + 1 - 0) + 0; // range 0:(i-2)
         }
-        return new_page;
+        return new_page % num_of_pages;
     }
     
 }
