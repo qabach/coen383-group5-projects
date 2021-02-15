@@ -23,19 +23,17 @@
 
 using namespace std;
 
-int main(int argc, const char * argv[])
+void printStats(std::vector<std::tuple<int,int,int>> stats_vec);
+
+
+int main()
 {
 	srand(time(0));
     int n;
     double a, b, a2, b2;
     CustomQueue q;
     q.generateProcesses();
-    //Job a = q.popProcess();
-    //a.insertPage(1,1);
-    //a.insertPage(3,4);
-    //cout << a.isListed(1) << endl;
-    //a.removePage(1);
-    //cout << a.isListed(1) << endl;
+
     for (int i =0; i < 5 ; ++i)
     {	
     	double c;
@@ -58,26 +56,38 @@ int main(int argc, const char * argv[])
     << a2/5.0<<std::endl;
     std::cout <<"LRU avg # of processes of 100 References: "
     << b2/5.0<<std::endl;
-    /*
-    if(argc !=2)
-    {
-        cout << "not enough arguements" << endl;
-        return -1;
-    }
 
-    //note that this might create an error maybe.
-    string yay = string(argv[1]);
-    for(int i =0; i < yay.length(); ++i)
-    {
-        if(!isdigit(argv[1][i]))
-        {
-            cout << "Argument is not a number" << endl;
-            return -2;
-        }
-    }
-    n = stoi(yay);
     
-    */
+    std::vector<std::tuple<int,int,int>> stats_vec;
+    for (int i = 0; i < 5; i++)
+    {   CustomQueue cq;
+        cq.generateProcesses();
+        auto stats = LFU_paging(cq);
+        stats_vec.push_back(stats);
+    }
+    printStats(stats_vec);
+    std::cout << "***** END OF LFU *****" << std::endl << std::endl;
+    
     return 0;
 }
+
+void printStats(std::vector<std::tuple<int,int,int>> stats_vec)
+{
+    double avg_swapped_in = 0.0;
+    double avg_hit = 0.0;
+    double avg_miss = 0.0;
+
+    for (int i = 0; i< stats_vec.size();i++)
+    {
+        avg_swapped_in += std::get<0>(stats_vec[i]);
+        avg_hit += std::get<1>(stats_vec[i]);
+        avg_miss += std::get<2>(stats_vec[i]);
+    }
+    
+    std::cout << "Average swapped in:  " << avg_swapped_in/double(stats_vec.size()) << std::endl;
+    std::cout << "Average hit       :  " << avg_hit/double(stats_vec.size()) << std::endl;
+    std::cout << "Average miss      :  " << avg_miss/double(stats_vec.size()) << std::endl;
+
+}
+
 
