@@ -6,6 +6,7 @@
 //
 
 #include "memory.hpp"
+#include <cassert>
 
 
 // ******************************************************************************
@@ -144,10 +145,12 @@ int Memory::getFreePage()
 // ******************************************************************************
 void Memory::insertPageToMem(Job * process, int pageNum)
 {
+	assert(_memMap.size() <=100);
     auto it = _memMap.begin();
     int memLoc = getFreePage();
     //std::cout << "memLocm: " << memLoc << std::endl;
     _memMap.erase(it+memLoc);
+    assert(memLoc >= 0 && memLoc <=99);
     if(memLoc ==0)
     {
     	it = _memMap.begin();
@@ -186,9 +189,9 @@ void Memory::insertPageToMem(Job * process, int pageNum)
 void Memory::removePageFromMem(Job * process, int pageNum)
 {
     
-    
     int memLoc = process->getPageVec()->at(pageNum).getPageInMemory();
     //std::cout << "memLocd: " << memLoc << std::endl;
+    assert(memLoc>=0 && memLoc <= 99);
     auto itt = process->getPageVec()->begin();
     (itt+pageNum)->setMem(false);
     (itt+pageNum)->setInMemory(-1);

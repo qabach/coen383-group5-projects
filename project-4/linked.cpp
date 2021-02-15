@@ -57,7 +57,7 @@ Job::Job(int a, int b, int s, std::string nam = "None")
 	stats.turnaroundTime = 0;
 	for(int i = 0; i < s; ++i)
 	{
-		pages.push_back(Page(i, 0,0, false));
+		pages.push_back(Page(i, -1,0, false));
 	}
 	
 }
@@ -144,7 +144,7 @@ void CustomQueue::generateProcesses()
 	}
 	
 }
-
+//pops the job at the front.
 Job CustomQueue::popProcess()
 {
 	if(processes.begin() != processes.end())
@@ -155,6 +155,16 @@ Job CustomQueue::popProcess()
 		
 }
 
+//gets the job at the front
+Job CustomQueue::front()
+{
+	if(processes.begin() != processes.end())
+	{
+		return *processes.begin();
+	}
+	return Job();
+		
+}
 
 //void Job::setPageInMem(int pageNum)
 //{

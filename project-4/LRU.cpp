@@ -6,8 +6,10 @@
 //
 
 #include "LRU.hpp"
+#include <cassert>
 
 void pLRU(Memory &m, std::vector<Job *> &jobs, int &insertLoc, int num);
+void LRUpushMore(Memory &m, Job * process);
 
 void LRU(CustomQueue myQueue)
 {
@@ -29,23 +31,38 @@ void LRU(CustomQueue myQueue)
     
     std::cout << "freeMemSize: " << freeMemSize << std::endl;
     //please put in memory until full?
-	while(myMem.getFreeMemNum() >=95 && !myQueue.isEmpty())
+    /*
+	while(myMem.getFreeMemNum() >=95 && !myQueue.isEmpty() 
+		&& myQueue.front().getArr() < globalTime)
 	{
 		Job * process = new Job(myQueue.popProcess());
 		int memLoc = myMem.getFreePage();
-		std::cout << "size: " << myMem.getFreeMemNum() << std::endl;
 		myMem.insertPageToMem(process, 0);
 		inMem.push_back(process);
 		inMem.back()->insertPage(0,memLoc);
 		lastAccessed.push_back(0);
-		++miss;
+		LRUpushMore(myMem, process);
+		miss+=4;
 		    
 	}
+	*/
     for(int globalTime = 0; globalTime < 60; ++globalTime)
     {
-		
+    	while(myMem.getFreeMemNum() >=4 && !myQueue.isEmpty() 
+		&& myQueue.front().getArr() < globalTime)
+		{
+			Job * process = new Job(myQueue.popProcess());
+			assert(process!=nullptr);
+			int memLoc = myMem.getFreePage();
+			myMem.insertPageToMem(process, 0);
+			inMem.push_back(process);
+			inMem.back()->insertPage(0,memLoc);
+			lastAccessed.push_back(0);
+			LRUpushMore(myMem, process);
+			miss+=4;	
+		}
 		//the 10ms that happens
-		for(int i =0 ; i < 100; ++i)
+		for(int i =0 ; i < 10; ++i)
 		{
 			for(std::vector<Job *>::iterator k = inMem.begin(); k != inMem.end(); ++k)
 			{
@@ -58,8 +75,9 @@ void LRU(CustomQueue myQueue)
 					//<<(*k)->size<<std::endl;
 				//if its listed reset timer of last accessed
 				if((*k)->isListed(lastAccessed[pos])){
+					assert(lastAccessed[pos] < (*k)->getSize());
 					++hit;
-					(*k)->resetTime(pos);
+					(*k)->resetTime(lastAccessed[pos]);
 					continue;
 				}
 				//if if not and size not free perform LRU
@@ -72,9 +90,9 @@ void LRU(CustomQueue myQueue)
 				{
 					int memLoc = myMem.getFreePage();
 					//std::cout << "memLocb: " << memLoc << std::endl;
+					(*k)->insertPage(lastAccessed[pos],memLoc);
+					(*k)->resetTime(lastAccessed[pos]);
 					myMem.insertPageToMem(*k, lastAccessed[pos]);
-					inMem[pos]->insertPage(lastAccessed[pos],memLoc);
-					inMem[pos]->resetTime(lastAccessed[pos]);
 					
 				}
 				(*k)->advTime();
@@ -122,7 +140,25 @@ void pLRU(Memory &m, std::vector<Job *> &jobs, int &insert, int num)
     jobs[insert]->insertPage(num,memLoc);
 	jobs[insert]->resetTime(num);
 	m.insertPageToMem(jobs[insert], num);
+}
 
-
+void LRUpushMore(Memory &m, Job * process)
+{
+	std::set<int> s;
+	int num =0;
+	s.insert(0);
+	for(int i =0; i < 3; ++i)
+	{
+		while(s.find(num) != s.end())
+		{
+			num = rand() % (process->getSize());
+		}
+		assert(num < process->getSize());
+		s.insert(num);
+		int memLoc = m.getFreePage();
+		process->insertPage(num,memLoc);
+		process->resetTime(num);
+		m.insertPageToMem(process, num);
+	}
 
 }
