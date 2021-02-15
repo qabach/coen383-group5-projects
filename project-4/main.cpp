@@ -32,9 +32,14 @@ void printStats(std::vector<std::tuple<int,int,int>> stats_vec);
 
 int main()
 {
+
+    
+    srand(time(NULL));
+    int n;
+    double a, b, a2, b2;
     CustomQueue q;
     q.generateProcesses();
-
+    
     std::vector<std::tuple<int,int,int>> stats_vec_rand;
         for (int i = 0; i < 5; i++)
         {   CustomQueue cq;
