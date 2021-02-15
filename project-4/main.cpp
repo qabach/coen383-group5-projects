@@ -17,8 +17,9 @@
 #include "linked.hpp"
 #include "memory.hpp"
 #include "LRU.hpp"
-#include "MFUfromLFU.hpp"
+#include "MFU.hpp"
 #include "LFU.hpp"
+#include "FIFO.hpp"
 #include <pthread.h>
 #include <vector>
 #include <ctime>
@@ -36,6 +37,7 @@ int main()
     CustomQueue q;
     q.generateProcesses();
 
+    
     for (int i =0; i < 5 ; ++i)
     {	
     	double c;
@@ -69,7 +71,7 @@ int main()
     }
     printStats(stats_vec);
     std::cout << "***** END OF LFU *****" << std::endl << std::endl;
-    
+
     std::vector<std::tuple<int,int,int>> stats_vec_MFU;
     for (int i = 0; i < 5; i++)
     {
@@ -78,12 +80,28 @@ int main()
     }
     printStats(stats_vec_MFU);
     std::cout << "***** END OF MFU *****" << std::endl << std::endl;
+  
+    
+    
+    std::vector<std::tuple<int,int,int>> stats_vec;
+    for (int i = 0; i < 5; i++)
+    {
+        std::cout << "******************** RUN " << i+1 << " ******************" << std::endl;
+        CustomQueue cq;
+        cq.generateProcesses();
+        auto stats = FIFO(cq);
+        stats_vec.push_back(stats);
+    }
+    printStats(stats_vec);
+    std::cout << "***** END OF FIFO *****" << std::endl << std::endl;
     
     return 0;
 }
 
 void printStats(std::vector<std::tuple<int,int,int>> stats_vec)
 {
+    std::cout << std::endl << "**************** OVERALL STATISTICS ********************" << std::endl;
+    
     double avg_swapped_in = 0.0;
     double avg_hit = 0.0;
     double avg_miss = 0.0;
@@ -98,6 +116,7 @@ void printStats(std::vector<std::tuple<int,int,int>> stats_vec)
     std::cout << "Average swapped in:  " << avg_swapped_in/double(stats_vec.size()) << std::endl;
     std::cout << "Average hit       :  " << avg_hit/double(stats_vec.size()) << std::endl;
     std::cout << "Average miss      :  " << avg_miss/double(stats_vec.size()) << std::endl;
+    std::cout << "Average hit/miss      :  " << (avg_hit/double(stats_vec.size())) / (avg_miss/double(stats_vec.size())) << std::endl;
 
 }
 
