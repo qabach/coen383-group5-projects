@@ -106,7 +106,7 @@ size_t MFU(CustomQueue queue, double &rate)
 					MFUprintTimeStampMS(
 						(*jobIterator)->getName(),
 						lastAccessedJobNumberList[position],
-						globalTime * SCALE + i,
+						globalTime * SCALE + i * 10,
 						(*jobIterator)->getPage(lastAccessedJobNumberList[position]).getPageInMemory(),
 						"",
 						-1);
@@ -138,6 +138,15 @@ size_t MFU(CustomQueue queue, double &rate)
 					int pageMemoryLocation = (*jobIterator)->getPage(pagePosition).getPageInMemory();
 					(*jobIterator)->insertPage(lastAccessedJobNumberList[position], pageMemoryLocation);
 					(*jobIterator)->resetTime(lastAccessedJobNumberList[position]);
+
+					//print time stamp
+					MFUprintTimeStampMS(
+						(*jobIterator)->getName(),
+						lastAccessedJobNumberList[position],
+						globalTime * SCALE + i * 10,
+						-1,
+						"",
+						-1);
 				}
 
 				//Choice 3: insert page inside memory if there are some free pages
@@ -158,7 +167,7 @@ size_t MFU(CustomQueue queue, double &rate)
 					MFUprintTimeStampMS(
 						(*jobIterator)->getName(),
 						lastAccessedJobNumberList[position],
-						globalTime * SCALE + i,
+						globalTime * SCALE + i * 10,
 						-1,
 						"",
 						-1);

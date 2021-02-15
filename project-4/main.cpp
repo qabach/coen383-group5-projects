@@ -17,6 +17,7 @@
 #include "linked.hpp"
 #include "memory.hpp"
 #include "LRU.hpp"
+#include "MFU.hpp"
 #include <pthread.h>
 #include <vector>
 #include <ctime>
@@ -37,7 +38,8 @@ int main(int argc, const char * argv[])
     //a.removePage(1);
     //cout << a.isListed(1) << endl;
     
-    LRU(q, a);
+    // LRU(q, a);
+    MFU(q, a);
     /*
     if(argc !=2)
     {
