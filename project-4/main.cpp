@@ -17,7 +17,7 @@
 #include "linked.hpp"
 #include "memory.hpp"
 #include "LRU.hpp"
-#include "MFU.hpp"
+#include "MFUfromLFU.hpp"
 #include "LFU.hpp"
 #include <pthread.h>
 #include <vector>
