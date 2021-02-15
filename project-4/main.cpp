@@ -17,6 +17,8 @@
 #include "linked.hpp"
 #include "memory.hpp"
 #include "LRU.hpp"
+#include "MFU.hpp"
+#include "LFU.hpp"
 #include <pthread.h>
 #include <vector>
 #include <ctime>
@@ -67,6 +69,15 @@ int main()
     }
     printStats(stats_vec);
     std::cout << "***** END OF LFU *****" << std::endl << std::endl;
+    
+    std::vector<std::tuple<int,int,int>> stats_vec_MFU;
+    for (int i = 0; i < 5; i++)
+    {
+        auto stats = MFU_paging(q);
+        stats_vec_MFU.push_back(stats);
+    }
+    printStats(stats_vec_MFU);
+    std::cout << "***** END OF MFU *****" << std::endl << std::endl;
     
     return 0;
 }
