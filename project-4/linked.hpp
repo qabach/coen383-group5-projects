@@ -138,7 +138,7 @@ class CustomQueue
 	Job popProcess();
 	Job front();
 	bool isEmpty(){return processes.empty();}
-	
+    std::vector<Job> getProcessList() { return processes; }
 	
 	
 
