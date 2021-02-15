@@ -11,7 +11,7 @@
  
  */
 
-#include "MFU.hpp"
+#include "MFUfromLFU.hpp"
 
 
 const int TIME_LIMIT = 60; //msec; time to run the simulator in miliseconds i.e. 1 minute
