@@ -166,7 +166,7 @@ Job CustomQueue::front()
 {
 	if(processes.begin() != processes.end())
 	{
-		return *processes.begin();
+		return processes[0];
 	}
 	return Job();
 		

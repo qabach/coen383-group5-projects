@@ -34,12 +34,13 @@ std::tuple<int,int,int>  LRU(CustomQueue myQueue, bool sim)
     	
     	for(int i =0 ; i< inMem.size(); ++i)
     	{
-    		if(inMem[i]->getComp() == inMem[i]->getServ());
+    		inMem[i]->incrementComp();
+    		if(inMem[i]->getComp() == inMem[i]->getServ())
     		{	
     			int j = myMem.getFreeMemNum();
-    			LRUprintTimeStamp(myMem, inMem[i], globalTime,"exit");
     			myMem.removeProcessFromMem(inMem[i]);
     			assert(myMem.getFreeMemNum() >=j);
+    			LRUprintTimeStamp(myMem, inMem[i], globalTime,"exit");
     			inMem.erase(inMem.begin() + i);
     			--i;
     		}
@@ -50,7 +51,8 @@ std::tuple<int,int,int>  LRU(CustomQueue myQueue, bool sim)
 		&& myQueue.front().getArr() <= globalTime)
 		{
 			Job * process = new Job(myQueue.popProcess());
-			assert(process!=nullptr);
+			assert(process!=nullptr 
+				&& process->getServ() != process->getComp());
 			int memLoc = myMem.getFreePage();
 			myMem.insertPageToMem(process, 0);
 			inMem.push_back(process);
@@ -75,10 +77,7 @@ std::tuple<int,int,int>  LRU(CustomQueue myQueue, bool sim)
 				}
 				++count;
 				//on the last second, increment completion time
-				if( i == 9)
-				{
-					(*k)->incrementComp(); 
-				}
+			
 				if((*k)->getComp() >= (*k)->getServ())
     			{	
     				(*k)->advTime();
@@ -122,6 +121,7 @@ std::tuple<int,int,int>  LRU(CustomQueue myQueue, bool sim)
 				(*k)->advTime();
 				++miss;
 			}
+			
 			
 
 		} 
