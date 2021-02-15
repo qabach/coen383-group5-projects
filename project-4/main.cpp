@@ -18,90 +18,48 @@
 #include "memory.hpp"
 #include "LRU.hpp"
 #include "MFU.hpp"
-#include "LFU.hpp"
 #include <pthread.h>
 #include <vector>
 #include <ctime>
 
 using namespace std;
 
-void printStats(std::vector<std::tuple<int,int,int>> stats_vec);
-
-
-int main()
+int main(int argc, const char * argv[])
 {
 	srand(time(0));
     int n;
-    double a, b, a2, b2;
+    double a;
     CustomQueue q;
     q.generateProcesses();
-
-    for (int i =0; i < 5 ; ++i)
-    {	
-    	double c;
-    	CustomQueue q;
-    	q.generateProcesses();
-    	std::cout<<"-----------60 seconds--------------" <<std::endl;
-    	a2+= LRU(q, c, true);
-    	a+= c;
-    	std::cout<<std::endl;
-    	std::cout<<"---------------100 References----------" <<std::endl;
-    	b2= LRU(q, c, false);
-    	b+= c;
-    	std::cout<<std::endl;
-    }
-    std::cout <<"LRU avg # of hit/miss of 60s: "
-    << a/5.0<< std::endl;
-    std::cout <<"LRU avg # of hit/miss of 100 References: "
-    << b/5.0 <<std::endl;
-    std::cout <<"LRU avg # of processes switched of 60s: "
-    << a2/5.0<<std::endl;
-    std::cout <<"LRU avg # of processes of 100 References: "
-    << b2/5.0<<std::endl;
-
-    
-    std::vector<std::tuple<int,int,int>> stats_vec;
-    for (int i = 0; i < 5; i++)
-    {   CustomQueue cq;
-        cq.generateProcesses();
-        auto stats = LFU_paging(cq);
-        stats_vec.push_back(stats);
-    }
-    printStats(stats_vec);
-    std::cout << "***** END OF LFU *****" << std::endl << std::endl;
+    //Job a = q.popProcess();
+    //a.insertPage(1,1);
+    //a.insertPage(3,4);
+    //cout << a.isListed(1) << endl;
+    //a.removePage(1);
+    //cout << a.isListed(1) << endl;
     
     // LRU(q, a);
     MFU(q, a);
-
-    std::vector<std::tuple<int,int,int>> stats_vec_MFU;
-    for (int i = 0; i < 5; i++)
+    /*
+    if(argc !=2)
     {
-        auto stats = MFU_paging(q);
-        stats_vec_MFU.push_back(stats);
+        cout << "not enough arguements" << endl;
+        return -1;
     }
-    printStats(stats_vec_MFU);
-    std::cout << "***** END OF MFU *****" << std::endl << std::endl;
+
+    //note that this might create an error maybe.
+    string yay = string(argv[1]);
+    for(int i =0; i < yay.length(); ++i)
+    {
+        if(!isdigit(argv[1][i]))
+        {
+            cout << "Argument is not a number" << endl;
+            return -2;
+        }
+    }
+    n = stoi(yay);
     
+    */
     return 0;
 }
-
-void printStats(std::vector<std::tuple<int,int,int>> stats_vec)
-{
-    double avg_swapped_in = 0.0;
-    double avg_hit = 0.0;
-    double avg_miss = 0.0;
-
-    for (int i = 0; i< stats_vec.size();i++)
-    {
-        avg_swapped_in += std::get<0>(stats_vec[i]);
-        avg_hit += std::get<1>(stats_vec[i]);
-        avg_miss += std::get<2>(stats_vec[i]);
-    }
-    
-    std::cout << "Average swapped in:  " << avg_swapped_in/double(stats_vec.size()) << std::endl;
-    std::cout << "Average hit       :  " << avg_hit/double(stats_vec.size()) << std::endl;
-    std::cout << "Average miss      :  " << avg_miss/double(stats_vec.size()) << std::endl;
-
-}
-
 

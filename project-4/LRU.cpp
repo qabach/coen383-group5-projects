@@ -8,10 +8,10 @@
 #include "LRU.hpp"
 #include <cassert>
 
-#define SCALE 100
+#define SCALE 1000
 
 
-size_t LRU(CustomQueue myQueue, double &rate, bool sim)
+size_t LRU(CustomQueue myQueue, double &rate)
 {
 //    CustomQueue myQueue;
 //    queue.
@@ -33,7 +33,6 @@ size_t LRU(CustomQueue myQueue, double &rate, bool sim)
     
     std::cout << "freeMemSize: " << freeMemSize << std::endl;
     std::cout << "ProcessSize: " << myQueue.size() << std::endl;
-    int count =0;
     //please put in memory until full?
     /*
 	while(myMem.getFreeMemNum() >=95 && !myQueue.isEmpty() 
@@ -83,18 +82,12 @@ size_t LRU(CustomQueue myQueue, double &rate, bool sim)
 			//miss+=4;
 			LRUprintTimeStamp(myMem, process, globalTime,"enter");
 		}
-		//this is the 100ms that happens
-		for(int i =0 ; i < 10; ++i)
+		//this is the 10ms that happens
+		for(int i =0 ; i < 100; ++i)
 		{
 			//go through each job and check wether job is in memory
 			for(std::vector<Job *>::iterator k = inMem.begin(); k != inMem.end(); ++k)
 			{
-				if(count > 100 && !sim)
-				{
-					break;
-				}
-				++count;
-				
 				if( i == 9)
 				{
 					(*k)->incrementComp(); 
@@ -146,10 +139,7 @@ size_t LRU(CustomQueue myQueue, double &rate, bool sim)
     		<< "----------->" <<std::endl;
     	//myMem.printMem();
     	//myMem.printFreePageList();
-		if(count > 100 && !sim)
-		{
-			break;
-		}
+    	
     }
     std::cout << "Jobs Missed: " << myQueue.size()<< std::endl;
     while(!processed.empty())
@@ -234,6 +224,10 @@ void LRUprintTimeStamp(Memory &m, Job * process, int timestamp, std::string in)
 void LRUprintTimeStampMS(std::string cProc, int cPage, int timestamp, int PageInMem, std::string rProc, int Page_TBE)
 {
 	std::cout << "Seconds: " << timestamp/SCALE << ".";
+	if(timestamp % SCALE < 10)
+	{
+		std::cout << "0";
+	}
 	std::cout << timestamp % SCALE
 		<< " Name: " << cProc
 		<< " Page: " << cPage;
