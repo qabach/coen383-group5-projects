@@ -16,6 +16,7 @@
 #include <iostream>
 #include "linked.hpp"
 #include "memory.hpp"
+
 #include "LRU.hpp"
 #include "MFU.hpp"
 #include "LFU.hpp"
@@ -23,19 +24,27 @@
 #include <pthread.h>
 #include <vector>
 #include <ctime>
-
+#include "random2.hpp"
 using namespace std;
+void printStats(std::vector<std::tuple<int,int,int>> stats_vec);
 
 void printStats(std::vector<std::tuple<int,int,int>> stats_vec);
 
 
 int main()
 {
-	srand(time(0));
-    int n;
-    double a, b, a2, b2;
     CustomQueue q;
     q.generateProcesses();
+
+    std::vector<std::tuple<int,int,int>> stats_vec_rand;
+        for (int i = 0; i < 5; i++)
+        {   CustomQueue cq;
+            cq.generateProcesses();
+            auto stats = Random_paging(cq);
+            stats_vec_rand.push_back(stats);
+        }
+        printStats(stats_vec_rand);
+        std::cout << "***** END OF Random *****" << std::endl << std::endl;
 
     
     for (int i =0; i < 5 ; ++i)
