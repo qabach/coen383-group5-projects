@@ -27,6 +27,8 @@ class Page{
 	
 	//other
 	void changeMem() { inMem = !inMem;}
+	void setMem(bool b) {inMem = b;}
+	void incrementTime(){++time;}
 	
 	///getters
 	int getPageNum(){return pNum;}
@@ -87,8 +89,12 @@ class Job{
 	bool insertPage(int pageNum, int pageInMem);
 	void insertPageNoCheck(int pageNum, int pageInMem);
 	const Page requestPage (int pn) const;
-	void removePage(int pageNum);  
+	int removePage(int pageNum);  
     bool isListed(int pageNum);
+    void resetTime(int pos){pages[pos].setTime(0);}
+    void advTime();
+    int returnTime(int pos){return pages[pos].getTime();}
+    void incrementComp(){++completion;}
 	
 	//getter stuff
 	std::string getName(){return processName;}
@@ -130,6 +136,8 @@ class CustomQueue
 	//some functions
 	void generateProcesses();
 	Job popProcess();
+	Job front();
+	bool isEmpty(){return processes.empty();}
 	
 	
 	

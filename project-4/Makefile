@@ -1,7 +1,7 @@
 CC = g++
 
 edit : main.o linked.o FIFO.o utils.o utils.o memory.o LRU.o
-	g++ -std=c++11 -pthread -o test main.o linked.o FIFO.o \
+	g++ -std=c++11 -pthread -Wall -o test main.o linked.o FIFO.o \
 	utils.o memory.o LRU.o
 
 

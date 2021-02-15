@@ -30,7 +30,7 @@ int locality_reference(int reference_page, int num_of_pages) // num_of_pages can
         if (randnum == 2)
             reference_page = (reference_page + num_of_pages -1) % num_of_pages;
         else
-            reference_page += randnum;
+            reference_page = (reference_page + randnum) % num_of_pages;
         
         return reference_page % num_of_pages;
     }

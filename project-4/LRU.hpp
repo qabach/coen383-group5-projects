@@ -8,6 +8,7 @@
 #define FIFO_hpp
 
 #include <stdio.h>
+#include <set>
 #include "memory.hpp"
 #include "utils.hpp"
 

@@ -1,7 +1,7 @@
 #include <iostream>
 #include "linked.hpp"
 
-Page::Page() : pNum(0), pageInMem(0), time(0), inMem(false)
+Page::Page() : pNum(0), pageInMem(-1), time(0), inMem(false)
 {
 
 }
@@ -57,7 +57,7 @@ Job::Job(int a, int b, int s, std::string nam = "None")
 	stats.turnaroundTime = 0;
 	for(int i = 0; i < s; ++i)
 	{
-		pages.push_back(Page(i, 0,0, false));
+		pages.push_back(Page(i, -1,0, false));
 	}
 	
 }
@@ -91,16 +91,28 @@ const Page Job::requestPage(int pn) const
 	return pages[pn];
 }
 //removes a Page from mem( please make sure 
-void Job::removePage(int pageNum)
+int Job::removePage(int pageNum)
 {
 	if(pages[pageNum].isInMem())
+	{
 		pages[pageNum].changeMem();
+		return pages[pageNum].getPageInMemory();
+	}
+	return -1;
 }
 
 //checks to see if page is inside job. if not return false
 bool Job::isListed(int pageNum)
 {
 	return pages[pageNum].isInMem();
+}
+
+void Job::advTime()
+{
+	for(int i; i< size; ++i)
+	{
+		pages[i].incrementTime();
+	}
 }
 
 //the comparision function for jobs in sort
@@ -132,7 +144,7 @@ void CustomQueue::generateProcesses()
 	}
 	
 }
-
+//pops the job at the front.
 Job CustomQueue::popProcess()
 {
 	if(processes.begin() != processes.end())
@@ -143,6 +155,16 @@ Job CustomQueue::popProcess()
 		
 }
 
+//gets the job at the front
+Job CustomQueue::front()
+{
+	if(processes.begin() != processes.end())
+	{
+		return *processes.begin();
+	}
+	return Job();
+		
+}
 
 //void Job::setPageInMem(int pageNum)
 //{
