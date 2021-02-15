@@ -80,7 +80,7 @@ std::tuple<int,int,int> Random_paging (CustomQueue customer_queue)
             swapped_in++;
             //pop job out of waitingt queue
             waiting_queue.pop_front();
-            print_time_log(&servicing_queue.back(), time, last_reference.back(), &memory_map, memory_map.getFreeMemNum(),nullptr,0);
+            print_time_log_rand(&servicing_queue.back(), time, last_reference.back(), &memory_map, memory_map.getFreeMemNum(),nullptr,0);
             memory_map.printMem();
             std::cout << std::endl << std::endl;
                            
@@ -111,7 +111,7 @@ std::tuple<int,int,int> Random_paging (CustomQueue customer_queue)
                 {
                     //increment hit
                     hit++;
-                    print_time_log(&servicing_queue[i], time, last_reference[i], &memory_map, memory_map.getFreeMemNum(),nullptr,0);
+                    print_time_log_rand(&servicing_queue[i], time, last_reference[i], &memory_map, memory_map.getFreeMemNum(),nullptr,0);
 
                 }
                 //else, add new page into memory
@@ -141,7 +141,7 @@ std::tuple<int,int,int> Random_paging (CustomQueue customer_queue)
                                 page_to_evict = job_to_evict->requestPage(x).getPageNum();
                         }
                         
-                        print_time_log(&servicing_queue[i], time, last_reference[i], &memory_map, memory_map.getFreeMemNum(),job_to_evict,page_to_evict);
+                        print_time_log_rand(&servicing_queue[i], time, last_reference[i], &memory_map, memory_map.getFreeMemNum(),job_to_evict,page_to_evict);
 
                         
                         //remove page from memory
@@ -152,7 +152,7 @@ std::tuple<int,int,int> Random_paging (CustomQueue customer_queue)
                     //else, add
                     else
                     {
-                        print_time_log(&servicing_queue[i], time, last_reference[i], &memory_map, memory_map.getFreeMemNum(),nullptr,0);
+                        print_time_log_rand(&servicing_queue[i], time, last_reference[i], &memory_map, memory_map.getFreeMemNum(),nullptr,0);
                         //add new page
                         memory_map.insertPageToMem(&servicing_queue[i], new_page);
 
@@ -198,7 +198,7 @@ std::tuple<int,int,int> Random_paging (CustomQueue customer_queue)
 }
 
 
-void print_time_log (Job *job, int time, int last_reference,Memory *memory_map, int free_space, Job * ptr, int page_to_evict)
+void print_time_log_rand (Job *job, int time, int last_reference,Memory *memory_map, int free_space, Job * ptr, int page_to_evict)
 {
     std::string job_evict = "None";
     std::string page_evict = "None";

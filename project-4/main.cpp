@@ -21,10 +21,10 @@
 #include "LRU.hpp"
 #include "MFUfromLFU.hpp"
 #include "LFU.hpp"
-#include "FIFO.hpp"
 #include "random2.hpp"
+#include "FIFO.hpp"
 
-using namespace std;
+
 void printStats(std::vector<std::tuple<int,int,int>> stats_vec);
 
 void printStats(std::vector<std::tuple<int,int,int>> stats_vec);
@@ -41,38 +41,38 @@ int main()
     q.generateProcesses();
     
     std::vector<std::tuple<int,int,int>> stats_vec_rand;
-        for (int i = 0; i < 5; i++)
-        {   CustomQueue cq;
-            cq.generateProcesses();
-            auto stats = Random_paging(cq);
-            stats_vec_rand.push_back(stats);
-        }
-        printStats(stats_vec_rand);
-        std::cout << "***** END OF Random *****" << std::endl << std::endl;
-
-    
-    for (int i =0; i < 5 ; ++i)
-    {	
-    	double c;
-    	CustomQueue q;
-    	q.generateProcesses();
-    	std::cout<<"-----------60 seconds--------------" <<std::endl;
-    	a2+= LRU(q, c, true);
-    	a+= c;
-    	std::cout<<std::endl;
-    	std::cout<<"---------------100 References----------" <<std::endl;
-    	b2= LRU(q, c, false);
-    	b+= c;
-    	std::cout<<std::endl;
+    for (int i = 0; i < 5; i++)
+    {   CustomQueue cq;
+        cq.generateProcesses();
+        auto stats = Random_paging(cq);
+        stats_vec_rand.push_back(stats);
     }
-    std::cout <<"LRU avg # of hit/miss of 60s: "
-    << a/5.0<< std::endl;
-    std::cout <<"LRU avg # of hit/miss of 100 References: "
-    << b/5.0 <<std::endl;
-    std::cout <<"LRU avg # of processes switched of 60s: "
-    << a2/5.0<<std::endl;
-    std::cout <<"LRU avg # of processes of 100 References: "
-    << b2/5.0<<std::endl;
+    printStats(stats_vec_rand);
+    std::cout << "***** END OF Random *****" << std::endl << std::endl;
+//
+//
+//    for (int i =0; i < 5 ; ++i)
+//    {
+//    	double c;
+//    	CustomQueue q;
+//    	q.generateProcesses();
+//    	std::cout<<"-----------60 seconds--------------" <<std::endl;
+//    	a2+= LRU(q, c, true);
+//    	a+= c;
+//    	std::cout<<std::endl;
+//    	std::cout<<"---------------100 References----------" <<std::endl;
+//    	b2= LRU(q, c, false);
+//    	b+= c;
+//    	std::cout<<std::endl;
+//    }
+//    std::cout <<"LRU avg # of hit/miss of 60s: "
+//    << a/5.0<< std::endl;
+//    std::cout <<"LRU avg # of hit/miss of 100 References: "
+//    << b/5.0 <<std::endl;
+//    std::cout <<"LRU avg # of processes switched of 60s: "
+//    << a2/5.0<<std::endl;
+//    std::cout <<"LRU avg # of processes of 100 References: "
+//    << b2/5.0<<std::endl;
 
     
     std::vector<std::tuple<int,int,int>> stats_vec;
@@ -93,19 +93,19 @@ int main()
     }
     printStats(stats_vec_MFU);
     std::cout << "***** END OF MFU *****" << std::endl << std::endl;
-  
     
     
-    std::vector<std::tuple<int,int,int>> stats_vec;
+    
+    std::vector<std::tuple<int,int,int>> stats_vec_FIFO;
     for (int i = 0; i < 5; i++)
     {
         std::cout << "******************** RUN " << i+1 << " ******************" << std::endl;
         CustomQueue cq;
         cq.generateProcesses();
         auto stats = FIFO(cq);
-        stats_vec.push_back(stats);
+        stats_vec_FIFO.push_back(stats);
     }
-    printStats(stats_vec);
+    printStats(stats_vec_FIFO);
     std::cout << "***** END OF FIFO *****" << std::endl << std::endl;
     
     return 0;

@@ -89,6 +89,7 @@ class Job{
 	bool insertPage(int pageNum, int pageInMem);
 	void insertPageNoCheck(int pageNum, int pageInMem);
 	const Page requestPage (int pn) const;
+    Page * requestPagePtr(int pn);
 	int removePage(int pageNum);  
     bool isListed(int pageNum);
     void resetTime(int pos){pages[pos].setTime(0);}
