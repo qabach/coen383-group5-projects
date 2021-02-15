@@ -10,12 +10,8 @@
 
 #define SCALE 1000
 
-void pLRU(Memory &m, std::vector<Job *> &jobs, Job *insertLoc, int num, int timestamp);
-void LRUpushMore(Memory &m, Job * process);
-void LRUprintTimeStamp(Memory &m, Job * process, int timestamp, std::string in);
-void LRUprintTimeStampMS(std::string cProc, int cPage, int timestamp, int PageInMem, std::string rProc, int Page_TBE);
 
-void LRU(CustomQueue myQueue)
+size_t LRU(CustomQueue myQueue, double &rate)
 {
 //    CustomQueue myQueue;
 //    queue.
@@ -145,7 +141,7 @@ void LRU(CustomQueue myQueue)
     	//myMem.printFreePageList();
     	
     }
-    std::cout << "Jobs Missed: " << myQueue.size() + inMem.size() << std::endl;
+    std::cout << "Jobs Missed: " << myQueue.size()<< std::endl;
     while(!processed.empty())
     {
     	Job *temp = processed[0];
@@ -155,6 +151,8 @@ void LRU(CustomQueue myQueue)
     }
     std::cout << "************************"<< std::endl;
     std::cout << "Hit/Miss ratio: " << (double)hit/miss << std::endl;
+    rate = (double)hit/miss;
+    return 150 - myQueue.size();
 }
 
 

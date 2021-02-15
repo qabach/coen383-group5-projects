@@ -27,6 +27,7 @@ int main(int argc, const char * argv[])
 {
 	srand(time(0));
     int n;
+    double a;
     CustomQueue q;
     q.generateProcesses();
     //Job a = q.popProcess();
@@ -36,7 +37,7 @@ int main(int argc, const char * argv[])
     //a.removePage(1);
     //cout << a.isListed(1) << endl;
     
-    LRU(q);
+    LRU(q, a);
     /*
     if(argc !=2)
     {
