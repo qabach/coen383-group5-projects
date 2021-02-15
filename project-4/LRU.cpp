@@ -195,9 +195,9 @@ void LRUpushMore(Memory &m, Job * process)
 		process->insertPage(num,memLoc);
 		process->resetTime(num);
 		m.insertPageToMem(process, num);
-		if(process->isListed(i))
+		if(process->isListed(num))
     	{
-    		assert(process->isListed(i) && memLoc == process->requestPage(num).getPageInMemory()) ;
+    		assert(process->isListed(num) && memLoc == process->requestPage(num).getPageInMemory()) ;
     	}
 	}
 
