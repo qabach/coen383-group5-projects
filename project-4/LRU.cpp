@@ -53,11 +53,15 @@ void LRU(CustomQueue myQueue)
     	std::cout << "<-----------Second: " << globalTime
     		<< "----------->" << std::endl;
     	//check which processes to delete from memory
-    	for(std::vector<Job *>::iterator k = inMem.begin(); k != inMem.end(); ++k)
+    	for(int i =0 ; i< inMem.size(); ++i)
     	{
-    		if((*k)->getComp() == (*k)->getServ());
+    		if(inMem[i]->getComp() == inMem[i]->getServ());
     		{	
-    			//waiting on delete process from mem
+    			myMem.removeProcessFromMem(inMem[i]);
+    			LRUprintTimeStamp(myMem, inMem[i], globalTime,"exit");
+    			delete inMem[i];
+    			inMem.erase(inMem.begin() + i);
+    			--i;
     			continue;
     		}
     	}
@@ -73,7 +77,7 @@ void LRU(CustomQueue myQueue)
 			inMem.back()->insertPage(0,memLoc);
 			lastAccessed.push_back(0);
 			LRUpushMore(myMem, process);
-			miss+=4;
+			//miss+=4;
 			LRUprintTimeStamp(myMem, process, globalTime,"enter");
 		}
 		//this is the 10ms that happens
@@ -82,6 +86,10 @@ void LRU(CustomQueue myQueue)
 			//go through each job and check wether job is in memory
 			for(std::vector<Job *>::iterator k = inMem.begin(); k != inMem.end(); ++k)
 			{
+				if( i == 9)
+				{
+					(*k)->incrementComp(); 
+				}
 				//for each job find the locality reference
 				int pos = k - inMem.begin();
 				int freeMemSize = myMem.getFreeMemNum();
@@ -121,14 +129,12 @@ void LRU(CustomQueue myQueue)
 				(*k)->advTime();
 				++miss;
 				//on the last second, increment completion time
-				if( i == 9)
-				{
-					(*k)->incrementComp(); 
-				}
 			}
 			
 
 		} 
+		std::cout << "<-----------End of Second: " << globalTime
+    		<< "----------->" <<std::endl;
     	//myMem.printMem();
     	//myMem.printFreePageList();
     	
@@ -140,6 +146,8 @@ void LRU(CustomQueue myQueue)
     	delete temp;
     	inMem.erase(inMem.begin());
     }
+    std::cout << "************************"<< std::endl;
+    std::cout << "Hit/Miss ratio: " << (double)hit/miss << std::endl;
 }
 
 

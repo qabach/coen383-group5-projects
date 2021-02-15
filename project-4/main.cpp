@@ -37,7 +37,7 @@ int main(int argc, const char * argv[])
     cout << a.isListed(1) << endl;
     
     LRU(q);
-    
+    /*
     if(argc !=2)
     {
         cout << "not enough arguements" << endl;
@@ -56,7 +56,7 @@ int main(int argc, const char * argv[])
     }
     n = stoi(yay);
     
-    
+    */
     return 0;
 }
 
