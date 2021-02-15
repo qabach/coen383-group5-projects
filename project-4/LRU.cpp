@@ -4,7 +4,7 @@
 #define SCALE 100
 
 
-size_t LRU(CustomQueue myQueue, double &rate, bool sim)
+std::tuple<int,int,int>  LRU(CustomQueue myQueue, bool sim)
 {
 //    CustomQueue myQueue;
 //    queue.
@@ -88,11 +88,7 @@ size_t LRU(CustomQueue myQueue, double &rate, bool sim)
 			//go through each job and check wether job is in memory
 			for(std::vector<Job *>::iterator k = inMem.begin(); k != inMem.end(); ++k)
 			{
-				//std::cout<<(*k)->getArr()<<std::endl;
-				if((*k)->getComp() >= (*k)->getServ())
-    			{	
-    				continue;
-    			}
+				
 				if(count > 100 && !sim)
 				{
 					break;
@@ -103,6 +99,12 @@ size_t LRU(CustomQueue myQueue, double &rate, bool sim)
 				{
 					(*k)->incrementComp(); 
 				}
+				//std::cout<<(*k)->getArr()<<std::endl;
+				if((*k)->getComp() >= (*k)->getServ())
+    			{	
+    				(*k)->advTime();
+    				continue;
+    			}
 				//for each job find the locality reference
 				int pos = k - inMem.begin();
 				int freeMemSize = myMem.getFreeMemNum();
@@ -169,8 +171,7 @@ size_t LRU(CustomQueue myQueue, double &rate, bool sim)
     }
     std::cout << "************************"<< std::endl;
     std::cout << "Hit/Miss ratio: " << (double)hit/miss << std::endl;
-    rate = (double)hit/miss;
-    return 150 - myQueue.size();
+    return std::make_tuple(150 - myQueue.size(),hit,miss);
 }
 
 
@@ -226,7 +227,7 @@ void LRUpushMore(Memory &m, Job * process)
 		m.insertPageToMem(process, num);
 		if(process->isListed(i))
     	{
-    		std::cout<<process->getName()<<std::endl;
+    		//std::cout<<process->getName()<<std::endl;
     		assert(process->isListed(i) && memLoc == process->requestPage(i).getPageInMemory()) ;
     	}
 	}

@@ -9,10 +9,11 @@
 
 #include <stdio.h>
 #include <set>
+#include <tuple>
 #include "memory.hpp"
 #include "utils.hpp"
 
-size_t LRU(const CustomQueue myQueue, double &rate,bool sim);
+std::tuple<int,int,int> LRU(const CustomQueue myQueue, bool sim);
 void pLRU(Memory &m, std::vector<Job *> &jobs, Job *insertLoc, int num, int timestamp);
 void LRUpushMore(Memory &m, Job * process);
 void LRUprintTimeStamp(Memory &m, Job * process, int timestamp, std::string in);
