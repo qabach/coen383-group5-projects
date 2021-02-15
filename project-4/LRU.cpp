@@ -190,7 +190,7 @@ void LRUpushMore(Memory &m, Job * process)
 		}
 		assert(num < process->getSize());
 		s.insert(num);
-		std::cout <<num <<std::endl;
+		//std::cout <<num <<std::endl;
 		const int memLoc = m.getFreePage();
 		process->insertPage(num,memLoc);
 		process->resetTime(num);
