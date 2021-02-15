@@ -97,7 +97,7 @@ std::tuple<int,int,int> LFU_paging (CustomQueue customer_queue)
             for (int i = 0; i < servicing_queue.size(); i++)
             {
                 //skip if job is already completed i.e. service time == completion time
-                if (servicing_queue[i].getServ() == servicing_queue[i].completion)
+                if (servicing_queue[i].getServ() <= servicing_queue[i].completion)
                 {
                     continue; //just skip to next one
                 }
