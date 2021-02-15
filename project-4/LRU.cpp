@@ -8,8 +8,10 @@
 #include "LRU.hpp"
 #include <cassert>
 
-void pLRU(Memory &m, std::vector<Job *> &jobs, int &insertLoc, int num);
+void pLRU(Memory &m, std::vector<Job *> &jobs, int &insertLoc, int num, int timestamp);
 void LRUpushMore(Memory &m, Job * process);
+void LRUprintTimeStamp(Memory &m, Job * process, int timestamp, std::string in);
+void LRUprintTimeStampMS(std::string cProc, int cPage, int timestamp, int PageInMem, std::string rProc, int Page_TBE);
 
 void LRU(CustomQueue myQueue)
 {
@@ -48,6 +50,18 @@ void LRU(CustomQueue myQueue)
 	*/
     for(int globalTime = 0; globalTime < 60; ++globalTime)
     {
+    	std::cout << "<-----------Second: " << globalTime
+    		<< "----------->" << std::endl;
+    	//check which processes to delete from memory
+    	for(std::vector<Job *>::iterator k = inMem.begin(); k != inMem.end(); ++k)
+    	{
+    		if((*k)->getComp() == (*k)->getServ());
+    		{	
+    			//waiting on delete process from mem
+    			continue;
+    		}
+    	}
+    	//load more processes in from queue
     	while(myMem.getFreeMemNum() >=4 && !myQueue.isEmpty() 
 		&& myQueue.front().getArr() < globalTime)
 		{
@@ -59,11 +73,13 @@ void LRU(CustomQueue myQueue)
 			inMem.back()->insertPage(0,memLoc);
 			lastAccessed.push_back(0);
 			LRUpushMore(myMem, process);
-			miss+=4;	
+			miss+=4;
+			LRUprintTimeStamp(myMem, process, globalTime,"enter");
 		}
-		//the 10ms that happens
+		//this is the 10ms that happens
 		for(int i =0 ; i < 10; ++i)
 		{
+			//go through each job and check wether job is in memory
 			for(std::vector<Job *>::iterator k = inMem.begin(); k != inMem.end(); ++k)
 			{
 				//for each job find the locality reference
@@ -73,19 +89,24 @@ void LRU(CustomQueue myQueue)
 					lastAccessed[pos], (*k)->size);
 				//std::cout << lastAccessed[pos] << " " 
 					//<<(*k)->size<<std::endl;
-				//if its listed reset timer of last accessed
+				//if its listed, reset timer of last accessed and increment hit
 				if((*k)->isListed(lastAccessed[pos])){
 					assert(lastAccessed[pos] < (*k)->getSize());
 					++hit;
 					(*k)->resetTime(lastAccessed[pos]);
+					LRUprintTimeStampMS(
+						(*k)->getName(),lastAccessed[pos],
+						globalTime * 100 + i,
+						(*k)->requestPage(lastAccessed[pos]).getPageInMemory(),"",-1);
 					continue;
 				}
 				//if if not and size not free perform LRU
 				else if(myMem.getFreeMemNum() <=0)
 				{
-					pLRU(myMem, inMem, pos, lastAccessed[pos]);
+					pLRU(myMem, inMem, pos, lastAccessed[pos],
+						globalTime * 100 + i);
 				}
-				//just insert page inside memoryMap if found something free
+				//just insert page inside memoryMap if something was free
 				else
 				{
 					int memLoc = myMem.getFreePage();
@@ -93,16 +114,24 @@ void LRU(CustomQueue myQueue)
 					(*k)->insertPage(lastAccessed[pos],memLoc);
 					(*k)->resetTime(lastAccessed[pos]);
 					myMem.insertPageToMem(*k, lastAccessed[pos]);
-					
+					LRUprintTimeStampMS(
+						(*k)->getName(),lastAccessed[pos],
+						globalTime * 100 + i,-1,"",-1);
 				}
 				(*k)->advTime();
 				++miss;
+				//on the last second, increment completion time
+				if( i == 9)
+				{
+					(*k)->incrementComp(); 
+				}
 			}
 			
 
 		} 
-    	myMem.printMem();
-    	myMem.printFreePageList();
+    	//myMem.printMem();
+    	//myMem.printFreePageList();
+    	
     }
     while(!inMem.empty())
     {
@@ -114,7 +143,7 @@ void LRU(CustomQueue myQueue)
 }
 
 
-void pLRU(Memory &m, std::vector<Job *> &jobs, int &insert, int num)
+void pLRU(Memory &m, std::vector<Job *> &jobs, int &insert, int num, int timestamp)
 {
 	int time = -1;
 	std::vector<Job *>::iterator kpos;
@@ -140,8 +169,11 @@ void pLRU(Memory &m, std::vector<Job *> &jobs, int &insert, int num)
     jobs[insert]->insertPage(num,memLoc);
 	jobs[insert]->resetTime(num);
 	m.insertPageToMem(jobs[insert], num);
+	LRUprintTimeStampMS( jobs[insert]->getName(), num,
+		timestamp, -1,(*kpos)->getName(),pos);
 }
 
+//push the remaining 3 pages into memeory randomly
 void LRUpushMore(Memory &m, Job * process)
 {
 	std::set<int> s;
@@ -161,4 +193,41 @@ void LRUpushMore(Memory &m, Job * process)
 		m.insertPageToMem(process, num);
 	}
 
+}
+
+void LRUprintTimeStamp(Memory &m, Job * process, int timestamp, std::string in)
+{
+	std::cout << "----------------------------------" <<std::endl;
+	std::cout << "Seconds: " << time 
+		<< " Name: " << process->getName() 
+		<< " Entry: " << in 
+		<< " Size: " << process->getSize() 
+		<< " Service Time:" << process->getServ() << std::endl;
+	m.printMem();	
+	std::cout << std::endl
+		<< "----------------------------------" <<std::endl;
+}
+
+void LRUprintTimeStampMS(std::string cProc, int cPage, int timestamp, int PageInMem, std::string rProc, int Page_TBE)
+{
+	std::cout << "Seconds: " << timestamp/100 << "." << timestamp % 100
+		<< " Name: " << cProc
+		<< " Page: " << cPage;
+		if(PageInMem >= 0)
+		{
+			std::cout << " Page-in-Memory: " << PageInMem;
+		}
+		else
+		{
+			std::cout <<" Page-in-Memory: None";
+		} 
+		if(rProc != "" && Page_TBE >= 0)
+		{
+			std::cout << " Proc/Page-TBE: " 
+				<< rProc << "/" << Page_TBE << std::endl;
+		}
+		else
+		{
+			std::cout << " Proc/Page-TBE: None" <<std::endl;
+		} 
 }

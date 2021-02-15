@@ -94,6 +94,7 @@ class Job{
     void resetTime(int pos){pages[pos].setTime(0);}
     void advTime();
     int returnTime(int pos){return pages[pos].getTime();}
+    void incrementComp(){++completion;}
 	
 	//getter stuff
 	std::string getName(){return processName;}
