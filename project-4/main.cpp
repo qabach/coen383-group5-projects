@@ -21,20 +21,31 @@
 #include "LRU.hpp"
 #include "MFUfromLFU.hpp"
 #include "LFU.hpp"
+#include "FIFO.hpp"
+#include "random2.hpp"
 
 using namespace std;
+void printStats(std::vector<std::tuple<int,int,int>> stats_vec);
 
 void printStats(std::vector<std::tuple<int,int,int>> stats_vec);
 
 
 int main()
 {
-	srand(time(0));
-    int n;
-    double a, b, a2, b2;
     CustomQueue q;
     q.generateProcesses();
 
+    std::vector<std::tuple<int,int,int>> stats_vec_rand;
+        for (int i = 0; i < 5; i++)
+        {   CustomQueue cq;
+            cq.generateProcesses();
+            auto stats = Random_paging(cq);
+            stats_vec_rand.push_back(stats);
+        }
+        printStats(stats_vec_rand);
+        std::cout << "***** END OF Random *****" << std::endl << std::endl;
+
+    
     for (int i =0; i < 5 ; ++i)
     {	
     	double c;
@@ -68,7 +79,7 @@ int main()
     }
     printStats(stats_vec);
     std::cout << "***** END OF LFU *****" << std::endl << std::endl;
-    
+
     std::vector<std::tuple<int,int,int>> stats_vec_MFU;
     for (int i = 0; i < 5; i++)
     {
@@ -77,12 +88,28 @@ int main()
     }
     printStats(stats_vec_MFU);
     std::cout << "***** END OF MFU *****" << std::endl << std::endl;
+  
+    
+    
+    std::vector<std::tuple<int,int,int>> stats_vec;
+    for (int i = 0; i < 5; i++)
+    {
+        std::cout << "******************** RUN " << i+1 << " ******************" << std::endl;
+        CustomQueue cq;
+        cq.generateProcesses();
+        auto stats = FIFO(cq);
+        stats_vec.push_back(stats);
+    }
+    printStats(stats_vec);
+    std::cout << "***** END OF FIFO *****" << std::endl << std::endl;
     
     return 0;
 }
 
 void printStats(std::vector<std::tuple<int,int,int>> stats_vec)
 {
+    std::cout << std::endl << "**************** OVERALL STATISTICS ********************" << std::endl;
+    
     double avg_swapped_in = 0.0;
     double avg_hit = 0.0;
     double avg_miss = 0.0;
@@ -98,6 +125,7 @@ void printStats(std::vector<std::tuple<int,int,int>> stats_vec)
     std::cout << "Average hit       :  " << avg_hit/double(stats_vec.size()) << std::endl;
     std::cout << "Average miss      :  " << avg_miss/double(stats_vec.size()) << std::endl;
     std::cout << "Hit/Miss ratio: " << (avg_hit/double(stats_vec.size()))/(avg_miss/double(stats_vec.size())) << std::endl;
+
 }
 
 

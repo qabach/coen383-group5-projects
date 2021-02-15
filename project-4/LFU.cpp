@@ -96,6 +96,7 @@ std::tuple<int,int,int> LFU_paging (CustomQueue customer_queue)
             //each job will request a reference page
             for (int i = 0; i < servicing_queue.size(); i++)
             {
+
                 //skip if job is already completed i.e. service time <= completion time
                 if (servicing_queue[i].getServ() <= servicing_queue[i].completion)
                 {
