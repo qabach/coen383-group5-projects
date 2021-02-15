@@ -144,7 +144,7 @@ class CustomQueue
 	Job front();
 	size_t size(){return processes.size();}
 	bool isEmpty(){return processes.empty();}
-	
+    std::vector<Job> getProcessList() { return processes; }
 	
 	
 
