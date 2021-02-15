@@ -19,6 +19,7 @@ class Page{
 	int pageInMem;
 	bool inMem;
 	int time;
+	int hitCount = 0;
 	
 	public:
 	Page();
@@ -29,12 +30,14 @@ class Page{
 	void changeMem() { inMem = !inMem;}
 	void setMem(bool b) {inMem = b;}
 	void incrementTime(){++time;}
+	void incrementHitCount(){++hitCount;}
 	
 	///getters
 	int getPageNum(){return pNum;}
 	int getPageInMemory(){return pageInMem;}
 	bool isInMem(){return inMem;}
 	int getTime(){return time;}
+	int getHitCount(){return hitCount;}
 	const int getPageNum() const {return pNum;}
 	const int getPageInMemory() const {return pageInMem;}
 	const bool isInMem() const {return inMem;}
@@ -95,6 +98,7 @@ class Job{
     void advTime();
     int returnTime(int pos){return pages[pos].getTime();}
     void incrementComp(){++completion;}
+	Page getPage(int position){return pages[position];}
 	
 	//getter stuff
 	std::string getName(){return processName;}
@@ -111,6 +115,7 @@ class Job{
 	int getTurn(){return stats.turnaroundTime;}
 	const int getTurn() const{return stats.turnaroundTime;}
     std::vector<Page> * getPageVec() { return &pages;}
+	std::vector<Page> getPageList() { return pages;}
     
     void printProcessPages();       // ****** AT ******
     void printProcessPagesBool();    // ****** AT ******
