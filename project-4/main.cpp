@@ -86,7 +86,7 @@ int main()
     printStats(stats_vecLFU1);
     printStats(stats_vecLFU2);
     std::cout << "***** END OF LRU *****" << std::endl << std::endl;
-    
+
     std::vector<std::tuple<int,int,int>> stats_vec;
     for (int i = 0; i < 5; i++)
     {   CustomQueue cq;
