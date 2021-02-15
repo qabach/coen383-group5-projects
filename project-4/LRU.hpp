@@ -12,7 +12,11 @@
 #include "memory.hpp"
 #include "utils.hpp"
 
-void LRU(CustomQueue queue);
+size_t LRU(CustomQueue myQueue, double &rate);
+void pLRU(Memory &m, std::vector<Job *> &jobs, Job *insertLoc, int num, int timestamp);
+void LRUpushMore(Memory &m, Job * process);
+void LRUprintTimeStamp(Memory &m, Job * process, int timestamp, std::string in);
+void LRUprintTimeStampMS(std::string cProc, int cPage, int timestamp, int PageInMem, std::string rProc, int Page_TBE);
 
 
 #endif /* FIFO_hpp */

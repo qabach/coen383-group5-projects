@@ -221,6 +221,17 @@ void Memory::removePageFromMem(Job * process, int pageNum)
 
 }
 
+void Memory::removeProcessFromMem(Job * process)
+{
+    for(size_t i =0; i < process->getSize(); ++i)
+    {
+    	if(process->isListed(i))
+    	{
+    		removePageFromMem(process, i);
+    	}
+    }
+}
+
 
 
 

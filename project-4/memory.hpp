@@ -46,6 +46,7 @@ public:
     
     void insertPageToMem(Job * process, int pageNum);
     void removePageFromMem(Job * process, int pageNum);
+    void removeProcessFromMem(Job * process);
 
     
 

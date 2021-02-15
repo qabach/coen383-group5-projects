@@ -136,12 +136,13 @@ void CustomQueue::generateProcesses()
 	sort(processes.begin(),processes.end(), compareJobs);
 	
 	//just output change later
-
+	/*
 	for(int i = 0; i < 100; ++i)
 	{
 		std::cout<< processes[i].getName() << " "
 			<< processes[i].getArr()  << std::endl;
 	}
+	*/
 	
 }
 //pops the job at the front.

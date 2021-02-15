@@ -137,6 +137,7 @@ class CustomQueue
 	void generateProcesses();
 	Job popProcess();
 	Job front();
+	size_t size(){return processes.size();}
 	bool isEmpty(){return processes.empty();}
 	
 	
