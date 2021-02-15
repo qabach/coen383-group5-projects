@@ -1,10 +1,3 @@
-//
-//  FIFO.cpp
-//  Project_4_AT
-//
-//  Created by Anh Tuk on 2/13/21.
-//
-
 #include "LRU.hpp"
 #include <cassert>
 

@@ -85,6 +85,8 @@ std::tuple<int,int,int> LFU_paging (CustomQueue customer_queue)
             //pop job out of waitingt queue
             waiting_queue.pop_front();
             print_time_log(&servicing_queue.back(), time, last_reference.back(), &memory_map, memory_map.getFreeMemNum(),nullptr,0);
+            memory_map.printMem();
+            std::cout << std::endl << std::endl;
                            
         }
         
@@ -94,8 +96,9 @@ std::tuple<int,int,int> LFU_paging (CustomQueue customer_queue)
             //each job will request a reference page
             for (int i = 0; i < servicing_queue.size(); i++)
             {
-                //skip if job is already completed i.e. service time == completion time
-                if (servicing_queue[i].getServ() == servicing_queue[i].completion)
+
+                //skip if job is already completed i.e. service time <= completion time
+                if (servicing_queue[i].getServ() <= servicing_queue[i].completion)
                 {
                     continue; //just skip to next one
                 }
@@ -130,11 +133,9 @@ std::tuple<int,int,int> LFU_paging (CustomQueue customer_queue)
                         //evict page and add new page
                         //find the first idx with min
                         int minIdx = std::min_element(freq_array.begin(),freq_array.end()) - freq_array.begin();
-                        std::cout << minIdx << std::endl;
+                        
                         //remove page from memory
                         auto * job_to_evict = std::get<1>(memory_map.getMemMap()[minIdx]);
-                        
-                        
                         int page_to_evict = -1;
                         //need to get page number to evict
                         for (int x = 0; x < job_to_evict->getSize();x++)
@@ -161,12 +162,10 @@ std::tuple<int,int,int> LFU_paging (CustomQueue customer_queue)
                         memory_map.insertPageToMem(&servicing_queue[i], new_page);
                         //increment the frequency of this new page
                         freq_array[servicing_queue[i].requestPage(new_page).getPageInMemory()]++;
-
                     }
                 }
             }
         }
-        
         //increment service time for job in queue
         for (int i = 0; i < servicing_queue.size(); i++)
         {
@@ -182,10 +181,14 @@ std::tuple<int,int,int> LFU_paging (CustomQueue customer_queue)
                 for(int k = 0; k < servicing_queue[idx].getSize();k++)
                 {
                     if (servicing_queue[idx].requestPage(k).getPageInMemory() >= 0)
+                    {
+                        freq_array[servicing_queue[idx].requestPage(k).getPageInMemory()] = 0;
                         memory_map.removePageFromMem(&servicing_queue[idx], k); //remove pages from memory once job is done
+                        memory_map.printMem();
+                        std::cout << std::endl << std::endl;
+                    }
+
                 }
-//                servicing_queue.erase(servicing_queue.begin()+idx); //remove job
-//                last_reference.erase(last_reference.begin()+idx); //remove job
             }
         }
     }
@@ -193,6 +196,8 @@ std::tuple<int,int,int> LFU_paging (CustomQueue customer_queue)
     std::cout << "Swapped in: " << swapped_in << std::endl;
     std::cout << "Hit: " << hit << std::endl;
     std::cout << "Miss: " << miss << std::endl;
+    std::cout << "Hit/Miss ratio: " << double(hit)/double(miss) << std::endl;
+
     
     return std::make_tuple(swapped_in,hit,miss);
 }
@@ -222,6 +227,5 @@ void print_time_log (Job *job, int time, int last_reference,Memory *memory_map, 
     {
         std::cout << "      - Page to evicted   : " << job_evict << "/" << page_evict <<  std::endl;
     }
-    memory_map->printMem();
     std::cout << std::endl;
 }

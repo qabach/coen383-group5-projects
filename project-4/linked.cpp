@@ -90,6 +90,11 @@ const Page Job::requestPage(int pn) const
 {
 	return pages[pn];
 }
+
+Page * Job::requestPagePtr(int pn)
+{
+    return &pages[pn];
+}
 //removes a Page from mem( please make sure 
 int Job::removePage(int pageNum)
 {
