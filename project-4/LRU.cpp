@@ -61,9 +61,9 @@ size_t LRU(CustomQueue myQueue, double &rate, bool sim)
     		if(inMem[i]->getComp() == inMem[i]->getServ());
     		{	
     			int j = myMem.getFreeMemNum();
+    			LRUprintTimeStamp(myMem, inMem[i], globalTime,"exit");
     			myMem.removeProcessFromMem(inMem[i]);
     			assert(myMem.getFreeMemNum() >=j);
-    			LRUprintTimeStamp(myMem, inMem[i], globalTime,"exit");
     			//delete inMem[i];
     			inMem.erase(inMem.begin() + i);
     			--i;
