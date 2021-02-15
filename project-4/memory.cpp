@@ -163,6 +163,7 @@ void Memory::insertPageToMem(Job * process, int pageNum)
     {
     	_memMap.insert(it+memLoc, std::make_tuple(memLoc, process));
     }
+    process->insertPage(pageNum,memLoc);
     _inMemNum++;
     //_memMap.push_back(std::make_tuple(memLoc, process));
     
@@ -190,6 +191,7 @@ void Memory::removePageFromMem(Job * process, int pageNum)
 {
     
     int memLoc = process->getPageVec()->at(pageNum).getPageInMemory();
+    process->removePage(pageNum);
     //std::cout << "memLocd: " << memLoc << std::endl;
     assert(memLoc>=0 && memLoc <= 99);
     auto itt = process->getPageVec()->begin();
@@ -223,13 +225,37 @@ void Memory::removePageFromMem(Job * process, int pageNum)
 
 void Memory::removeProcessFromMem(Job * process)
 {
-    for(size_t i =0; i < process->getSize(); ++i)
+    for(auto i = 0 ; i != _memMap.size(); ++i)
     {
-    	if(process->isListed(i))
+    	auto temp = std::get<1>(_memMap[i]);
+    	if(temp == process)
     	{
-    		removePageFromMem(process, i);
-    	}
-    }
+    		_memMap.erase(_memMap.begin() + i); 
+    		Job * noneProcess;
+			noneProcess = nullptr;
+			if(i > _memMap.size())
+			{
+				_memMap.push_back(std::make_tuple(i, noneProcess));
+			}
+			else
+			{
+				_memMap.insert(_memMap.begin()+i, std::make_tuple(i, noneProcess));
+			}
+			_inMemNum--;
+    
+   
+    		_freePage.push_back(i);
+    
+    		_freePageNum++;
+		}
+	}
+	auto a = process->getPageVec();
+	for(auto it = a->begin(); it != a->end() ; ++it)
+	{
+		(it)->setMem(false);
+    	(it)->setInMemory(-1);
+	}
+   
 }
 
 
