@@ -170,6 +170,7 @@ void pLRU(Memory &m, std::vector<Job *> &jobs, Job * insert, int num, int timest
 			{
 				kpos = k;
 				pos = i;
+				time = (*k)->returnTime(i);
 			}
 			
 		}
