@@ -155,7 +155,9 @@ Job CustomQueue::popProcess()
 {
 	if(processes.begin() != processes.end())
 	{
-		return *processes.erase(processes.begin());
+		Job temp = processes[0];
+		processes.erase(processes.begin());
+		return temp;
 	}
 	return Job();
 		

@@ -18,7 +18,10 @@
 #define utils_hpp
 
 #include <cmath>
+#include "memory.hpp"
+#include "linked.hpp"
 
 int locality_reference(int reference_page, int num_of_pages);
+void print_time_log_g(Job *job, int time, int tick, int last_reference, Memory *memory_map, int free_space, Job * ptr, int page_to_evict);
 
 #endif /* utils_hpp */

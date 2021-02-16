@@ -16,6 +16,7 @@
 #include <iostream>
 #include <vector>
 #include <ctime>
+#include <string>
 #include "linked.hpp"
 #include "memory.hpp"
 #include "LRU.hpp"
@@ -30,100 +31,114 @@ void printStats(std::vector<std::tuple<int,int,int>> stats_vec);
 void printStats(std::vector<std::tuple<int,int,int>> stats_vec);
 
 
-int main()
+int main(int argc, char * argv[])
 {
 
     
     srand(time(NULL));
     int n;
+    bool isRand = false, isLRU = false, 
+    	isFIFO = false, isLFU = false, 
+    	isMFU = false, isAll = false;
     double a, b, a2, b2;
     CustomQueue q;
     q.generateProcesses();
+    if(argc >= 2)
+    {
+    	std::string yay = std::string(argv[1]);
+    	if(yay.compare("Rand") == 0)
+    	{
+    		isRand = true;
+    	}
+    	else if(yay.compare("FIFO") == 0)
+    	{
+    		isFIFO = true;
+    	}
+    	else if(yay.compare("LRU") == 0)
+    	{
+    		isLRU = true;
+    	}
+    	else if(yay.compare("MFU") == 0)
+    	{
+    		isMFU = true;
+    	}
+    	else
+    	{
+    		isAll = true;
+    	}
+
+    }
+    else
+    {
+    	isAll = true;
+    }
     
     std::vector<std::tuple<int,int,int>> stats_vec_rand;
-    for (int i = 0; i < 5; i++)
+    if(isAll || isRand)
     {
-        std::cout << "******************** RUN " << i+1 << " ******************" << std::endl;
-        auto stats = Random_paging(q);
-        stats_vec_rand.push_back(stats);
-    }
-    printStats(stats_vec_rand);
-    std::cout << "***** END OF Random *****" << std::endl << std::endl;
-    
-//
-//
-//    for (int i =0; i < 5 ; ++i)
-//    {
-//    	double c;
-//    	CustomQueue q;
-//    	q.generateProcesses();
-//    	std::cout<<"-----------60 seconds--------------" <<std::endl;
-//    	a2+= LRU(q, c, true);
-//    	a+= c;
-//    	std::cout<<std::endl;
-//    	std::cout<<"---------------100 References----------" <<std::endl;
-//    	b2= LRU(q, c, false);
-//    	b+= c;
-//    	std::cout<<std::endl;
-//    }
-//    std::cout <<"LRU avg # of hit/miss of 60s: "
-//    << a/5.0<< std::endl;
-//    std::cout <<"LRU avg # of hit/miss of 100 References: "
-//    << b/5.0 <<std::endl;
-//    std::cout <<"LRU avg # of processes switched of 60s: "
-//    << a2/5.0<<std::endl;
-//    std::cout <<"LRU avg # of processes of 100 References: "
-//    << b2/5.0<<std::endl;
-	
-
-    std::vector<std::tuple<int,int,int>> stats_vec;
-    for (int i = 0; i < 5; i++)
+		for (int i = 0; i < 5; i++)
+		{
+		    std::cout << "******************** RUN " << i+1 << " ******************" << std::endl;
+		    auto stats = Random_paging(q);
+		    stats_vec_rand.push_back(stats);
+		}
+		printStats(stats_vec_rand);
+		std::cout << "***** END OF Random *****" << std::endl << std::endl;
+	}
+    if(isAll || isLFU)
     {
-        auto stats = LFU_paging(q);
-        stats_vec.push_back(stats);
-    }
-    printStats(stats_vec);
-    std::cout << "***** END OF LFU *****" << std::endl << std::endl;
-
+		std::vector<std::tuple<int,int,int>> stats_vec;
+		for (int i = 0; i < 5; i++)
+		{
+		    auto stats = LFU_paging(q);
+		    stats_vec.push_back(stats);
+		}
+		printStats(stats_vec);
+		std::cout << "***** END OF LFU *****" << std::endl << std::endl;
+	}
     
-    
-    std::vector<std::tuple<int,int,int>> stats_vec_MFU;
-    for (int i = 0; i < 5; i++)
+    if(isAll || isMFU)
     {
-        std::cout << "******************** RUN " << i+1 << " ******************" << std::endl;
-        auto stats = MFU_paging(q);
-        stats_vec_MFU.push_back(stats);
+		std::vector<std::tuple<int,int,int>> stats_vec_MFU;
+		for (int i = 0; i < 5; i++)
+		{
+		    std::cout << "******************** RUN " << i+1 << " ******************" << std::endl;
+		    auto stats = MFU_paging(q);
+		    stats_vec_MFU.push_back(stats);
+		}
+		printStats(stats_vec_MFU);
+		std::cout << "***** END OF MFU *****" << std::endl << std::endl;
     }
-    printStats(stats_vec_MFU);
-    std::cout << "***** END OF MFU *****" << std::endl << std::endl;
     
-    
-    
-    std::vector<std::tuple<int,int,int>> stats_vec_FIFO;
-    for (int i = 0; i < 5; i++)
+        
+    if(isAll || isFIFO)
     {
-        std::cout << "******************** RUN " << i+1 << " ******************" << std::endl;
-        auto stats = FIFO(q);
-        stats_vec_FIFO.push_back(stats);
+		std::vector<std::tuple<int,int,int>> stats_vec_FIFO;
+		for (int i = 0; i < 5; i++)
+		{
+		    std::cout << "******************** RUN " << i+1 << " ******************" << std::endl;
+		    auto stats = FIFO(q);
+		    stats_vec_FIFO.push_back(stats);
+		}
+		printStats(stats_vec_FIFO);
+		std::cout << "***** END OF FIFO *****" << std::endl << std::endl;
     }
-    printStats(stats_vec_FIFO);
-    std::cout << "***** END OF FIFO *****" << std::endl << std::endl;
     
-    
-    
+    if(isAll || isLRU)
+    {
     std::vector<std::tuple<int,int,int>> stats_vecLFU1, stats_vecLFU2;
     for (int i = 0; i < 5; i++)
-    {
-        std::cout << "******************** RUN " << i+1 << " ******************" << std::endl;
-        auto stats = LRU(q, true);
-        auto stats2 = LRU(q, false);
-        stats_vecLFU1.push_back(stats);
-        stats_vecLFU2.push_back(stats2);
+	{
+		std::cout << "******************** RUN " << i+1 << " ******************" << std::endl;
+		auto stats = LRU(q, true);
+		auto stats2 = LRU(q, false);
+		stats_vecLFU1.push_back(stats);
+		stats_vecLFU2.push_back(stats2);
+	}
+		printStats(stats_vecLFU1);
+		printStats(stats_vecLFU2);
+		std::cout << "***** END OF LRU *****" << std::endl << std::endl;
     }
-    printStats(stats_vecLFU1);
-    printStats(stats_vecLFU2);
-    std::cout << "***** END OF LRU *****" << std::endl << std::endl;
-    
     
     return 0;
 }

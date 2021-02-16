@@ -51,8 +51,7 @@ std::tuple<int,int,int>  LRU(CustomQueue myQueue, bool sim)
 		&& myQueue.front().getArr() <= globalTime)
 		{
 			Job * process = new Job(myQueue.popProcess());
-			assert(process!=nullptr 
-				&& process->getServ() != process->getComp());
+			//assert(process->getName().compare(myQueue.front().getName())!=0);
 			int memLoc = myMem.getFreePage();
 			myMem.insertPageToMem(process, 0);
 			inMem.push_back(process);
@@ -80,7 +79,6 @@ std::tuple<int,int,int>  LRU(CustomQueue myQueue, bool sim)
 			
 				if((*k)->getComp() >= (*k)->getServ())
     			{	
-    				(*k)->advTime();
     				continue;
     			}
 				//for each job find the locality reference
@@ -94,11 +92,13 @@ std::tuple<int,int,int>  LRU(CustomQueue myQueue, bool sim)
 					assert(lastAccessed[pos] < (*k)->getSize());
 					++hit;
 					(*k)->resetTime(lastAccessed[pos]);
+					print_time_log_g(*k, globalTime, i, lastAccessed[pos], &myMem, myMem.getFreeMemNum(),nullptr,0);
+					/*
 					LRUprintTimeStampMS(
 						(*k)->getName(),lastAccessed[pos],
 						globalTime * SCALE + i,
 						(*k)->requestPage(lastAccessed[pos]).getPageInMemory(),"",-1);
-						(*k)->advTime();
+						*/
 					continue;
 				}
 				//if if not and size not free perform LRU
@@ -110,20 +110,25 @@ std::tuple<int,int,int>  LRU(CustomQueue myQueue, bool sim)
 				//just insert page inside memoryMap if something was free
 				else
 				{
+					print_time_log_g(*k, globalTime, i, lastAccessed[pos], &myMem, myMem.getFreeMemNum(),nullptr,0);
 					int memLoc = myMem.getFreePage();
 					(*k)->resetTime(lastAccessed[pos]);
 					myMem.insertPageToMem(*k, lastAccessed[pos]);
 					assert(memLoc == (*k)->requestPage(lastAccessed[pos]).getPageInMemory());
+					/*
 					LRUprintTimeStampMS(
 						(*k)->getName(),lastAccessed[pos],
 						globalTime * SCALE + i,-1,"",-1);
+						*/
 				}
-				(*k)->advTime();
 				++miss;
 			}
+			//advTime for every process
+			for(std::vector<Job *>::iterator k = inMem.begin(); k != inMem.end(); ++k)
+			{
+				(*k)->advTime();
+			}
 			
-			
-
 		} 
 		std::cout << "<-----------End of Second: " << globalTime
     		<< "----------->" <<std::endl;
@@ -167,13 +172,16 @@ void pLRU(Memory &m, std::vector<Job *> &jobs, Job * insert, int num, int timest
 			
 		}
 	}
+	print_time_log_g(insert, timestamp/SCALE, timestamp%SCALE, num, &m, m.getFreeMemNum(),*kpos,pos);
 	int memLoc = (*kpos)->requestPage(pos).getPageInMemory();
 	m.removePageFromMem(*kpos,pos);
 	insert->resetTime(num);
 	m.insertPageToMem(insert, num);
 	assert(insert->requestPage(num).isInMem());
+	/*
 	LRUprintTimeStampMS(insert->getName(), num,
 		timestamp, -1,(*kpos)->getName(),pos);
+		*/
 }
 
 //push the remaining 3 pages into memeory

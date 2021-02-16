@@ -25,5 +25,5 @@
 std::tuple<int,int,int> LFU_paging(CustomQueue customer_queue);
 
 //print time log 
-void print_time_log (Job *job, int time, int last_reference,Memory *memory_map, int free_space, Job * ptr, int page_to_evict);
+void print_time_log_g (Job *job, int time, int last_reference,Memory *memory_map, int free_space, Job * ptr, int page_to_evict);
 #endif /* LFU_hpp */

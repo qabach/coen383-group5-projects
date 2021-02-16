@@ -68,7 +68,7 @@ std::tuple<int,int,int> FIFO (CustomQueue customer_queue)
             //pop job out of waiting queue
             waiting_queue.pop_front();
             //print_time_log(&servicing_queue.back(), time, 0, last_reference.back(), &memory_map, memory_map.getFreeMemNum());
-            print_time_log_FIFO(&servicing_queue.back(), time, 0, last_reference.back(), &memory_map, memory_map.getFreeMemNum(),nullptr,0);
+            print_time_log_g(&servicing_queue.back(), time, 0, last_reference.back(), &memory_map, memory_map.getFreeMemNum(),nullptr,0);
             memory_map.printMem();
             std::cout << std::endl;
             std::cout << std::endl;
@@ -161,7 +161,7 @@ std::tuple<int,int,int> FIFO (CustomQueue customer_queue)
                         Page * insertPage = servicing_queue[i].requestPagePtr(new_page);
                         insertPage->setTime(timeTick);
                        
-                        print_time_log_FIFO(&servicing_queue[i], time, tick, last_reference[i], &memory_map, memory_map.getFreeMemNum(),nullptr,0);
+                        print_time_log_g(&servicing_queue[i], time, tick, last_reference[i], &memory_map, memory_map.getFreeMemNum(),nullptr,0);
                         
                         std::cout << std::endl;
 
@@ -202,34 +202,5 @@ std::tuple<int,int,int> FIFO (CustomQueue customer_queue)
     
     return std::make_tuple(swapped_in,hit,miss);
 
-}
-
-
-void print_time_log_FIFO (Job *job, int time, int tick, int last_reference,Memory *memory_map, int free_space, Job * ptr, int page_to_evict)
-{
-    std::string job_evict = "None";
-    std::string page_evict = "None";
-    std::cout << "timestamp: " << time << " sec  " << tick  << " tick " << std::endl;
-    std::cout << "      - Job               : " << job->getName() << std::endl;
-    std::cout << "      - Page reference    : " << last_reference << std::endl;
-    std::cout << "      - Page in memory    : ";
-    for (int num = 0; num < job->getSize();num++)
-    {
-        if (job->isListed(num))
-            std::cout << job->requestPagePtr(num)->getPageNum() << " ";
-    }
-    std::cout << std::endl;
-    if (free_space == 0 && ptr != nullptr)
-    {
-        job_evict  = ptr->getName();
-        page_evict = std::to_string(page_to_evict);
-        std::cout << "      - Page to evicted   : " << job_evict << "/" << page_evict <<  std::endl;
-    }
-    else
-    {
-        std::cout << "      - Page to evicted   : " << job_evict << "/" << page_evict <<  std::endl;
-    }
-//    memory_map->printMem();
-//    std::cout << std::endl;
 }
 

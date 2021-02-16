@@ -78,3 +78,40 @@ int locality_reference(int reference_page, int num_of_pages) // num_of_pages can
     }
     
 }
+
+void print_time_log_g(Job *job, int time, int tick, int last_reference,Memory *memory_map, int free_space, Job * ptr, int page_to_evict)
+{
+    std::string job_evict = "None";
+    std::string page_evict = "None";
+    std::cout << "timestamp: " << time << " sec  " << tick  << " tick " << std::endl;
+    std::cout << "      - Job               : " << job->getName() << std::endl;
+    std::cout << "      - Page reference    : " << last_reference << std::endl;
+    std::cout << "      - Pages in memory   : ";
+    for (int num = 0; num < job->getSize();num++)
+    {
+        if (job->isListed(num))
+        {
+        	if(num == last_reference)
+        	{
+        		 std::cout <<"\""
+        		 	<< job->requestPage(num).getPageNum() << "\" ";
+        	}
+        	else
+        	{
+        		std::cout << job->requestPage(num).getPageNum() << " ";
+        	}
+        }
+    }
+    std::cout << std::endl;
+    if (free_space == 0 && ptr != nullptr)
+    {
+        job_evict  = ptr->getName();
+        page_evict = std::to_string(page_to_evict);
+        std::cout << "      - Page to evicted   : " << job_evict << "/" << page_evict <<  std::endl;
+    }
+    else
+    {
+        std::cout << "      - Page to evicted   : " << job_evict << "/" << page_evict <<  std::endl;
+    }
+    std::cout << std::endl;
+}
