@@ -12,9 +12,9 @@ std::tuple<int,int,int>  LRU(CustomQueue myQueue, bool sim)
     
     // check memory free page size
     Memory myMem;
-    size_t hit = 0, miss = 0;
+    size_t hit = 0, miss = 0, orgSize;
     myMem = Memory();
-    
+    orgSize = myQueue.size();
     int freeMemSize = myMem.getFreeMemNum();
     
     std::vector<Job *> inMem;
@@ -149,7 +149,7 @@ std::tuple<int,int,int>  LRU(CustomQueue myQueue, bool sim)
     }
     std::cout << "************************"<< std::endl;
     std::cout << "Hit/Miss ratio: " << (double)hit/miss << std::endl;
-    return std::make_tuple(150 - myQueue.size(),hit,miss);
+    return std::make_tuple(orgSize - myQueue.size(),hit,miss);
 }
 
 

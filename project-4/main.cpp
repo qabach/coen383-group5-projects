@@ -86,38 +86,36 @@ int main(int argc, char * argv[])
 		    auto stats = Random_paging(q);
 		    stats_vec_rand.push_back(stats);
 		}
-		printStats(stats_vec_rand);
+		//printStats(stats_vec_rand);
 		std::cout << "***** END OF Random *****" << std::endl << std::endl;
 	}
+	std::vector<std::tuple<int,int,int>> stats_vec;
     if(isAll || isLFU)
     {
-		std::vector<std::tuple<int,int,int>> stats_vec;
 		for (int i = 0; i < 5; i++)
 		{
 		    auto stats = LFU_paging(q);
 		    stats_vec.push_back(stats);
 		}
-		printStats(stats_vec);
+		//printStats(stats_vec);
 		std::cout << "***** END OF LFU *****" << std::endl << std::endl;
 	}
-    
+	std::vector<std::tuple<int,int,int>> stats_vec_MFU;
     if(isAll || isMFU)
     {
-		std::vector<std::tuple<int,int,int>> stats_vec_MFU;
 		for (int i = 0; i < 5; i++)
 		{
 		    std::cout << "******************** RUN " << i+1 << " ******************" << std::endl;
 		    auto stats = MFU_paging(q);
 		    stats_vec_MFU.push_back(stats);
 		}
-		printStats(stats_vec_MFU);
+		//printStats(stats_vec_MFU);
 		std::cout << "***** END OF MFU *****" << std::endl << std::endl;
     }
-    
-        
+   	std::vector<std::tuple<int,int,int>> stats_vec_FIFO;     
     if(isAll || isFIFO)
     {
-		std::vector<std::tuple<int,int,int>> stats_vec_FIFO;
+
 		for (int i = 0; i < 5; i++)
 		{
 		    std::cout << "******************** RUN " << i+1 << " ******************" << std::endl;
@@ -127,22 +125,41 @@ int main(int argc, char * argv[])
 		printStats(stats_vec_FIFO);
 		std::cout << "***** END OF FIFO *****" << std::endl << std::endl;
     }
-    
+    std::vector<std::tuple<int,int,int>> stats_vecLFU1, stats_vecLFU2;
     if(isAll || isLRU)
     {
-    std::vector<std::tuple<int,int,int>> stats_vecLFU1, stats_vecLFU2;
-    for (int i = 0; i < 5; i++)
-	{
-		std::cout << "******************** RUN " << i+1 << " ******************" << std::endl;
-		auto stats = LRU(q, true);
-		auto stats2 = LRU(q, false);
-		stats_vecLFU1.push_back(stats);
-		stats_vecLFU2.push_back(stats2);
+    	for (int i = 0; i < 5; i++)
+		{
+			std::cout << "******************** RUN " << i+1 << " ******************" << std::endl;
+			auto stats = LRU(q, true);
+			auto stats2 = LRU(q, false);
+			stats_vecLFU1.push_back(stats);
+			stats_vecLFU2.push_back(stats2);
+		}
 	}
-		printStats(stats_vecLFU1);
-		printStats(stats_vecLFU2);
-		std::cout << "***** END OF LRU *****" << std::endl << std::endl;
-    }
+		//printStats(stats_vecLFU1);
+		//printStats(stats_vecLFU2);
+	std::cout << "***** END OF LRU *****" << std::endl << std::endl;
+	std::cout << "***** Stats  *****" << std::endl << std::endl;
+	std::cout << "***** 60 Seconds  *****" << std::endl << std::endl;
+	std::cout << std::endl
+		<< "***** Rand *****" << std::endl;
+	printStats(stats_vec_rand);
+	std::cout << std::endl 
+		<< std::endl << "***** LFU *****" << std::endl;
+	printStats(stats_vec);
+	std::cout << std::endl 
+		<< std::endl << "***** MFU *****" << std::endl;
+	printStats(stats_vec_MFU);
+	std::cout << std::endl 
+		<< std::endl << "***** FIFO *****" << std::endl;
+	printStats(stats_vec_FIFO);
+	std::cout << std::endl 
+		<< std::endl << "***** LRU *****" << std::endl;
+	printStats(stats_vecLFU1);
+	std::cout << std::endl << std::endl;
+	std::cout << "***** 100 Page Ref  *****" << std::endl;
+	printStats(stats_vecLFU2);
     
     return 0;
 }
