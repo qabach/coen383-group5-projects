@@ -84,8 +84,9 @@ std::tuple<int,int,int> MFU_paging (CustomQueue customer_queue)
             swapped_in++;
             //pop job out of waitingt queue
             waiting_queue.pop_front();
+            pushMore(memory_map,job);
             print_time_log_g(&servicing_queue.back(), time, 0, last_reference.back(), &memory_map, memory_map.getFreeMemNum(),nullptr,0);
-            memory_map.printMem();
+            print_timestamp_log(memory_map, &servicing_queue.back(), time, "enter");
             std::cout << std::endl << std::endl;
                            
         }
@@ -186,11 +187,11 @@ std::tuple<int,int,int> MFU_paging (CustomQueue customer_queue)
                     {
                         freq_array[servicing_queue[idx].requestPage(k).getPageInMemory()] = 0;
                         memory_map.removePageFromMem(&servicing_queue[idx], k); //remove pages from memory once job is done
-                        memory_map.printMem();
-                        std::cout << std::endl << std::endl;
+                        
                     }
 
                 }
+                print_timestamp_log(memory_map, &servicing_queue[idx], time, "exit");
             }
         }
     }

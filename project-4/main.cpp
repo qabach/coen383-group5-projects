@@ -62,6 +62,10 @@ int main(int argc, char * argv[])
     	{
     		isMFU = true;
     	}
+    	else if(yay.compare("LFU") == 0)
+    	{
+    		isLFU = true;
+    	}
     	else
     	{
     		isAll = true;

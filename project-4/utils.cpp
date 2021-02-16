@@ -115,3 +115,38 @@ void print_time_log_g(Job *job, int time, int tick, int last_reference,Memory *m
     }
     std::cout << std::endl;
 }
+
+void print_timestamp_log(Memory &m, Job * process, int timestamp, std::string in)
+{
+	std::cout << "----------------------------------" <<std::endl;
+	std::cout << "Seconds: " << timestamp 
+		<< " Name: " << process->getName() 
+		<< " Entry: " << in 
+		<< " Size: " << process->getSize() 
+		<< " Service Time:" << process->getServ() << std::endl;
+	m.printMem();	
+	std::cout << std::endl
+		<< "----------------------------------" <<std::endl;
+}
+
+//push the remaining 3 pages into memeory
+void pushMore(Memory &m, Job * process)
+{
+	std::set<int> s;
+	int num =0;
+	s.insert(0);
+	for(int i =0; i < 3; ++i)
+	{
+		while(s.find(num) != s.end())
+		{
+			num = rand() % (process->getSize());
+		}
+		s.insert(num);
+		//std::cout <<num <<std::endl;
+		const int memLoc = m.getFreePage();
+		process->insertPage(num,memLoc);
+		process->resetTime(num);
+		m.insertPageToMem(process, num);
+	}
+
+}

@@ -79,9 +79,10 @@ std::tuple<int,int,int> Random_paging (CustomQueue customer_queue)
             memory_map.insertPageToMem(job, 0);
             swapped_in++;
             //pop job out of waitingt queue
+            pushMore(memory_map,job);
             waiting_queue.pop_front();
-            print_time_log_rand(&servicing_queue.back(), time, last_reference.back(), &memory_map, memory_map.getFreeMemNum(),nullptr,0);
-            memory_map.printMem();
+            print_time_log_g(&servicing_queue.back(), time, 0, last_reference.back(), &memory_map, memory_map.getFreeMemNum(),nullptr,0);
+            print_timestamp_log(memory_map, &servicing_queue.back(), time, "enter");
             std::cout << std::endl << std::endl;
                            
         }
@@ -89,6 +90,7 @@ std::tuple<int,int,int> Random_paging (CustomQueue customer_queue)
         //for every 100ms tick i.e. 10 ticks of 100ms in 1s
         for (int tick = 1; tick < 10; tick++)
         {
+        	std::set<int> repeat;
             //each job will request a reference page
             for (int i = 0; i < servicing_queue.size(); i++)
             {
@@ -111,7 +113,7 @@ std::tuple<int,int,int> Random_paging (CustomQueue customer_queue)
                 {
                     //increment hit
                     hit++;
-                    print_time_log_rand(&servicing_queue[i], time, last_reference[i], &memory_map, memory_map.getFreeMemNum(),nullptr,0);
+                    print_time_log_g(&servicing_queue[i], time, tick, last_reference[i], &memory_map, memory_map.getFreeMemNum(),nullptr,0);
 
                 }
                 //else, add new page into memory
@@ -124,10 +126,11 @@ std::tuple<int,int,int> Random_paging (CustomQueue customer_queue)
                     if (memory_map.getFreeMemNum() == 0)
                     {
                         //evict page and add new page
-                        int idx = rand() % servicing_queue[i].getSize();
-                        while(!servicing_queue[i].isListed(idx)){
-                            idx = rand() % servicing_queue[i].getSize();
-                        }
+                        int idx;
+                        do{
+                        	idx =rand() % memory_map.getInMemNum();
+                        }while(repeat.find(idx)!=repeat.end());
+                        repeat.insert(idx);
                         
                         //remove page from memory
                         auto * job_to_evict = std::get<1>(memory_map.getMemMap()[idx]);
@@ -141,7 +144,7 @@ std::tuple<int,int,int> Random_paging (CustomQueue customer_queue)
                                 page_to_evict = job_to_evict->requestPage(x).getPageNum();
                         }
                         
-                        print_time_log_rand(&servicing_queue[i], time, last_reference[i], &memory_map, memory_map.getFreeMemNum(),job_to_evict,page_to_evict);
+                        print_time_log_g(&servicing_queue[i], time, tick, last_reference[i], &memory_map, memory_map.getFreeMemNum(),job_to_evict,page_to_evict);
 
                         
                         //remove page from memory
@@ -152,7 +155,7 @@ std::tuple<int,int,int> Random_paging (CustomQueue customer_queue)
                     //else, add
                     else
                     {
-                        print_time_log_rand(&servicing_queue[i], time, last_reference[i], &memory_map, memory_map.getFreeMemNum(),nullptr,0);
+                        print_time_log_g(&servicing_queue[i], time, tick, last_reference[i], &memory_map, memory_map.getFreeMemNum(),nullptr,0);
                         //add new page
                         memory_map.insertPageToMem(&servicing_queue[i], new_page);
 
@@ -184,8 +187,7 @@ std::tuple<int,int,int> Random_paging (CustomQueue customer_queue)
 
                 }*/
                 memory_map.removeProcessFromMem(&servicing_queue[idx]);
-                memory_map.printMem();
-                std::cout << std::endl << std::endl;
+                print_timestamp_log(memory_map, &servicing_queue[idx], time, "exit");
             }
         }
     }

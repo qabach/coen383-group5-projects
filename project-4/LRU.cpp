@@ -40,7 +40,7 @@ std::tuple<int,int,int>  LRU(CustomQueue myQueue, bool sim)
     			int j = myMem.getFreeMemNum();
     			myMem.removeProcessFromMem(inMem[i]);
     			assert(myMem.getFreeMemNum() >=j);
-    			LRUprintTimeStamp(myMem, inMem[i], globalTime,"exit");
+    			print_timestamp_log(myMem, inMem[i], globalTime,"exit");
     			inMem.erase(inMem.begin() + i);
     			--i;
     		}
@@ -61,7 +61,7 @@ std::tuple<int,int,int>  LRU(CustomQueue myQueue, bool sim)
 			lastAccessed.push_back(0);
 			LRUpushMore(myMem, process);
 			//miss+=4;
-			LRUprintTimeStamp(myMem, process, globalTime,"enter");
+			print_timestamp_log(myMem, process, globalTime,"enter");
 		}
 		//this is the 100ms that happens
 		for(int i =1 ; i < 10; ++i)
@@ -70,7 +70,7 @@ std::tuple<int,int,int>  LRU(CustomQueue myQueue, bool sim)
 			for(std::vector<Job *>::iterator k = inMem.begin(); k != inMem.end(); ++k)
 			{
 				
-				if(count > 100 && !sim)
+				if(count >= 100 && !sim)
 				{
 					break;
 				}
@@ -139,7 +139,6 @@ std::tuple<int,int,int>  LRU(CustomQueue myQueue, bool sim)
 			break;
 		}
     }
-    LRUprintTimeStamp(myMem, inMem[0], 60,"End");
     std::cout << "Jobs Missed: " << myQueue.size()<< std::endl;
     while(!processed.empty())
     {
@@ -209,19 +208,6 @@ void LRUpushMore(Memory &m, Job * process)
     	}
 	}
 
-}
-
-void LRUprintTimeStamp(Memory &m, Job * process, int timestamp, std::string in)
-{
-	std::cout << "----------------------------------" <<std::endl;
-	std::cout << "Seconds: " << timestamp 
-		<< " Name: " << process->getName() 
-		<< " Entry: " << in 
-		<< " Size: " << process->getSize() 
-		<< " Service Time:" << process->getServ() << std::endl;
-	m.printMem();	
-	std::cout << std::endl
-		<< "----------------------------------" <<std::endl;
 }
 
 void LRUprintTimeStampMS(std::string cProc, int cPage, int timestamp, int PageInMem, std::string rProc, int Page_TBE)

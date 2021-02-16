@@ -67,9 +67,10 @@ std::tuple<int,int,int> FIFO (CustomQueue customer_queue)
             swapped_in++;
             //pop job out of waiting queue
             waiting_queue.pop_front();
+            pushMore(memory_map,job);
             //print_time_log(&servicing_queue.back(), time, 0, last_reference.back(), &memory_map, memory_map.getFreeMemNum());
             print_time_log_g(&servicing_queue.back(), time, 0, last_reference.back(), &memory_map, memory_map.getFreeMemNum(),nullptr,0);
-            memory_map.printMem();
+            print_timestamp_log(memory_map, &servicing_queue.back(), time, "enter");
             std::cout << std::endl;
             std::cout << std::endl;
 
@@ -101,7 +102,7 @@ std::tuple<int,int,int> FIFO (CustomQueue customer_queue)
                     //increment hit
                     hit++;
                     
-//                    print_time_log(&servicing_queue[i], time, tick, last_reference[i], &memory_map, memory_map.getFreeMemNum(),nullptr,0);
+                    print_time_log_g(&servicing_queue[i], time, tick, last_reference[i], &memory_map, memory_map.getFreeMemNum(),nullptr,0);
 
                 }
                 //else, add new page into memory
@@ -139,7 +140,7 @@ std::tuple<int,int,int> FIFO (CustomQueue customer_queue)
                            
                         }
                         
-//                        print_time_log(&servicing_queue[i], time, tick, last_reference[i], &memory_map, memory_map.getFreeMemNum(), evictJob , evictPageNum);
+                        print_time_log_g(&servicing_queue[i], time, tick, last_reference[i], &memory_map, memory_map.getFreeMemNum(), evictJob , evictPageNum);
                         
                         // evict page
                         memory_map.removePageFromMem(evictJob, evictPageNum);
@@ -154,14 +155,13 @@ std::tuple<int,int,int> FIFO (CustomQueue customer_queue)
                     else
                     {
                         //add new page
+                        print_time_log_g(&servicing_queue[i], time, tick, last_reference[i], &memory_map, memory_map.getFreeMemNum(),nullptr,0);
                         memory_map.insertPageToMem(&servicing_queue[i], new_page);
                         
                         //updating the time the page got brought into the Memory
                         double timeTick = time + double(tick)/10;
                         Page * insertPage = servicing_queue[i].requestPagePtr(new_page);
                         insertPage->setTime(timeTick);
-                       
-                        print_time_log_g(&servicing_queue[i], time, tick, last_reference[i], &memory_map, memory_map.getFreeMemNum(),nullptr,0);
                         
                         std::cout << std::endl;
 
@@ -187,8 +187,7 @@ std::tuple<int,int,int> FIFO (CustomQueue customer_queue)
                     if (servicing_queue[idx].requestPagePtr(k)->getPageInMemory() >= 0)
                         memory_map.removePageFromMem(&servicing_queue[idx], k); //remove pages from memory once job is done
                 }
-                memory_map.printMem();
-                std::cout << std::endl;
+                print_timestamp_log(memory_map, &servicing_queue[idx], time, "exit");
 //                servicing_queue.erase(servicing_queue.begin()+idx); //remove job
 //                last_reference.erase(last_reference.begin()+idx); //remove job
             }
