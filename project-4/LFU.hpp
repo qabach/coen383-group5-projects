@@ -22,7 +22,7 @@
 #include "memory.hpp"
 
 //Least Frequently Used Swapping Algorithm
-std::tuple<int,int,int> LFU_paging(CustomQueue customer_queue);
+std::tuple<int,int,int> LFU_paging(CustomQueue customer_queue, bool sim);
 
 //print time log 
 void print_time_log_g (Job *job, int time, int last_reference,Memory *memory_map, int free_space, Job * ptr, int page_to_evict);

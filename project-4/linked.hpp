@@ -137,6 +137,7 @@ class CustomQueue
 	//some functions
 	void generateProcesses();
 	Job popProcess();
+	CustomQueue skewProcesses() const;
 	Job front();
 	size_t size(){return processes.size();}
 	bool isEmpty(){return processes.empty();}

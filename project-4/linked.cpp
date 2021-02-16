@@ -150,6 +150,16 @@ void CustomQueue::generateProcesses()
 	*/
 	
 }
+
+CustomQueue CustomQueue::skewProcesses() const
+{
+	CustomQueue temp(*this);
+	for(int i = 0; i < 150; ++i)
+	{
+		temp.processes[i].arrivalTime = 0;
+	}
+	return temp;
+}
 //pops the job at the front.
 Job CustomQueue::popProcess()
 {

@@ -13,8 +13,8 @@ std::tuple<int,int,int>  LRU(CustomQueue myQueue, bool sim)
     // check memory free page size
     Memory myMem;
     size_t hit = 0, miss = 0, orgSize;
+    int swapped =0;
     myMem = Memory();
-    orgSize = myQueue.size();
     int freeMemSize = myMem.getFreeMemNum();
     
     std::vector<Job *> inMem;
@@ -24,7 +24,7 @@ std::tuple<int,int,int>  LRU(CustomQueue myQueue, bool sim)
     
     std::cout << "freeMemSize: " << freeMemSize << std::endl;
     std::cout << "ProcessSize: " << myQueue.size() << std::endl;
-    int count =0;
+    int counter =0;
     //please put in memory until full?
     for(int globalTime = 0; globalTime < 60; ++globalTime)
     {
@@ -62,25 +62,32 @@ std::tuple<int,int,int>  LRU(CustomQueue myQueue, bool sim)
 			LRUpushMore(myMem, process);
 			//miss+=4;
 			print_timestamp_log(myMem, process, globalTime,"enter");
+			++swapped;
+			//++counter;
+		}
+		if(counter >= 100 && !sim)
+		{
+			return std::make_tuple(swapped,hit,miss);
 		}
 		//this is the 100ms that happens
-		for(int i =1 ; i < 10; ++i)
+		for(int i =0 ; i < 10; ++i)
 		{
 			//go through each job and check wether job is in memory
 			for(std::vector<Job *>::iterator k = inMem.begin(); k != inMem.end(); ++k)
 			{
-				
-				if(count >= 100 && !sim)
-				{
-					break;
-				}
-				++count;
+			
 				//on the last second, increment completion time
 			
 				if((*k)->getComp() >= (*k)->getServ())
     			{	
     				continue;
     			}
+    			
+    			if(counter >= 100 && !sim)
+        		{
+        			break;
+        		}
+				++counter;
 				//for each job find the locality reference
 				int pos = k - inMem.begin();
 				int freeMemSize = myMem.getFreeMemNum();
@@ -134,10 +141,6 @@ std::tuple<int,int,int>  LRU(CustomQueue myQueue, bool sim)
     		<< "----------->" <<std::endl;
     	//myMem.printMem();
     	//myMem.printFreePageList();
-		if(count > 100 && !sim)
-		{
-			break;
-		}
     }
     std::cout << "Jobs Missed: " << myQueue.size()<< std::endl;
     while(!processed.empty())
@@ -149,7 +152,7 @@ std::tuple<int,int,int>  LRU(CustomQueue myQueue, bool sim)
     }
     std::cout << "************************"<< std::endl;
     std::cout << "Hit/Miss ratio: " << (double)hit/miss << std::endl;
-    return std::make_tuple(orgSize - myQueue.size(),hit,miss);
+    return std::make_tuple(swapped,hit,miss);
 }
 
 

@@ -16,12 +16,12 @@
 
 const int TIME_LIMIT = 60; //msec; time to run the simulator in miliseconds i.e. 1 minute
 using namespace std;
-std::tuple<int,int,int> Random_paging (CustomQueue customer_queue)
+std::tuple<int,int,int> Random_paging (CustomQueue customer_queue, bool sim)
 {
-    srand(time(0));
+    //srand(time(0));
     //Program Announcement
     std::cout << "********** Random **********" << std::endl << std::endl;
-    
+    int counter = 0;
     //memory map
     Memory memory_map;
     memory_map = Memory();
@@ -84,11 +84,15 @@ std::tuple<int,int,int> Random_paging (CustomQueue customer_queue)
             print_time_log_g(&servicing_queue.back(), time, 0, last_reference.back(), &memory_map, memory_map.getFreeMemNum(),nullptr,0);
             print_timestamp_log(memory_map, &servicing_queue.back(), time, "enter");
             std::cout << std::endl << std::endl;
-                           
+            //counter++;               
+        }
+        if(counter >= 100 && !sim)
+        {
+        	return std::make_tuple(swapped_in,hit,miss);
         }
         
         //for every 100ms tick i.e. 10 ticks of 100ms in 1s
-        for (int tick = 1; tick < 10; tick++)
+        for (int tick = 0; tick < 10; tick++)
         {
         	std::set<int> repeat;
             //each job will request a reference page
@@ -99,7 +103,11 @@ std::tuple<int,int,int> Random_paging (CustomQueue customer_queue)
                 {
                     continue; //just skip to next one
                 }
-                
+                if(counter >= 100 && !sim)
+                {
+                	break;
+                }
+                ++counter;
                 //store prev page number for later use
                 int previous_page_num = last_reference[i];
                 
