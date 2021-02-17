@@ -14,7 +14,7 @@
 #include "utils.hpp"
 #include <deque>
 
-std::tuple<int,int,int> FIFO (CustomQueue queue);
+std::tuple<int,int,int> FIFO (CustomQueue queue, bool sim);
 void print_time_log_FIFO (Job *job, int time, int tick, int last_reference,Memory *memory_map, int free_space, Job * ptr, int page_to_evict);
 
 #endif /* FIFO_2_hpp */

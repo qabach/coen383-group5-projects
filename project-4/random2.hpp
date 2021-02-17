@@ -17,7 +17,7 @@
 #include "memory.hpp"
 #include <cstdlib>
 #include <ctime>
-std::tuple<int,int,int> Random_paging(CustomQueue customer_queue);
+std::tuple<int,int,int> Random_paging(CustomQueue customer_queue, bool sim);
 
 //print time log
 void print_time_log_rand (Job *job, int time, int last_reference,Memory *memory_map, int free_space, Job * ptr, int page_to_evict);

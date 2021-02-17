@@ -12,9 +12,9 @@ std::tuple<int,int,int>  LRU(CustomQueue myQueue, bool sim)
     
     // check memory free page size
     Memory myMem;
-    size_t hit = 0, miss = 0;
+    size_t hit = 0, miss = 0, orgSize;
+    int swapped =0;
     myMem = Memory();
-    
     int freeMemSize = myMem.getFreeMemNum();
     
     std::vector<Job *> inMem;
@@ -24,7 +24,7 @@ std::tuple<int,int,int>  LRU(CustomQueue myQueue, bool sim)
     
     std::cout << "freeMemSize: " << freeMemSize << std::endl;
     std::cout << "ProcessSize: " << myQueue.size() << std::endl;
-    int count =0;
+    int counter =0;
     //please put in memory until full?
     for(int globalTime = 0; globalTime < 60; ++globalTime)
     {
@@ -40,7 +40,7 @@ std::tuple<int,int,int>  LRU(CustomQueue myQueue, bool sim)
     			int j = myMem.getFreeMemNum();
     			myMem.removeProcessFromMem(inMem[i]);
     			assert(myMem.getFreeMemNum() >=j);
-    			LRUprintTimeStamp(myMem, inMem[i], globalTime,"exit");
+    			print_timestamp_log(myMem, inMem[i], globalTime,"exit");
     			inMem.erase(inMem.begin() + i);
     			--i;
     		}
@@ -51,8 +51,7 @@ std::tuple<int,int,int>  LRU(CustomQueue myQueue, bool sim)
 		&& myQueue.front().getArr() <= globalTime)
 		{
 			Job * process = new Job(myQueue.popProcess());
-			assert(process!=nullptr 
-				&& process->getServ() != process->getComp());
+			//assert(process->getName().compare(myQueue.front().getName())!=0);
 			int memLoc = myMem.getFreePage();
 			myMem.insertPageToMem(process, 0);
 			inMem.push_back(process);
@@ -62,27 +61,33 @@ std::tuple<int,int,int>  LRU(CustomQueue myQueue, bool sim)
 			lastAccessed.push_back(0);
 			LRUpushMore(myMem, process);
 			//miss+=4;
-			LRUprintTimeStamp(myMem, process, globalTime,"enter");
+			print_timestamp_log(myMem, process, globalTime,"enter");
+			++swapped;
+			//++counter;
+		}
+		if(counter >= 100 && !sim)
+		{
+			return std::make_tuple(swapped,hit,miss);
 		}
 		//this is the 100ms that happens
-		for(int i =1 ; i < 10; ++i)
+		for(int i =0 ; i < 10; ++i)
 		{
 			//go through each job and check wether job is in memory
 			for(std::vector<Job *>::iterator k = inMem.begin(); k != inMem.end(); ++k)
 			{
-				
-				if(count > 100 && !sim)
-				{
-					break;
-				}
-				++count;
+			
 				//on the last second, increment completion time
 			
 				if((*k)->getComp() >= (*k)->getServ())
     			{	
-    				(*k)->advTime();
     				continue;
     			}
+    			
+    			if(counter >= 100 && !sim)
+        		{
+        			break;
+        		}
+				++counter;
 				//for each job find the locality reference
 				int pos = k - inMem.begin();
 				int freeMemSize = myMem.getFreeMemNum();
@@ -94,11 +99,13 @@ std::tuple<int,int,int>  LRU(CustomQueue myQueue, bool sim)
 					assert(lastAccessed[pos] < (*k)->getSize());
 					++hit;
 					(*k)->resetTime(lastAccessed[pos]);
+					print_time_log_g(*k, globalTime, i, lastAccessed[pos], &myMem, myMem.getFreeMemNum(),nullptr,0);
+					/*
 					LRUprintTimeStampMS(
 						(*k)->getName(),lastAccessed[pos],
 						globalTime * SCALE + i,
 						(*k)->requestPage(lastAccessed[pos]).getPageInMemory(),"",-1);
-						(*k)->advTime();
+						*/
 					continue;
 				}
 				//if if not and size not free perform LRU
@@ -110,31 +117,31 @@ std::tuple<int,int,int>  LRU(CustomQueue myQueue, bool sim)
 				//just insert page inside memoryMap if something was free
 				else
 				{
+					print_time_log_g(*k, globalTime, i, lastAccessed[pos], &myMem, myMem.getFreeMemNum(),nullptr,0);
 					int memLoc = myMem.getFreePage();
 					(*k)->resetTime(lastAccessed[pos]);
 					myMem.insertPageToMem(*k, lastAccessed[pos]);
 					assert(memLoc == (*k)->requestPage(lastAccessed[pos]).getPageInMemory());
+					/*
 					LRUprintTimeStampMS(
 						(*k)->getName(),lastAccessed[pos],
 						globalTime * SCALE + i,-1,"",-1);
+						*/
 				}
-				(*k)->advTime();
 				++miss;
 			}
+			//advTime for every process
+			for(std::vector<Job *>::iterator k = inMem.begin(); k != inMem.end(); ++k)
+			{
+				(*k)->advTime();
+			}
 			
-			
-
 		} 
 		std::cout << "<-----------End of Second: " << globalTime
     		<< "----------->" <<std::endl;
     	//myMem.printMem();
     	//myMem.printFreePageList();
-		if(count > 100 && !sim)
-		{
-			break;
-		}
     }
-    LRUprintTimeStamp(myMem, inMem[0], 60,"End");
     std::cout << "Jobs Missed: " << myQueue.size()<< std::endl;
     while(!processed.empty())
     {
@@ -145,7 +152,7 @@ std::tuple<int,int,int>  LRU(CustomQueue myQueue, bool sim)
     }
     std::cout << "************************"<< std::endl;
     std::cout << "Hit/Miss ratio: " << (double)hit/miss << std::endl;
-    return std::make_tuple(150 - myQueue.size(),hit,miss);
+    return std::make_tuple(swapped,hit,miss);
 }
 
 
@@ -163,17 +170,21 @@ void pLRU(Memory &m, std::vector<Job *> &jobs, Job * insert, int num, int timest
 			{
 				kpos = k;
 				pos = i;
+				time = (*k)->returnTime(i);
 			}
 			
 		}
 	}
+	print_time_log_g(insert, timestamp/SCALE, timestamp%SCALE, num, &m, m.getFreeMemNum(),*kpos,pos);
 	int memLoc = (*kpos)->requestPage(pos).getPageInMemory();
 	m.removePageFromMem(*kpos,pos);
 	insert->resetTime(num);
 	m.insertPageToMem(insert, num);
 	assert(insert->requestPage(num).isInMem());
+	/*
 	LRUprintTimeStampMS(insert->getName(), num,
 		timestamp, -1,(*kpos)->getName(),pos);
+		*/
 }
 
 //push the remaining 3 pages into memeory
@@ -201,19 +212,6 @@ void LRUpushMore(Memory &m, Job * process)
     	}
 	}
 
-}
-
-void LRUprintTimeStamp(Memory &m, Job * process, int timestamp, std::string in)
-{
-	std::cout << "----------------------------------" <<std::endl;
-	std::cout << "Seconds: " << timestamp 
-		<< " Name: " << process->getName() 
-		<< " Entry: " << in 
-		<< " Size: " << process->getSize() 
-		<< " Service Time:" << process->getServ() << std::endl;
-	m.printMem();	
-	std::cout << std::endl
-		<< "----------------------------------" <<std::endl;
 }
 
 void LRUprintTimeStampMS(std::string cProc, int cPage, int timestamp, int PageInMem, std::string rProc, int Page_TBE)
