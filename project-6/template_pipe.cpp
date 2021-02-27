@@ -16,7 +16,7 @@
  
  */
 
-
+#include <iostream>
 #include <stdio.h>
 #include <unistd.h>
 #include <sys/types.h>
@@ -24,7 +24,13 @@
 #define BUFFER_SIZE 32
 #define READ_END 0
 #define WRITE_END 1
+int pipe_template(void);
 
+int main()
+{
+	pipe_template();
+	return 0;
+}
 
 int pipe_template(void)
 {
@@ -39,7 +45,7 @@ int pipe_template(void)
         fprintf(stderr,"pipe() failed");
         return 1;
     }
-    
+
     // Fork a child process.
     pid = fork();
     
