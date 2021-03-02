@@ -11,9 +11,7 @@
     Yukun Zhang
  
  Project 6
- 
- Select() Template from professor
- 
+  
  */
 
 
@@ -63,8 +61,7 @@ int main()
         if (pid[i] > 0)
         {
             close(fd[i][WRITE_END]);
-            FD_SET(fd[i][READ_END], &inputs); // set file desciprtor pipe?
-            printf("%d\n",fd[i][READ_END]);
+            FD_SET(fd[i][READ_END], &inputs); // set file desciprtor pipe
         }
         else if (pid[i] == 0)
         {
@@ -115,7 +112,6 @@ int main()
                     strcat(out_msg, milsec);
                     strcat(out_msg, others);
                     strcat(out_msg, copy_msg);
-                    printf("Write message: %s",out_msg);
                     write(fd[i][WRITE_END], out_msg, strlen(out_msg)+1);
                     ++count;
                     if(strlen(read_msg) >= 50)
@@ -165,17 +161,19 @@ int main()
     
     gettimeofday(&prev, NULL);
     gettimeofday(&current, NULL);
-    while(current.tv_sec - prev.tv_sec < TOTAL_SECONDS)
+    
+    
+    FILE *filePtr;
+    filePtr = fopen("output.txt", "w");
+    
+    if (filePtr == NULL )
     {
-        inputfds = inputs;
-        timeout.tv_sec = 2;
-        timeout.tv_usec = 5000;
-        // Get select() results. FD_SETSIZE = 1024 bits/FDs
-        result = select(FD_SETSIZE, &inputfds,
-                        (fd_set *) 0, (fd_set *) 0, &timeout);
-        gettimeofday(&current, NULL);
-        switch(result)
-
+        printf( "output.txt file failed to open." ) ;
+    }
+    else
+    {
+        printf( "Open output.txt \n" ) ;
+        while(current.tv_sec - prev.tv_sec < TOTAL_SECONDS)
         {
             inputfds = inputs;
             timeout.tv_sec = 2;
@@ -229,76 +227,26 @@ int main()
                             memset(append_msg,'\0',APPEND_SIZE);
                             strcpy(append_msg, num);
                             strcat(append_msg, milNum);
-                            printf("%s", append_msg);
-                            fprintf(filePtr,"%s", append_msg);      // ****** AT ******
-                            printf("%s",read_msg);
-                            fprintf(filePtr, "%s",read_msg);                  // ****** AT ******
+                            fprintf(filePtr,"%s", append_msg);
+                            fprintf(filePtr, "%s",read_msg);
                         }
                     }
                     break;
                 }
             }
-            case -1:
-            { // error
-                perror("select");
-                exit(1);
-            }
-                // If, during the wait, we have some action on the file descriptor,
-                // we read the input on stdin and echo it whenever an
-                // <end of line> character is received, until that input is Ctrl-D.
-            default:
-            {   // Got input
-                for(int i =0;i<NUM_OF_CHILDREN; ++i)
-                {
-                    if (FD_ISSET(fd[i][READ_END], &inputfds))
-                    {
-                        char num[10], milNum[20], other[35];
-                        long int sec;
-                        double milsec;
-                        sec = current.tv_sec-prev.tv_sec;
-                        milsec = current.tv_usec - prev.tv_usec;
-                        milsec/=1000;
-                        ioctl(fd[i][READ_END],FIONREAD,&nread);
-                        // read # of bytes available
-                        // on pipe and set nread arg
-                        // to that value
-                        if (nread == 0)
-                        {
-                            printf("Child %d Finished.\n", i+1);
-                            FD_CLR(fd[i][READ_END],&inputs);
-                            break;
-                        }
-                        nread = read(fd[i][READ_END],read_msg,nread);
-                        sprintf(num, "%2.02ld:",
-                            sec);
-                        sprintf(milNum, "%05.3f:Parent:",
-                    milsec);
-                        memset(append_msg,'\0',APPEND_SIZE);
-                        strcpy(append_msg, num);
-                        strcat(append_msg, milNum);
-//                        printf("%s", append_msg);
-//                        printf("%s",read_msg);
-                    }
-                }
-                break;
-            }
+            gettimeofday(&current, NULL);
         }
-        gettimeofday(&current, NULL);
     }
     //terminate child 5 after 30s
-    close(fd[4][WRITE_END]);
     kill(pid[4],SIGKILL);
     for(i = 0; i < NUM_OF_CHILDREN; ++i)
     {
         waitpid(pid[i],&stat, 0);
         close(fd[i][READ_END]);
     }
-
     
-    printf("Close output.txt \n") ;    // ****** AT ******
-    fclose(filePtr);                    // ****** AT ******
+    printf("Close output.txt \n") ;
+    fclose(filePtr);
     
-	return 0;
+    return 0;
 }
-
-
