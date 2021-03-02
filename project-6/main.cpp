@@ -31,16 +31,17 @@
 
 #define NUM_OF_CHILDREN 5
 #define TOTAL_SECONDS 30
-#define BUFFER_SIZE 100
-#define APPEND_SIZE 120
+#define BUFFER_SIZE 90
+#define APPEND_SIZE_CHILD 140
+#define APPEND_SIZE_PARENT 50
 #define READ_END 0
 #define WRITE_END 1
 
 int main()
 {
-    char write_msg[BUFFER_SIZE];
-    char read_msg[BUFFER_SIZE];
-    char append_msg[APPEND_SIZE];
+    char write_msg[APPEND_SIZE_CHILD];
+    char read_msg[APPEND_SIZE_CHILD];
+    char append_msg[APPEND_SIZE_PARENT];
     fd_set inputs, inputfds; // 2 sets of file descriptors bit-arrays
     struct timeval timeout, current, prev;
     pid_t pid[NUM_OF_CHILDREN]; // child process id
@@ -75,7 +76,9 @@ int main()
             //Child 5 code here
             if(i == 4)
             {
-                while(1)
+            	char mess[18] = "Enter message: \n";
+            	int k = 0;
+                while(current.tv_sec - prev.tv_sec < TOTAL_SECONDS)
                 {
                     char * sec, * milsec, * others;
                     sec = (char *)malloc(10);
@@ -87,20 +90,31 @@ int main()
                     long int _sec;
                     double _milsec;
                     _sec = current.tv_sec-prev.tv_sec;
-                    _milsec = current.tv_usec; //since milsec resets every sec; dont need to take the different
-                    _milsec /=1000;
+                    _milsec = current.tv_usec- - prev.tv_usec; //since milsec resets every sec; dont need to take the different
+                    //sorry it does because it gets current time
+                    _milsec /=10000;
+                    if(_milsec<0)
+                    {
+                    	_milsec +=100;
+                    	--_sec;
+                    }
                     
                     //prompt for input message from terminal
                     char * read_msg;
                     read_msg = (char *)malloc(BUFFER_SIZE);
+                    memset(read_msg,'\0',BUFFER_SIZE);
                     char * out_msg;
-                    out_msg = (char *)malloc(BUFFER_SIZE);
-                    printf("Enter message: ");
-                    read(0, read_msg, BUFFER_SIZE); //0 for fd indicates stdin
-                    
+                    out_msg = (char *)malloc(APPEND_SIZE_CHILD);
+                    if(k!=BUFFER_SIZE-2)
+                    	write(1,mess,18);
+                    k = read(0, read_msg, BUFFER_SIZE-2); //0 for fd indicates stdin
+                    if(k==BUFFER_SIZE-2)
+                    {
+                    	strncat(read_msg,"\n",2);
+                    }
                     char * copy_msg;
-                    copy_msg = (char *)malloc(51);
-                    strncpy(copy_msg, read_msg, 50);
+                    copy_msg = (char *)malloc(BUFFER_SIZE);
+                    strncpy(copy_msg, read_msg, BUFFER_SIZE-1);
                     
                     sprintf(sec, "%2.02ld:", _sec);
                     sprintf(milsec, "%05.3f:",_milsec);
@@ -112,10 +126,12 @@ int main()
                     strcat(out_msg, milsec);
                     strcat(out_msg, others);
                     strcat(out_msg, copy_msg);
-                    write(fd[i][WRITE_END], out_msg, strlen(out_msg)+1);
+                    write(fd[i][WRITE_END], out_msg, APPEND_SIZE_CHILD);
                     ++count;
+                    /*
                     if(strlen(read_msg) >= 50)
                         printf("\n");
+                    */
                     gettimeofday(&current, NULL);
                     free(out_msg);
                     free(copy_msg);
@@ -177,7 +193,7 @@ int main()
         {
             inputfds = inputs;
             timeout.tv_sec = 2;
-            timeout.tv_usec = 5000;
+            timeout.tv_usec = 50000;
             // Get select() results. FD_SETSIZE = 1024 bits/FDs
             result = select(FD_SETSIZE, &inputfds,
                             (fd_set *) 0, (fd_set *) 0, &timeout);
@@ -208,7 +224,12 @@ int main()
                             double milsec;
                             sec = current.tv_sec-prev.tv_sec;
                             milsec = current.tv_usec - prev.tv_usec;
-                            milsec/=1000;
+                            milsec/=10000;
+                            if(milsec<0)
+                    		{
+                    			milsec +=100;
+                    			--sec;
+                    		}		
                             ioctl(fd[i][READ_END],FIONREAD,&nread);
                             // read # of bytes available
                             // on pipe and set nread arg
@@ -219,16 +240,17 @@ int main()
                                 FD_CLR(fd[i][READ_END],&inputs);
                                 break;
                             }
-                            nread = read(fd[i][READ_END],read_msg,nread);
+                            nread = read(fd[i][READ_END],read_msg,
+                            	APPEND_SIZE_CHILD);
                             sprintf(num, "%2.02ld:",
                                 sec);
                             sprintf(milNum, "%05.3f:Parent:",
                         milsec);
-                            memset(append_msg,'\0',APPEND_SIZE);
+                            memset(append_msg,'\0',APPEND_SIZE_PARENT);
                             strcpy(append_msg, num);
                             strcat(append_msg, milNum);
                             fprintf(filePtr,"%s", append_msg);
-                            fprintf(filePtr, "%s",read_msg);
+                            fputs(read_msg,filePtr);
                         }
                     }
                     break;
