@@ -82,10 +82,10 @@ int main()
                     char * sec, * milsec, * others;
                     sec = (char *)malloc(10);
                     milsec = (char *)malloc(10);
-                    others = (char *)malloc(35);
+                    others = (char *)malloc(22);
                     memset(sec,'\0',10);
                     memset(milsec,'\0',10);
-                    memset(others,'\0',35);
+                    memset(others,'\0',22);
                     long int _sec;
                     double _milsec;
                     _sec = current.tv_sec-prev.tv_sec;
@@ -117,6 +117,8 @@ int main()
                     printf("Write message: %s",out_msg);
                     write(fd[i][WRITE_END], out_msg, strlen(out_msg)+1);
                     ++count;
+                    if(strlen(read_msg) >= 8)
+                        printf("\n");
                     gettimeofday(&current, NULL);
                     free(out_msg);
                     free(copy_msg);
