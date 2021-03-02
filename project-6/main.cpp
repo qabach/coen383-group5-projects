@@ -32,8 +32,8 @@
 
 #define NUM_OF_CHILDREN 5
 #define TOTAL_SECONDS 30
-#define BUFFER_SIZE 64
-#define APPEND_SIZE 80
+#define BUFFER_SIZE 100
+#define APPEND_SIZE 120
 #define READ_END 0
 #define WRITE_END 1
 
@@ -101,8 +101,8 @@ int main()
                     read(0, read_msg, BUFFER_SIZE); //0 for fd indicates stdin
                     
                     char * copy_msg;
-                    copy_msg = (char *)malloc(8);
-                    strncpy(copy_msg, read_msg, 7);
+                    copy_msg = (char *)malloc(51);
+                    strncpy(copy_msg, read_msg, 50);
                     
                     sprintf(sec, "%2.02ld:", _sec);
                     sprintf(milsec, "%05.3f:",_milsec);
@@ -117,7 +117,7 @@ int main()
                     printf("Write message: %s",out_msg);
                     write(fd[i][WRITE_END], out_msg, strlen(out_msg)+1);
                     ++count;
-                    if(strlen(read_msg) >= 8)
+                    if(strlen(read_msg) >= 50)
                         printf("\n");
                     gettimeofday(&current, NULL);
                     free(out_msg);
