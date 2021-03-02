@@ -28,6 +28,7 @@
 #include <time.h>
 #include <sys/ioctl.h>
 
+
 #define NUM_OF_CHILDREN 5
 #define TOTAL_SECONDS 30
 #define BUFFER_SIZE 64
@@ -105,74 +106,98 @@ int main()
 	
 	gettimeofday(&prev, NULL);
 	gettimeofday(&current, NULL);
-	while(current.tv_sec - prev.tv_sec < TOTAL_SECONDS)
-	{
-		inputfds = inputs;
-		timeout.tv_sec = 2;
-        timeout.tv_usec = 5000;
-        // Get select() results. FD_SETSIZE = 1024 bits/FDs
-        result = select(FD_SETSIZE, &inputfds,
-                        (fd_set *) 0, (fd_set *) 0, &timeout);
-        gettimeofday(&current, NULL);
-        switch(result)
+    
+    FILE *filePtr;                          // ****** AT ******
+    filePtr = fopen("output.txt", "w");     // ****** AT ******
+    
+    // ****** AT ******
+    if (filePtr == NULL )
+    {
+        printf( "output.txt file failed to open." ) ;
+    }
+    else
+    // ****** AT ******
+    {
+        printf( "Open output.txt \n" ) ;        // ****** AT ******
+        while(current.tv_sec - prev.tv_sec < TOTAL_SECONDS)
         {
-            case 0: { // timeout w/o input
-                printf("@");
-                fflush(stdout);
-                break;
+            inputfds = inputs;
+            timeout.tv_sec = 2;
+            timeout.tv_usec = 5000;
+            // Get select() results. FD_SETSIZE = 1024 bits/FDs
+            result = select(FD_SETSIZE, &inputfds,
+                            (fd_set *) 0, (fd_set *) 0, &timeout);
+            gettimeofday(&current, NULL);
+            switch(result)
+            {
+                case 0: { // timeout w/o input
+                    printf("@");
+                    fflush(stdout);
+                    break;
+                }
+                case -1:
+                { // error
+                    perror("select");
+                    exit(1);
+                }
+                    // If, during the wait, we have some action on the file descriptor,
+                    // we read the input on stdin and echo it whenever an
+                    // <end of line> character is received, until that input is Ctrl-D.
+                default:
+                {   // Got input
+                    for(int i =0;i<NUM_OF_CHILDREN; ++i)
+                    {
+                        if (FD_ISSET(fd[i][READ_END], &inputfds))
+                        {
+                            char num[10], milNum[20], other[35];
+                            long int sec;
+                            double milsec;
+                            sec = current.tv_sec-prev.tv_sec;
+                            milsec = current.tv_usec - prev.tv_usec;
+                            milsec/=1000;
+                            ioctl(fd[i][READ_END],FIONREAD,&nread);
+                            // read # of bytes available
+                            // on pipe and set nread arg
+                            // to that value
+                            if (nread == 0)
+                            {
+                                printf("Child %d Finished.\n", i+1);
+                                FD_CLR(fd[i][READ_END],&inputs);
+                                break;
+                            }
+                            nread = read(fd[i][READ_END],read_msg,nread);
+                            sprintf(num, "%2.02ld:",
+                                sec);
+                            sprintf(milNum, "%05.3f:Parent:",
+                        milsec);
+                            memset(append_msg,'\0',APPEND_SIZE);
+                            strcpy(append_msg, num);
+                            strcat(append_msg, milNum);
+                            printf("%s", append_msg);
+                            fprintf(filePtr,"%s", append_msg);      // ****** AT ******
+                            printf("%s",read_msg);
+                            fprintf(filePtr, "%s",read_msg);                  // ****** AT ******
+                        }
+                    }
+                    break;
+                }
             }
-            case -1:
-            { // error
-                perror("select");
-                exit(1);
-            }
-                // If, during the wait, we have some action on the file descriptor,
-                // we read the input on stdin and echo it whenever an
-                // <end of line> character is received, until that input is Ctrl-D.
-            default:
-            {   // Got input
-            	for(int i =0;i<NUM_OF_CHILDREN; ++i)
-            	{
-                	if (FD_ISSET(fd[i][READ_END], &inputfds))
-                	{
-                    	char num[10], milNum[20], other[35];
-                    	long int sec;
-                    	double milsec;
-    					sec = current.tv_sec-prev.tv_sec;
-    					milsec = current.tv_usec - prev.tv_usec;
-    					milsec/=1000;
-                    	ioctl(fd[i][READ_END],FIONREAD,&nread); 
-                    	// read # of bytes available 
-                    	// on pipe and set nread arg 
-                    	// to that value
-                    	if (nread == 0)
-                    	{
-                    	    printf("Child %d Finished.\n", i+1);
-                    	    FD_CLR(fd[i][READ_END],&inputs);
-                    	    break;
-                    	}
-                    	nread = read(fd[i][READ_END],read_msg,nread);
-    					sprintf(num, "%2.02ld:", 
-    						sec);
-    					sprintf(milNum, "%05.3f:Parent:", 
-    				milsec);
-    					memset(append_msg,'\0',APPEND_SIZE);
-    					strcpy(append_msg, num);
-    					strcat(append_msg, milNum);
-    					printf("%s", append_msg);
-                    	printf("%s",read_msg);
-                	}
-            	}
-				break;
-        	}
+            gettimeofday(&current, NULL);
         }
-		gettimeofday(&current, NULL);
-	}
+    }
+	
+ 
+    
+    
 	for(i = 0; i < NUM_OF_CHILDREN; ++i)
     {
     	waitpid(pid[i],&stat, 0);
     	close(fd[i][READ_END]);
     }
+    
+    printf("Close output.txt \n") ;    // ****** AT ******
+    fclose(filePtr);                    // ****** AT ******
+    
 	return 0;
 }
 
