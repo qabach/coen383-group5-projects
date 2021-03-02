@@ -39,7 +39,7 @@
 
 int main()
 {
-    char write_msg[BUFFER_SIZE] = "You're my child process!";
+    char write_msg[BUFFER_SIZE];
     char read_msg[BUFFER_SIZE];
     char append_msg[APPEND_SIZE];
     fd_set inputs, inputfds; // 2 sets of file descriptors bit-arrays
@@ -79,35 +79,51 @@ int main()
             {
                 while(1)
                 {
-                    char num[10], milNum[10], other[35];
-                    long int sec;
-                    double milsec;
-                    sec = current.tv_sec-prev.tv_sec;
-                    milsec = current.tv_usec; //since milsec resets every sec; dont need to take the different
-                    milsec /=1000;
+                    char * sec, * milsec, * others;
+                    sec = (char *)malloc(10);
+                    milsec = (char *)malloc(10);
+                    others = (char *)malloc(35);
+                    memset(sec,'\0',10);
+                    memset(milsec,'\0',10);
+                    memset(others,'\0',35);
+                    long int _sec;
+                    double _milsec;
+                    _sec = current.tv_sec-prev.tv_sec;
+                    _milsec = current.tv_usec; //since milsec resets every sec; dont need to take the different
+                    _milsec /=1000;
                     
                     //prompt for input message from terminal
-                    char * msg;
-                    msg = (char *)malloc(20);
+                    char * read_msg;
+                    read_msg = (char *)malloc(BUFFER_SIZE);
+                    char * out_msg;
+                    out_msg = (char *)malloc(BUFFER_SIZE);
                     printf("Enter message: ");
-                    read(0, msg, 10); //0 for fd indicates stdin
+                    read(0, read_msg, BUFFER_SIZE); //0 for fd indicates stdin
                     
+                    char * copy_msg;
+                    copy_msg = (char *)malloc(8);
+                    strncpy(copy_msg, read_msg, 7);
                     
-                    sprintf(num, "%2.02ld:", sec);
-                    sprintf(milNum, "%05.3f:",milsec);
-                    sprintf(other, "Child %d message %d : ",i+1, count);
+                    sprintf(sec, "%2.02ld:", _sec);
+                    sprintf(milsec, "%05.3f:",_milsec);
+                    sprintf(others, "Child %d message %d : ",i+1, count);
                     
                     //send msg to parent
-                    memset(write_msg,'\0',BUFFER_SIZE);
-                    strcat(write_msg, num);
-                    strcat(write_msg, milNum);
-                    strcat(write_msg, other);
-                    strcat(write_msg, msg);
-                    printf("write message: %s",write_msg);
-                    write(fd[i][WRITE_END], write_msg, strlen(write_msg)+1);
+                    memset(out_msg,'\0',BUFFER_SIZE);
+                    strcat(out_msg, sec);
+                    strcat(out_msg, milsec);
+                    strcat(out_msg, others);
+                    strcat(out_msg, copy_msg);
+                    printf("Write message: %s",out_msg);
+                    write(fd[i][WRITE_END], out_msg, strlen(out_msg)+1);
                     ++count;
                     gettimeofday(&current, NULL);
-                    free(msg);
+                    free(out_msg);
+                    free(copy_msg);
+                    free(read_msg);
+                    free(sec);
+                    free(milsec);
+                    free(others);
                 }
                 return 0;
             }
@@ -210,6 +226,7 @@ int main()
         gettimeofday(&current, NULL);
     }
     //terminate child 5 after 30s
+    close(fd[4][WRITE_END]);
     kill(pid[4],SIGKILL);
     for(i = 0; i < NUM_OF_CHILDREN; ++i)
     {
