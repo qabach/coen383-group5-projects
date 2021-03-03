@@ -1,61 +1,75 @@
-00:0.109:Parent:00:0.000:Child 1 message 1
-00:0.109:Parent:00:0.000:Child 2 message 1
-00:0.109:Parent:00:0.000:Child 3 message 1
-00:0.184:Parent:00:0.000:Child 4 message 1
-01:1.049:Parent:01:1.049:Child 3 message 2
-02:0.645:Parent:02:1.106:Child 1 message 2
-02:0.645:Parent:02:0.467:Child 4 message 2
-03:-442.433:Parent:00:648.752:Child 5 message 1 : hello 1
-03:0.320:Parent:03:0.644:Child 2 message 2
-03:0.906:Parent:03:1.472:Child 1 message 3
-03:1.476:Parent:03:1.513:Child 3 message 3
-04:159.671:Parent:03:205.944:Child 5 message 2 : hello 2
-05:1.447:Parent:05:1.999:Child 1 message 4
-05:1.447:Parent:05:1.730:Child 2 message 3
-05:1.447:Parent:05:1.329:Child 4 message 3
-05:1.531:Parent:05:1.572:Child 3 message 4
-06:-504.743:Parent:04:808.033:Child 5 message 3 : hello 3
-06:1.604:Parent:06:2.143:Child 1 message 5
-06:1.604:Parent:06:1.637:Child 3 message 5
-07:2.835:Parent:07:2.753:Child 3 message 6
-07:159.401:Parent:06:143.618:Child 5 message 4 : hello 4
-08:1.707:Parent:08:1.987:Child 2 message 4
-08:1.707:Parent:08:1.538:Child 4 message 4
-08:3.996:Parent:08:3.939:Child 3 message 7
-09:2.679:Parent:09:3.217:Child 1 message 6
-10:2.841:Parent:10:3.372:Child 1 message 7
-10:2.841:Parent:10:3.136:Child 2 message 5
-10:2.841:Parent:10:2.701:Child 4 message 5
-10:4.063:Parent:10:4.072:Child 3 message 8
-11:3.904:Parent:11:3.789:Child 4 message 6
-11:4.463:Parent:11:4.493:Child 3 message 9
-13:3.957:Parent:13:4.453:Child 1 message 8
-13:3.957:Parent:13:4.201:Child 2 message 6
-13:4.774:Parent:13:4.693:Child 3 message 10
-14:3.947:Parent:14:3.761:Child 4 message 7
-15:4.940:Parent:15:5.382:Child 1 message 9
-15:4.940:Parent:15:5.173:Child 2 message 7
-15:5.551:Parent:15:5.550:Child 3 message 11
-16:4.977:Parent:16:4.766:Child 4 message 8
-17:5.036:Parent:17:5.537:Child 1 message 10
-17:5.036:Parent:17:5.300:Child 2 message 8
-18:6.667:Parent:18:6.623:Child 3 message 12
-19:5.132:Parent:19:5.659:Child 1 message 11
-19:5.132:Parent:19:4.981:Child 4 message 9
-20:5.295:Parent:20:5.800:Child 1 message 12
-20:5.295:Parent:20:5.581:Child 2 message 9
-20:6.938:Parent:20:6.945:Child 3 message 13
-22:5.222:Parent:22:5.021:Child 4 message 10
-22:5.347:Parent:22:5.898:Child 1 message 13
-22:8.015:Parent:22:8.015:Child 3 message 14
-23:5.501:Parent:23:5.990:Child 1 message 14
-23:5.501:Parent:23:5.757:Child 2 message 10
-24:5.652:Parent:24:5.425:Child 4 message 11
-24:9.126:Parent:24:9.119:Child 3 message 15
-25:5.679:Parent:25:6.210:Child 1 message 15
-25:5.679:Parent:25:5.966:Child 2 message 11
-26:10.325:Parent:26:10.288:Child 3 message 16
-27:5.884:Parent:27:6.361:Child 1 message 16
-27:5.884:Parent:27:5.682:Child 4 message 12
-28:5.963:Parent:28:6.208:Child 2 message 12
-29:11.398:Parent:29:11.398:Child 3 message 17
+00:00.013:Parent:00:00.000:Child 1 message 1
+00:00.014:Parent:00:00.000:Child 2 message 1
+00:00.014:Parent:00:00.000:Child 3 message 1
+00:00.014:Parent:00:00.000:Child 4 message 1
+01:00.130:Parent:01:00.131:Child 1 message 2
+01:00.131:Parent:01:00.128:Child 3 message 2
+01:00.131:Parent:01:00.125:Child 4 message 2
+02:00.042:Parent:02:00.021:Child 2 message 2
+02:00.180:Parent:02:00.163:Child 4 message 3
+02:00.184:Parent:02:00.183:Child 3 message 3
+03:04.731:Parent:03:04.735:Child 1 message 3
+03:04.733:Parent:03:04.733:Child 3 message 4
+03:86.295:Parent:03:86.283:Child 5 message 1 : some stuff
+04:18.068:Parent:04:18.072:Child 2 message 3
+04:18.069:Parent:04:18.064:Child 3 message 5
+05:00.318:Parent:05:00.314:Child 4 message 4
+05:73.196:Parent:05:73.181:Child 5 message 2 : text
+06:06.031:Parent:06:06.036:Child 1 message 4
+06:18.695:Parent:06:18.694:Child 3 message 6
+07:06.256:Parent:07:06.256:Child 1 message 5
+07:18.696:Parent:07:18.683:Child 2 message 4
+07:18.717:Parent:07:18.709:Child 3 message 7
+08:00.663:Parent:08:00.656:Child 4 message 5
+09:06.301:Parent:09:06.306:Child 1 message 6
+09:19.083:Parent:09:19.080:Child 3 message 8
+10:10.809:Parent:10:10.800:Child 1 message 7
+10:19.927:Parent:10:19.930:Child 2 message 5
+11:01.182:Parent:11:01.179:Child 4 message 6
+11:19.106:Parent:11:19.100:Child 3 message 9
+12:20.006:Parent:12:20.009:Child 2 message 6
+13:01.433:Parent:13:01.431:Child 4 message 7
+13:10.874:Parent:13:10.879:Child 1 message 8
+13:20.075:Parent:13:20.064:Child 2 message 7
+14:10.905:Parent:14:10.909:Child 1 message 9
+14:19.540:Parent:14:19.539:Child 3 message 10
+15:03.035:Parent:15:03.019:Child 4 message 8
+16:19.614:Parent:16:19.609:Child 3 message 11
+16:20.129:Parent:16:20.129:Child 2 message 8
+16:86.303:Parent:16:86.290:Child 5 message 3 : a reaLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL
+16:86.304:Parent:16:86.293:Child 5 message 4 : LLLLLLLLLLLLLLLLLLLLLLy long input
+17:13.232:Parent:17:13.236:Child 1 message 10
+17:19.717:Parent:17:19.714:Child 3 message 12
+17:20.207:Parent:17:20.209:Child 2 message 9
+17:81.880:Parent:17:81.870:Child 5 message 5 : 1
+18:03.073:Parent:18:03.068:Child 4 message 9
+18:06.981:Parent:18:06.971:Child 5 message 6 : 2
+18:13.306:Parent:18:13.311:Child 1 message 11
+18:31.887:Parent:18:31.877:Child 5 message 7 : 3
+19:03.108:Parent:19:03.100:Child 4 message 10
+19:13.276:Parent:19:13.265:Child 5 message 8 : 4
+19:13.371:Parent:19:13.377:Child 1 message 12
+19:48.915:Parent:19:48.904:Child 5 message 9 : 5
+19:75.586:Parent:19:75.576:Child 5 message 10 : 6
+20:00.391:Parent:20:00.381:Child 5 message 11 : 7
+20:20.230:Parent:20:20.231:Child 2 message 10
+20:20.232:Parent:20:20.221:Child 3 message 13
+20:32.394:Parent:20:32.385:Child 5 message 12 : 8
+20:76.499:Parent:20:76.490:Child 5 message 13 : 9
+21:13.905:Parent:21:13.904:Child 1 message 13
+21:20.430:Parent:21:20.433:Child 2 message 11
+22:03.157:Parent:22:03.148:Child 4 message 11
+22:26.281:Parent:22:26.276:Child 3 message 14
+22:70.487:Parent:22:70.477:Child 5 message 14 : 10
+24:03.249:Parent:24:03.246:Child 4 message 12
+24:14.536:Parent:24:14.542:Child 1 message 14
+24:21.522:Parent:24:21.525:Child 2 message 12
+24:27.162:Parent:24:27.156:Child 3 message 15
+25:27.169:Parent:25:27.168:Child 3 message 16
+26:03.463:Parent:26:03.456:Child 4 message 13
+26:16.291:Parent:26:16.290:Child 1 message 15
+26:62.420:Parent:26:62.407:Child 5 message 15 : wierd
+27:21.976:Parent:27:21.973:Child 2 message 13
+27:27.342:Parent:27:27.341:Child 3 message 17
+28:55.217:Parent:28:55.206:Child 5 message 16 : okay
+29:03.571:Parent:29:03.562:Child 4 message 14
