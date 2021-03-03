@@ -43,7 +43,7 @@ int main()
     char read_msg[APPEND_SIZE_CHILD]; // limit on how much is being read
     char append_msg[APPEND_SIZE_PARENT]; //Just the size of the parent appending message
     fd_set inputs, inputfds; // 2 sets of file descriptors bit-arrays
-    struct timeval timeout, current, prev;
+    struct timeval timeout, current, prev; //Times to keep track of, in addition to keeping track ofstuff
     pid_t pid[NUM_OF_CHILDREN]; // child process id
     int fd[NUM_OF_CHILDREN][2]; // file descriptors for the pipe
     int i=0, stat, result, nread;
@@ -69,9 +69,12 @@ int main()
         {
             close(fd[i][READ_END]); //close read end
             srand(time(NULL) + getpid()); //set the random seed
+            
+            //keep track of time too.
             gettimeofday(&prev, NULL);
             gettimeofday(&current, NULL);
-            //keep track of time too.
+            
+            //keeping track of how many messages
             int count = 1;
             
             //Child 5 code here
@@ -79,8 +82,10 @@ int main()
             {
             	char mess[18] = "Enter message: \n";
             	int k = 0;
+            	//keep doing this until time expires (30 seconds)
                 while(current.tv_sec - prev.tv_sec < TOTAL_SECONDS)
                 {
+                	//set values 
                     char * sec, * milsec, * others;
                     sec = (char *)malloc(10);
                     milsec = (char *)malloc(10);
@@ -97,34 +102,39 @@ int main()
                     memset(read_msg,'\0',BUFFER_SIZE);
                     char * out_msg;
                     out_msg = (char *)malloc(APPEND_SIZE_CHILD);
+                    //only output this message if the user input is past or on the same size, also prompts the usser to write
                     if(k!=BUFFER_SIZE-2)
                     	write(1,mess,18);
+                    
                     k = read(0, read_msg, BUFFER_SIZE-2); //0 for fd indicates stdin
                     //getting the time after reading
                     gettimeofday(&current, NULL);
                     _sec = current.tv_sec-prev.tv_sec;
                     _milsec = current.tv_usec/10000.0
-                    	- prev.tv_usec/10000.0; //since milsec resets every sec; dont need to take the different
-                    //sorry it does because it gets current time
+                    	- prev.tv_usec/10000.0; 
                     if(_milsec < 0)
                     {
                     	_milsec +=100;
                     	--_sec;
                     }
                     
+                    //add a newline if somehow it reaches the buffer_size
                     if(k==BUFFER_SIZE-2)
                     {
                     	strncat(read_msg,"\n",2);
                     }
+                    //copy the read msg to the copy message
                     char * copy_msg;
                     copy_msg = (char *)malloc(BUFFER_SIZE);
                     strncpy(copy_msg, read_msg, BUFFER_SIZE-1);
                     
+                    //generating timestamp of child
                     sprintf(sec, "%02ld:", _sec);
                     sprintf(milsec, "%06.3f:",_milsec);
                     sprintf(others, "Child %d message %d : ",i+1, count);
                     
                     //send msg to parent
+                    //also append timestamp of child
                     memset(out_msg,'\0',BUFFER_SIZE);
                     strcat(out_msg, sec);
                     strcat(out_msg, milsec);
@@ -158,6 +168,8 @@ int main()
                     milsec +=100;
                     --sec;
                 }
+                
+                //generate and append time messages
                 sprintf(num, "%02ld:", sec);
                 sprintf(milNum, "%06.3f:",
                     milsec);
@@ -244,11 +256,12 @@ int main()
                     		{
                     			milsec +=100;
                     			--sec;
-                    		}		
-                    		
-                            ioctl(fd[i][READ_END],FIONREAD,&nread);
-                            // read # of bytes available
+                    		}	
+                    			
+                    		// read # of bytes available
                             // on pipe
+                            ioctl(fd[i][READ_END],FIONREAD,&nread);
+                            
                             if (nread == 0) //check to see if nothing is to be read. if there is nothing just exit the loop and end
                             {
                                 printf("Child %d Finished.\n", i+1);
@@ -259,7 +272,7 @@ int main()
                             nread = read(fd[i][READ_END],read_msg,
                             	APPEND_SIZE_CHILD);
                             	
-                            //append timestamp to message from child
+                            //append parent timestamp to message from child
                             sprintf(num, "%02ld:",
                                 sec);
                             sprintf(milNum, "%06.3f:Parent:",
