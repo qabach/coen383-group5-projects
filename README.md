@@ -1,4 +1,4 @@
-# coen383-group5-projects
+# COEN383-group5-projects
   ```
   Santa Clara University
   Winter 2021
