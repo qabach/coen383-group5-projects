@@ -1,9 +1,13 @@
-//
-//  multithreads_seller.cpp
-//  coen383-project3
-//
-//  Created by Quan Bach  on 1/31/21.
-//
+/*
+ Santa Clara University
+ COEN 383 - Ad. Operating Systems
+ Winter 2021
+ Project-3
+ Author: Quan Bach
+ Multi-threads seller implementation 
+ Created by Quan Bach  on 1/31/21
+ */
+
 
 #include "multithreads_seller.hpp"
 
